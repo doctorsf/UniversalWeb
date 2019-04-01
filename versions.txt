@@ -6,7 +6,7 @@ V 1.0.0
 Version de base
 
 -----------------
-V 1.0.1
+V 1.0.1 (20.10.2014)
 -----------------
 1- Correction de bug sur les classes "UniversalFieldCancel" et "UniversalFieldButton"
 Ces éléments de type html button ne renvoyant aucun POST, la propriété 'value' était réinitialisée à '0' par l'objet parent UniversalField. Conséquence directe : le libellé du champ disparaisait ! Il a donc suffit d'interdire l'appel à la méthode relever() d'UniversalField en la surchargeant pour les classes "UniversalFieldCancel" et "UniversalFieldButton"
@@ -14,13 +14,13 @@ Ces éléments de type html button ne renvoyant aucun POST, la propriété 'value' é
 2- Ajout et prise en compte des paramètres 'group', lineType' et 'lineClass' pour les classes de boutons "UniversalFieldSubmit", "UniversalFieldReset", "UniversalFieldCancel" et "UniversalFieldButton"
 
 -----------------
-V 1.0.2
+V 1.0.2 (18.12.2014)
 -----------------
 1 – Amélioration classe UniversalField.
 Modification de la méthode test() pour que les tests soit fait si le champ n'est pas vide. Si le champ vide ne doit pas être accepté alors il faut maintenant jouter le paramètre "REQUIRED"
 
 -----------------
-V 1.0.3
+V 1.0.3 (21.01.2015)
 -----------------
 1 - Ajout dans "defines.inc.php" du paramétrage de l'IP du développeur pour affichage de la fenêtre de debug.
 2 – Corrections mineures sur "listing_users.inc.php"
@@ -43,7 +43,7 @@ V 1.0.5
 2 – UniversalFormXxxx -> Modifications mineures
 
 -----------------
-V 2.0
+V 2.0 (06.02.2015)
 -----------------
 1 - Utilise les nouvelles classes de UniversalFORM
 
@@ -94,7 +94,7 @@ V2.13 (15.01.2016)
 - UniversalForm : passage en version 2.18
 	- Modification de la classe UniversalFieldText pour prendre en charge les champs input de type 'file'.
 - UniversalForm : passage en version 2.19
-	- Modification de la classe UniversalFieldSubmit. On peut maintenant utiliser plusieurs submit dans un même formulaire. On peut même les grouper par nom (paramètre groupName) pour avoir en retour l'action validée sans un unique champ dbfield.
+	- Modification de la classe UniversalFieldSubmit. On peut maintenant utiliser plusieurs submit dans un même formulaire. On peut même les grouper par nom (paramètre groupName) pour avoir en retour l'action validée dans un unique champ dbfield.
 - UniversalForm : passage en version 2.20
 	- Utilise la version 15.01.2015 de routine.inc.php
 
@@ -155,9 +155,8 @@ V2.37 (23.08.2016)
 V2.38 (22.09.2016)
 -----------------
 - Possibilité d’administration user à partir annuaire LDAP
-- Ajout de classes : Login_ldap.class.php, User_ldap.class.php
 - Modification de la procédure de création de première mise en oeuvre
-- Ajout d’un code de base pour Frontend compatible avec authentification LDAP et basé sur HTML 5, Bootstrap 4 et jQuery 3.1.0
+- Ajout d’un code de base pour Frontend basé sur HTML 5, Bootstrap 4 et jQuery 3.1.0
 
 -----------------
 V3.0.0 (25.10.2016)
@@ -193,8 +192,6 @@ V3.3.2 (12.01.2017)
 -----------------
 - UniversalForm : passage en version 3.3.2
 - Réorganisation de l’arborescence de dossiers
-- Amélioration de la méthode « isGrantedUser » de la classe « User_ldap » pour prise en compte de l’utilisateur par la base de données interne de l’application.
-- Correction BUG : prise en compte de l’information « matricule_defense » à la place de « matricule » dans la classe « User_ldap »
 
 -----------------
 V3.4.0 (23.01.2017)
@@ -290,9 +287,7 @@ V3.5.8.3 (04.09.2017)
 V3.6.1.0 (25.10.2017)
 -----------------
 1 - universalForm en version 3.6.1 (Utilise Bootstrap v4.0.0-beta.2) et les fonctions javascripts remarchent
-2 - ldap.class.php
-	- le LDAP de la DGA prend maintenant en compte comme service l'entité opérationnelle à la place de l'entité organique
-3 - routines.inc.php (version 17.10.2017)
+2 - routines.inc.php (version 17.10.2017)
 	- Création de la fonction "utf8_strpos"
 	- renommage de la fonction mb_ucwords() en utf8_ucwords()
 	- renommage de la fonction mb_right() en utf8_right()
@@ -301,9 +296,9 @@ V3.6.1.0 (25.10.2017)
 	- Suppression de la fonction pageNavigator au profit de l'objet PageNavigator
 	- Ajout de la fonction buildImage qui permet d'obtenir une image formatté de taille fixé (x, y) préfixé par une chaine de caractère.
 	- Ajout de la fonction getRefererScriptName() qui renvoie le script de la page referer (appelante)
-4 - frontend
+3 - frontend
 	- Mise à jour
-5 - classe « Listing » (version 25.10.2017)
+4 - classe « Listing » (version 25.10.2017)
 	- Création de la méthode getDisplayedSize()
 
 -----------------
@@ -322,7 +317,6 @@ V3.6.2.0 (en cours)
 	- déplacement du fichier d'erreurs dans le répertoire LIBS
 	- amélioration de transposePourUrl()
 	- amélioration de la fonction convert_utf8()
-8 – Création des classes User_drcp et Login_drcpt et meilleure prise en compte du choix d’annuaire choisi pour l’identification utilisateur afin de rendre le tout plus transparent.
 
 -----------------
 V3.7.0.0 (17.03.2018)
@@ -340,14 +334,6 @@ V3.7.0.0 (17.03.2018)
 - Ldap.class.php 12.01.2018 :
 	- ajout du port dans le constructeur avec port par défaut à 389
 	- ajout de l'erreur -1 (Can't contact LDAP server)
-- Ldap_drcpt.class.php 08.01.2018 :
-	- prise en compte champ "displaynameprintable" inexistant
-	- création constante de recherche par défaut OU_SEARCH 
-	- Mise en conformité avec classe parente Ldap.class.php
-	- Port utilisé par défaut : 389
-- Ldap_totem.class.php 12.01.2018 :
-	- Mise en conformité avec classe parente Ldap.class.php
-	- Port utilisé par défaut : 389
 - listing_droits.php 06.02.2018 : 
 	- Petite correction bug
 - PageNavigator.class.php 10.01.2018 : 
@@ -390,8 +376,6 @@ V3.8.0.0 (non testée)
 - Renommage ExtraWeb en UniversalWeb
 - Suppression du fichier version.doc et remplacement par le fichier versions.txt (ce fichier)
 - Ajout de tables de logs Extraweb (+listing sur l'interface d'admin)
-- Ajout de la classe Kerberos pour authentification Kerberos et modification authentification pour prendre en compte n'importe quel type de connexion annuaire (6.04.2018)
-- Modification des classes Login_ User_ Ldap_ pour meilleur intégration
 - Classe UniversalList
 	16.04.2018 : VERSION 2.4.0
 	- Ajout	de la méthode publique setTriEncours() (modification du tri en cours)
@@ -413,7 +397,7 @@ V3.8.0.0 (non testée)
 	17.05.2018
 	- Modification fonctions restoreDatabase() et saveDatabase() pour obliger à renseigner les binaires "mysql" et "mysqldump"
 	28.05.2018
-	- Amélioration de la fonction oteAccents() pour que cela marche dans tous les codagezsq (comme UTF-8)
+	- Amélioration de la fonction oteAccents() pour que cela marche dans tous les codages (comme UTF-8)
 	29.05.2018
 	- Ajout de la fonction writeLog() qui écrit une ligne de log standardisée dans un fichier log
 	01.06.2018
@@ -435,7 +419,7 @@ V3.8.0.0 (non testée)
 	Version 3.8.0 du 14.05.2018
 	- Obligation ajouter la classe "uf" au tag "<form>" qui doit utiliser les classes UniversalForm
 	- Ajout des propriétes labelPlus, labelPlusHelp et labelPlusHelpPos sur les champ de type UniversalFieldText (permet de scinder le label en 2 parties, par exemple un texte et une icone)
-	- Modification apportée à tout ExtraWeb
+	- Modification apportée à tout UniversalWeb
 	Version 3.9.0 du 17.05.2018
 	- Ajout de la propriété flexLine : application des utilitaires flexbox sur les lignes d'objets (permet des cadrages, positionnement et plein d'autre choses sur les objets de la ligne)
 	Version 3.9.1 du 12.06.2018
@@ -496,8 +480,8 @@ V3.8.1.0
 - Utilise version UniversalForm V3.10.0 pour compatibilité avec Bootstrap V4.1.3
 - Utilise Font Awesome 5.0.10
 - Ajout version Apache dans panel information système extranet
-- Ajout du répertoire 'armoire' destinées aux imports/exports d'informations
-- Coloration syntaxique de la liste des sauvegardes de bvases de données disponibes en fonction des version (avec conseils)
+- Ajout du répertoire 'armoire' destiné aux imports/exports d'informations
+- Coloration syntaxique de la liste des sauvegardes de bases de données disponibes en fonction des version (avec conseils)
 - Fichiers de langue enrichis et corrigés
 - Amélioration du header backend
 - Amélioration de la présentation du formulaire de saisie users
@@ -557,8 +541,38 @@ V3.9.0.0
 - Traduction "SilentMail.class.php"
 - Traduction "SimpleListingHelper.class.php"
 - Ajout et test de la classe UniversalCsvImport.class.php (aide à l'import de fichiers CSV)
-- Scindé le fichier config.inc.php (mis tout ce qui concerne la connextion à la base de données dans config_db.inc.php)
+- Scindé le fichier config.inc.php (mis tout ce qui concerne la connexion à la base de données dans config_db.inc.php)
 - Création et test de la méthode SqlSimple::importMany() (import en plusieurs requetes)
 - Création de la documentation UniversalCsvImport()(v1.0.0)
 - Ajout des versions pour les classes UniversalZip (v1.0.0) et UniversalTree (v1.0.0)
 - Correction affichage journaux lors d'erreur de login (affichait le mot de passe et pas le login de l'utilisateur)
+
+-----------------
+V3.10.0.0
+-----------------
+- Utilise Bootstrap 4.3.1
+- Utilise Font Awesome 5.7.2
+- SimpleListingHelper
+	07.03.2019
+		Changement de paramètres pour la méthode getParams()
+		On passe maintenant l'identifiant de la colonne par défaut et non pas la liste des champs triables
+		On ajoute aussi un die() si la colonne par défaut n'existe pas
+- Ajout et utilisation de la police Montserrat à la place de Roboto
+- Passage en UniversalList V2.6.0 (14.03.2019)
+	- Ajout des méthodes publiques UniversalList::setHeadClass() et UniversalList::getHeadClass() pour modifier la classe CSS de l'entête du tableau
+	- Ajout des méthodes publiques UniversalList::setFiltresClass() et UniversalList::getFiltresClass() pour modifier la classe CSS du bandeau de filtres du tableau (valeur défaut "thead-light")
+	- Ajout du paramètre "header" dans la construction de la colonne de la table. (objet UniversalListColonne) : true (la colonne est une entetre pour la ligne), false sinon (valeur par défaut)
+	ce paramètre indique si la donnée de la colonne doit servir d'entête pour la ligne.
+	- Ajout des méthodes UniversalListColonne::setHeader() et UniversalListColonne:: getHeader() pour prendre en compte le nouveau paramètre "header"
+	- Affichage du listing : supprimé la taille de la colonne pour permettre à du code javascript de la modifier en drag & drop 
+	(voir code https://www.brainbell.com/javascript/making-resizable-table-js.html)
+- Classe SimpleListingHelper
+	14.03.2019
+		Ajout du paramètre "header" dans la construction de la colonne de la table. true (la colonne est une entete pour la ligne), false sinon (valeur par défaut). Ce paramètre indique si la donnée de la colonne doit servir d'entête pour la ligne.
+		Ajout du paramètre $css à la methode drawHead (personnalisation de l'entête)
+- backend : ajout affichage de la release en cours... (affichage du contenu du fichier release.txt)
+- backend/libs/fonctions.inc.php
+	19.03.2019
+		Ajout de la fonction getRelease() qui vient lire le contenur du fichier release.txt
+- Ajout de la fonction "Cookie Disclamer" en standard sur le Frontend.
+- Ajout de la signature du code frontend.

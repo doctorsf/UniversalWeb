@@ -1,0 +1,174 @@
+*************************************************
+* UNIVERSALWEB					*
+*************************************************
+
+Ceci constitue un squelette d'application UNIVERALWEB.
+Il comporte :
+- La structure de base (dossiers et fichiers) d'une application (frontend) et de son extranet (backend)
+
+	backend					//fichiers php formant l'extranet de l'application (backend)
+		-> bootstrap-x.x.x-dist		//code boostrap (version x.x.x)
+			-> css			//code CSS boostrap
+			-> js			//code JS boostrap
+		-> css				//feuillles de style CSS du backend
+		-> fontawesome-free-x.x.x-web	//icones font-awesome (version x.x.x)
+		-> fonts			//polices googles supplémentaires utilisées par l'application
+		-> images			//images du backend
+		-> js				//code javascript du backend
+		-> libs				//fichiers de bibliothèques du backend
+			-> briques		//code php de construction (html) du backend
+			-> classes		//classes php du backend
+			-> DB_backup		//backups de la base de données
+			-> langues		//fichiers de langues possibles du backend
+			-> sql			//code sql du backend
+
+	... et une structure de dossiers du frontend déja installée pour votre future application. Libre à vous de l'utiliser ou pas !
+
+	frontend				//fichiers formant le frontend
+		-> bootstrap-x.x.x-dist		//code boostrap (version x.x.x)
+			-> css			//code CSS boostrap
+			-> js			//code JS boostrap
+		-> css				//feuillles de style CSS de votre application
+		-> fontawesome-free-x.x.x-web	//icones font-awesome (version x.x.x)
+		-> fonts			//polices googles supplémentaires utilisées par l'application
+		-> images			//images de votre application
+		-> js				//code javascript de votre application
+		-> libs				//fichiers de bibliothèques de l'application (frontend)
+			-> briques		//code php de construction (html) de votre application
+			-> classes		//classes php de votre application
+			-> langues		//fichiers de langues de votre application
+			-> sql			//code sql de votre application
+
+- Le frontend offre en guise de démarrage une première application de base (site web) avec connexion utilisateur
+
+- Le backend est déjà opérationnel et exploitable. Il offre les fonctionnalités suivantes : 
+	- Login '_ANNUAIRE_INTERNE_'
+	- La gestions des droits de l'application 
+	- gestions des utilisateurs (ajout/suppression/modification)
+	- informations système
+	- signature du code (backend et frontend) avec signature finale
+	- sauvegarde et restauration de la base
+	- logs de connexion
+	- page de versionning de l'application
+	De plus il offre 7 scripts d'exemples : 
+	- exemple_videotheque.php (exemples de la documentation UniversalForm)
+	- exemples_universalform.php (code d'exemples d'utilisation des objets UniversalForm)
+	- exemple_liste_simple.php (code php d'exemple de mise en oeuvre de listes simples)
+	- exemple_liste_simple_pages.php (code php d'exemple de mise en oeuvre de listes simples avec gestionnaire de pages)
+	- exemple_liste_complexe.php (code php d'exemple de mise en oeuvre de listes complexes)
+	- exemple_listes.sql (code sql pour générer la table mySql qui sert aux exemples de listes)
+	- exemple_import_csv.php (code php pour importer un fichier csv en bases de données)
+	- exemple_import.csv (fichier csv à importer)
+
+
+*************************************************
+* Configuration du Backend 			*
+*************************************************
+
+1) Créer une base de données vierge pour l'application via PhpMyAdmin (IMPORTANT : en utf8_general_ci)
+
+2) Paramétrer le fichier /backend/libs/config.inc.php
+
+	a) _APP_SCHEMA_		: type d'url pour l'appli à choisir parmi : 
+				_SCHEMA_NATUREL_ (url inline) (http://appli/frontend/ et http://appli/backend/)
+				_SCHEMA_DOMAINE_ (url structurée par domaine TLD (Top Level Domain) et SLD (Second Domain Level) (http://www.appli.com et http://backend.appli.com)
+	b) _APP_TITLE_		: titre de l'application
+	c) _APP_SLOGAN_		: slogan de l'application
+	d) _AUTEUR_		: auteur de l'application
+	e) _COPYRIGHT_		: copyright
+	f) _VERSION_APP_	: version de l'application
+	g) _EMAIL_WEBMASTER_	: email du Webmaster
+	h) _IP_DEVELOPPEMENT_	: tableau des IP des développeurs (votre IP) (ex : array('120.146.2.120', [ipv6]) )
+	i) _APP_BLOWFISH_	: mot ou chaine de caractère qui permet à l'application d'être unique. Ne pas oublier cette définition, elle est primordiale pour le bon fonctionnement de l'application
+	j) _RUN_MODE_		: mode d'exécution de l'application à choisir parmi : 
+				_DEVELOPPEMENT_ (appli en Developpement, permet d'accéder au menus de gestion des couples "profils / fonctionnalités" à mettre en place pour votre application)
+				_PRODUCTION_ (appli en production : penser à mettre en mode _PRODUCTION_ lorsque l'appli est en production)
+	k) _ANNUAIRE_		: choix de l'annuaire utilisé pour la gestion des utilisateurs. UniversalWeb propose seulement l'annuaire interne à l'application. Vous pouvez ajouter votre propre annuaire.
+				_ANNUAIRE_INTERNE_	=> gestion des utilisateur entièrement géré par l'application (base de données)(option par défaut)
+				Vous pouvez ajouter votre propre annuaire si vous en possédez un.
+				Voir ci-après quelles classes sont à créer pour s'interfacer avec UniversalWeb.
+
+3) Paramétrer le fichier /backend/libs/config_db.inc.php avec les informations de connexion à la base de données
+
+	a) Renseigner les informations de connexion à la base de données, à savoir : 
+		$dbServer = '127.0.0.1';	//ip ou nom DNS du serveur MySQL qui sera utilisé pour l'application
+		$dbDatabase = 'unnom';		//nom de la base de données créée au point 1
+		$dbLogin = 'root';		//nom de l'utilisateur MySQL pour l'application
+		$dbPassword = '';		//mot de passe d'accès à MySql
+		$dbMysql = '';			//chemin complet vers mysql.exe
+		$dbMysqldump = '';		//chemin complet vers mysqldump.exe
+	b) _PREFIXE_TABLES_	: préfixe des tables de la base de données (1 à 3 caractère puis _) (ex : "rt_")
+
+*************************************************
+* Premier démarrage				*
+*************************************************
+
+4) Pour le premier démarrage, lancez simplement le script "http://chemin_du_backend/active_application.php" 
+	Celui-ci va créer les tables suivantes (préfixées du préfixe choisi en phase 3) dans la base de données :
+	1 - profils (table des profils d'utilisateurs)
+	2 - fonctionnalites (table des fonctionnalités de l'application)
+	3 - droits (table des droits pour un couple profil/fonctionnalite)
+	4 - users (ébauche de table utilisateur qui pourra être modifiée comme souhaité par le développeur)
+	5 - listings (sauvegarde des listings de l'application en relation avec la classe UniversalList.class.php)
+	6 - logs (table des journeaux de l'application)
+	7 - logs_types (table des types de journeaux de l'application. Un seul type de log défini par défaut 'Connexion')
+	8 - films (sans préfixe) (table utilisée dans les exemples de mise en oeuvre de listes et listings Extraweb)
+
+5) Lancer le backend http://chemin_du_backend/ et connectez-vous.
+	a) l'administrateur (admin) est créé par défaut avec le mot de passe (admin). 
+	Il possède le profil PROFIL_ADMIN (valeur "1") qui permet d'administrer l'application (fonctionnalité FONC_ADM_APP (valeur "1"))
+	
+6) Suppprimer le script "active_application.php" qui n'est plus utile.
+
+
+*************************************************
+* Configuration du Frontend			*
+*************************************************
+
+1) Paramétrer le fichier /frontend/libs/config.inc.php
+
+	a) _APP_SCHEMA_		: type d'url pour l'appli à choisir parmi : 
+				_SCHEMA_NATUREL_ (url inline) (http://appli/frontend/ et http://appli/backend/)
+				_SCHEMA_DOMAINE_ (url structurée par domaine TLD (Top Level Domain) et SLD (Second Domain Level) (http://www.appli.com et http://backend.appli.com)
+				NB : Doit être le même que pour le Backend
+	b) _APP_TITLE_		: titre de l'application
+	c) _APP_SLOGAN_		: slogan de l'application
+	d) _AUTEUR_		: auteur de l'application
+	e) _COPYRIGHT_		: copyright
+	f) _VERSION_APP_	: version de l'application
+	g) _EMAIL_WEBMASTER_	: email du Webmaster
+	h) _IP_DEVELOPPEMENT_	: tableau des IP des développeurs (votre IP) (ex : array('120.146.2.120', [ipv6]) )
+	i) _APP_BLOWFISH_	: mot ou chaine de caractère qui permet à l'application d'être unique. Ne pas oublier cette définition, elle est primordiale pour le bon fonctionnement de l'application. 
+				NB : Doit être différent le le blowfish du backend
+	j) _RUN_MODE_		: mode d'exécution de l'application à choisir parmi : 
+				_DEVELOPPEMENT_ (appli en Develloppement, permet d'accéder au menus de gestion des couples "profils / fonctionnalités" à mettre en place pour votre application)
+				_PRODUCTION_ (appli en production : penser à mettre en mode _PRODUCTION_ lorsque l'appli est en production)
+	k) _ANNUAIRE_		: choix de l'annuaire utilisé pour la connexion des utilisateurs. UniversalWeb propose seulement l'annuaire interne à l'application. Vous pouvez ajouter votre propre annuaire.
+				_ANNUAIRE_INTERNE_	=> gestion des utilisateur entièrement géré par l'application (base de données)(option par défaut)
+				Vous pouvez ajouter votre propre annuaire si vous en possédez un.
+				Voir ci-après quelles classes sont à créer pour s'interfacer avec UniversalWeb.
+				NB : Doit être le même que pour le Backend
+
+3) Paramétrer le fichier /backend/libs/config_db.inc.php avec les informations de connexion à la base de données
+
+	a) Renseigner les informations de connexion à la base de données, à savoir : 
+		$dbServer = '127.0.0.1';	//ip ou nom DNS du serveur MySQL qui sera utilisé pour l'application
+		$dbDatabase = 'unnom';		//nom de la base de données créée au point 1
+		$dbLogin = 'root';		//nom de l'utilisateur MySQL pour l'application
+		$dbPassword = '';		//mot de passe d'accès à MySql
+		NB : Doit être le même que pour le Backend
+	b) _PREFIXE_TABLES_	: préfixe des tables de la base de données (1 à 3 caractère puis _) (ex : "rt_")
+		NB : Doit être le même que pour le Backend
+
+*************************************************
+* Pour aller plus loin				*
+*************************************************
+Si vous devez vous connecter à partir d'un autra  annuaire (LDAP, KERBEROS, etc) voici les classes que vous aurez besoin d'écrire : 
+
+	1 - Surchargez la classe Ldap() avec une classe adaptées à votre annuaire
+			class Ldap_mon_annuaire extends Ldap {}
+
+	2 - Surcharger la classe User en créant votre classe User_mon_annuaire (c'est un exemple) pour en tirer les informations	
+			class User_mon_annuaire extends User {}
+
+	3 - Afin de conserver les infos de l'utilisateur en cours, créer une classe Login_mon_annuaire qui surcharge votre classe User_mon_annuaire
