@@ -1,4 +1,4 @@
-EXTRAWEB - Squelette d'application Extranet
+UniversalWeb - Squelette d'application Web
 
 -----------------
 V 1.0.0
