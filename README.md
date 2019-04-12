@@ -559,3 +559,8 @@ V3.11.0.0 (11.04.2019)
 3. Mise en conformité de tous les numéros de version des classes UniversalWeb
 4. Ajout des informations de configuration dans la page infos_systeme.php
 5. Ajout des informations de version UniversalWeb dans la page infos_systeme.php
+
+-----------------
+V3.11.1.0 (12.04.2019)
+-----------------
+- Correction bug infos_systeme.php (certains serveurs ne connaissent pas la fonction apache_get_version())

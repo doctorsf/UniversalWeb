@@ -64,6 +64,14 @@ echo '<body>';
 						echo '</div>';
 					echo '</div>';
 					echo '<div class="card">';
+						if(!function_exists('apache_get_version')){
+							function apache_get_version() {
+						        if(!isset($_SERVER['SERVER_SOFTWARE']) || strlen($_SERVER['SERVER_SOFTWARE']) == 0){
+									return '';
+								}
+								return $_SERVER['SERVER_SOFTWARE'];
+							}
+						}
 						$versionApache = apache_get_version();
 						//la valeur retournée est de la forme : Apache/2.4.29 (Win32) mod_authnz_sspi/0.1.0 OpenSSL/1.1.0g PHP/7.2.0
 						//on isole l'os marqué entre parenthèses
@@ -82,10 +90,10 @@ echo '<body>';
 						echo '<div class="card-body">';
 							echo '<h3 class="card-title">'.getLib('VERSION_APACHE').'</h3>';
 							echo '<p class="card-text">';
-							echo getLib('VERSION').' : '.$versionApache[0].' '.$os.'<br />';
-							echo getLib('MODULE_AUTHENTIFICATION').' : '.$versionApache[1].'<br />';
-							echo 'SSL : '.$versionApache[2].'<br />';
-							//echo 'PHP : '.$versionApache[3].'<br />';
+							if (isset($versionApache[0])) echo getLib('VERSION').' : '.$versionApache[0].' '.$os.'<br />';
+							if (isset($versionApache[1])) echo getLib('MODULE_AUTHENTIFICATION').' : '.$versionApache[1].'<br />';
+							if (isset($versionApache[2])) echo 'SSL : '.$versionApache[2].'<br />';
+							if (isset($versionApache[3])) echo 'PHP : '.$versionApache[3].'<br />';
 							echo '</p>';
 						echo '</div>';
 					echo '</div>';
