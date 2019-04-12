@@ -70,13 +70,10 @@ echo '<body>';
 						$log = new sqlLogs();
 						$nombre = $log->purge();
 						if ($nombre === false) {
-							riseErrorMessage(getLib('ERREUR_SQL'));
-						}
-						elseif ($nombre === 0) {
-							riseWarningMessage(getLib('LOG_RETIRE_AUCUN'));
+							riseErrorMessage('Erreur SQL&hellip;');
 						}
 						else {
-							riseMessage(getLib('LOG_RETIRE_X', $nombre));
+							riseMessage('Journaux purgés avec succès&hellip;');
 						}
 						//retour
 						goReferer();

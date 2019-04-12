@@ -120,8 +120,6 @@ class Form_login extends UniversalForm {
 		$fieldLogin = $this->field('login');
 		$fieldPassword = $this->field('password');
 		//test si l'utilisateur est connu dans l'annuaire
-		//Les 4 types d'annuaire sont pris en compte pour une meilleur compatibilité
-		//Avant la mise en production on peu supprimer les 3 annuaires inutiles
 		$annuaireUtilise = get_class($_SESSION[_APP_LOGIN_]);
 
 		//Cas du login utilisateur géré dans la base de données de l'appli
@@ -151,6 +149,9 @@ class Form_login extends UniversalForm {
 			}
 		}
 
+		//Cas du login utilisateur géré par un autre annuaire à faire ici
+		//------------------------------------------------
+
 		return false;		//pas d'erreur
 	}
 
@@ -158,15 +159,11 @@ class Form_login extends UniversalForm {
 	// affichage du formulaire
 	//--------------------------------------
 	public function afficher() {
-		parent::afficher();		//permet d'ajouter des tests de construction du formulaire
-		//ATTENTION : les champs disabled ne renvoient aucun POST !!! Donc impossible de récupérer les données depuis une suppression
-		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
-		$chaine = '';
-
-		$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
+		parent::afficher();
+		$chaine = '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
 			$chaine.= '<fieldset style="border:1px silver solid;padding:1.5rem">';
 				$chaine.= '<h1>'._APP_TITLE_.'</h1>';
-				$chaine.= $this->draw($enable);
+				$chaine.= $this->draw(true);
 			$chaine.= '</fieldset>';
 			$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').' (1) '.getLib('LECTURE_SEULE').'</p>';
 		$chaine.= '</form>';

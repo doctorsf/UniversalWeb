@@ -11,6 +11,8 @@
 //		ajout de la méthode importMany
 // 12.02.2019
 //		test de la méthode importMany et utilisation dans exemple fourni avec UniversalWeb
+// 04.04.2019
+//		correction bug importMany()
 //-----------------------------------------------------------------------
 // Cette classe comporte des méthodes d'acces génériques à une table
 // -------------------------------------
@@ -330,7 +332,7 @@ class SqlSimple {
 	//----------------------------------------------------------------------
 	// Le principe
 	// - Dans $masqueSql donner la requete SQL de remplissage des champs avec pour 
-	//		chaque valeur de champ un placeholder de la forme '[numero]' (voir exempls ci-dessous)
+	//		chaque valeur de champ un placeholder de la forme '[numero]' (voir exemples ci-dessous)
 	// - Dans $donnees placer les enregistrements à importer. Les champs de chaque enregistrement doivent être 
 	//		proposés dans l'ordre des placeholders du masque. Les $données seront automatiquement échappées. 
 	//		Il n'est pas besoin de la faire à l'avance.
@@ -347,7 +349,7 @@ class SqlSimple {
 		//construction de la liste des placeholders attendus dans le masque SQL
 		//on cree 1 placeholder par champ attendu
 		$placeholders = array();
-		$nbChamps = count(explode(',', $this->_champs));
+		$nbChamps = count($donnees[0]);
 		for ($i = 0; $i < $nbChamps; $i++) {
 			$placeholders[$i] = '['.$i.']';
 		}

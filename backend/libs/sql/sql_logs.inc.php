@@ -28,6 +28,9 @@ delete()			: supprime un tuple
 30.01.2019
 	- Correction creation table : remplacé 'datetime' par 'timestamp' dans la création du champ 'quand'
 	sinon sela ne marchait pas
+11.04.2019
+	- Correction méthode purge() : contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
+	l'ancienne méthode renvoyait toujours 0
 ------------------------------------------------------------------------*/
 
 //- CREATION tables logs --------------------------------------
@@ -91,11 +94,13 @@ class sqlLogs extends SqlSimple {
 	}
 
 	//purge entièrement les logs
+	//Contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
+	//la méthode retourne donc true ou false
 	public function purge() {
 		$requete.= "TRUNCATE TABLE ".$this->_table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
-			return $nombre;
+			return true;
 		}
 		return false;
 	}

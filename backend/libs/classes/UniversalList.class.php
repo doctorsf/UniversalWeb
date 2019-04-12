@@ -807,7 +807,7 @@ class UniversalList {
 	private $_headClass = '';				//classe CSS de l'entête de la table
 	private $_filtresClass = 'thead-light';	//classe CSS du bandeau de filtres (première ligne du tableau)
 
-	const VERSION = 'V2.6.0 - 12.03.2019';
+	const VERSION = 'V2.6.0 (2019.03.12)';
 	const NB_LIGNES_PAR_PAGE = 25;
 	const SHOW_BUTTONS = true;
 

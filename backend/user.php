@@ -104,34 +104,20 @@ echo '<body>';
 					case 'valid_ajouter': {
 						$donnees = $frm->getData();
 						//DEBUG_('donnees', $donnees);
-						if (($donnees['bouton'] == 'notposted') && ($donnees['recherche'] != '')) {
-							//recherche de l'utilisateur
-							$user = newUser();
-							$res = $user->userExistsInAnnuaire($donnees['recherche'], $infos);
-							if ($res) {
-								$frm->initWithLdapInfos($infos);
-							}
-							else {
-								$frm->setRechercheLdapErreur(getLib('UTILISATEUR_INCONNU_LDAP'));
-							}
+						if (!$frm->tester()) {
 							echo $frm->afficher();
 						}
 						else {
-							if (!$frm->tester()) {
-								echo $frm->afficher();
+							//ok ajouter
+							$donnees = $frm->getData();
+							if (!sqlUsers_addUser($donnees)) {
+								riseErrorMessage(getLib('ERREUR_CREATION_USER'));
 							}
 							else {
-								//ok ajouter
-								$donnees = $frm->getData();
-								if (!sqlUsers_addUser($donnees)) {
-									riseErrorMessage(getLib('ERREUR_CREATION_USER'));
-								}
-								else {
-									riseMessage(getLib('UTILISATEUR_AJOUTE', $donnees['prenom'], $donnees['nom']));
-								}
-								//branchement vers la page d'appel
-								goPageBack();
+								riseMessage(getLib('UTILISATEUR_AJOUTE', $donnees['prenom'], $donnees['nom']));
 							}
+							//branchement vers la page d'appel
+							goPageBack();
 						}
 						break;
 					}
@@ -167,19 +153,7 @@ echo '<body>';
 					case 'valid_modifier': {
 						$donnees = $frm->getData();
 						//DEBUG_('donnees', $donnees);
-						if (($donnees['bouton'] == 'notposted') && ($donnees['recherche'] != '')) {
-							//recherche de l'abonné
-							$abonne = newUser();
-							$res = $abonne->userExistsInAnnuaire($donnees['recherche'], $infos);
-							if ($res) {
-								$frm->initWithLdapInfos($infos);
-							}
-							else {
-								$frm->setRechercheLdapErreur(getLib('UTILISATEUR_INCONNU_LDAP'));
-							}
-							echo $frm->afficher();
-						}
-						elseif ($donnees['bouton'] == 'Modifier') {
+						if ($donnees['bouton'] == 'Modifier') {
 							if (!$frm->tester()) {
 								echo $frm->afficher();
 							}

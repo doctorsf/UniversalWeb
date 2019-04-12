@@ -126,6 +126,41 @@ echo '<body>';
 					echo '</div>';
 				echo '</div>';
 
+				//lecture des informations de configuration
+				echo '<p class="display-4  mt-3">CONFIG</p>';
+				echo '<div class="card-columns">';
+					echo '<div class="card">';
+						echo '<div class="card-body">';
+							echo '_APP_SCHEMA_ : '.((_APP_SCHEMA_ == _SCHEMA_NATUREL_) ? 'Naturel' : 'Domaine').'<br />';
+							echo '_APP_TITLE_ : '._APP_TITLE_.'<br />';
+							echo '_APP_SLOGAN_ : '._APP_SLOGAN_.'<br />';
+							echo '_AUTEUR_ : '._AUTEUR_.'<br />';
+							echo '_COPYRIGHT_ : '._COPYRIGHT_.'<br />';
+							echo '_EMAIL_WEBMASTER_ : '._EMAIL_WEBMASTER_.'<br />';
+							echo '_IP_DEVELOPPEMENT_ : '.implode(' / ', _IP_DEVELOPPEMENT_).'<br />';
+							echo '_APP_BLOWFISH_ : '._APP_BLOWFISH_.'<br />';
+							echo '_RUN_MODE_ : '.((_RUN_MODE_ == _DEVELOPPEMENT_) ? 'Developpement' : 'Production').'<br />';
+							echo '_ANNUAIRE_ : '._ANNUAIRE_.'<br />';
+							echo '_JQUERY_VERSION_ : '._JQUERY_VERSION_.'<br />';
+							echo '_BOOTSTRAP_VERSION_ : '._BOOTSTRAP_VERSION_.'<br />';
+							echo '_FONTAWESOME_VERSION_ : '._FONTAWESOME_VERSION_.'<br />';
+							echo '_SQL_MODE_: '._SQL_MODE_.'<br />';
+							echo '_APP_RELEASE_ : '._APP_RELEASE_.'<br />';
+						echo '</div>';
+					echo '</div>';
+					echo '<div class="card">';
+						echo '<div class="card-body">';
+							echo '<h1>UniversalWeb</h1>';
+							echo 'UniversalForm : '.UniversalForm::VERSION.'<br />';
+							echo 'UniversalList : '.UniversalList::VERSION.'<br />';
+							echo 'UniversalTree : '.UniversalTree::VERSION.'<br />';
+							echo 'UniversalZip : '.UniversalZip::VERSION.'<br />';
+							echo 'UniversalCsvImport : '.UniversalCsvImport::VERSION.'<br />';
+							echo 'UniversalDatabase : '.UniversalDatabase::VERSION.'<br />';
+						echo '</div>';
+					echo '</div>';
+				echo '</div>';
+
 			echo '</div>';
 		echo '</div>';
 

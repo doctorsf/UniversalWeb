@@ -581,6 +581,16 @@ V3.10.0.0
 - backend : ajout affichage de la release en cours... (affichage du contenu du fichier release.txt)
 - backend/libs/fonctions.inc.php
 	19.03.2019
-		Ajout de la fonction getRelease() qui vient lire le contenur du fichier release.txt
+		Ajout de la fonction getRelease() qui vient lire le contenu du fichier release.txt
 - Ajout de la fonction "Cookie Disclamer" en standard sur le Frontend.
 - Ajout de la signature du code frontend.
+
+-----------------
+V3.11.0.0 (11.04.2019)
+-----------------
+
+- Classe UniversalCsvImport en v2.0.0 + documentation à jour + exemple d'import à jour
+- Correction Bugs dans les journaux
+- Mise en conformité de tous les numéros de version des classes UniversalWeb
+- Ajout des informations de configuration dans la page infos_systeme.php
+- Ajout des informations de version UniversalWeb dans la page infos_systeme.php

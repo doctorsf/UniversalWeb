@@ -3,21 +3,36 @@
 // Modele UniversalCsvImport
 // Classe spécialisé dans l'import de fichiers CSV (séparateur ;)
 //----------------------------------------------------------------------
-// le modele est un tableau de colonnes contenant les informations suivantes :
+// le modele est un tableau représentant les colonnes CSV du document à importer et contenant les informations suivantes :
 //		-> numéro de la colonne dans le fichier csv
 //		-> libelle én clair de la colonne
 //		-> champ sql qui correspond à la colonne à importer
 //		-> tableau de tests à effectuer sur la colonne pour définir sa validité
 //		-> booleen (active) qui détermine si la colonne doit être utilisée
+//		-> chaine de caractère libre à destination de l'utilisateur final pour définir la saisie attendue
+//		-> CSS à donner au commentaire
+//		-> Valeur par défaut de la cellule
 //	exemple
 //    [civilite] => Array
 //        (
 //            [colonne] => 1
 //            [libelle] => Civilite
-//            [sql] => 
+//            [sqlField] => 
 //            [match] => Array()
 //			  [active] => 1
+//			  [commentaire] => Saisie d'une civilité attendue parmi ça et ça
+//			  [css] => danger		//css a donner au commentaire
+//			  [defaut] => M
 //        )
+//----------------------------------------------------------------------
+// V2.0.0 (2019-03-04)
+//		- ajout du champ 'commentaire' dans le modèle. il s'agit d'un commentaire libre qui peut être restitué, par exemple pour définir l'information attendue
+//		- ajout du champ 'css' dans le modèle. il permet de recevoir le css qui doit être appliqué au commentaire lorsqu'il est affiché
+//		- modification globale de la création des colonnes (paramétrage par passage d'une array maintenant)
+//		- standardisation des getters et setters
+//		- ajout dans chaque enregistrement de données du numéro de ligne CSV ou se trouve la donnée
+//		- ajout champ 'defaut' dans le modèle
+//		- ajout du test 'DEFAULT' qui n'en est pas un : si test DEFAULT posé, alors le champ prend la valeur définie par 'defaut' si il est à l'origine vide
 //----------------------------------------------------------------------
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -48,17 +63,28 @@ class UniversalCsvImport {
 	private $_filename = '';			//chemin + nom du fichier csv à importer
 	private $_lines = array();			//tableau contenant toutes les lignes (brutes) de données du fichier à importer et encodées utf-8
 	private $_modele = array();			//modele (structure) du fichier d'import
-	private $_entete = array();			//tableau contenant l'entete (correspondance colonne modele / colonne CSV)
+	private $_entete = array();			//tableau contenant l'entete (Numéro de Colonne CSV / identifiant du modèle)
 
-	const VERSION = 'v1.0.0 (2019-02-05)';
+	const VERSION = 'v2.0.0 (2019-04-03)';
 
 	//--------------------------------------
 	// Méthodes privées
 	//--------------------------------------
 
-	private function _keyExists($colonne) {
-		if (!array_key_exists($colonne, $this->_modele)) {
-			die ('Colonne "'.$colonne.'" inexistante dans le modèle créé');
+	//test de l'existence d'une colonne (clé) dans le modèle
+	private function _keyExists($id) {
+		if (!array_key_exists($id, $this->_modele)) {
+			die ('Colonne "'.$id.'" inexistante dans le modèle créé');
+		}
+	}
+
+	//hydratation des données : c'est à dire le remplissage des propriétés de l'objet
+	private function _hydrate($id, array $donnees) {
+		foreach ($donnees as $key => $value) {
+			$method = 'set'.ucfirst($key);
+			if (method_exists($this, $method)) {
+				$this->$method($id, $value);
+			}
 		}
 	}
 
@@ -73,8 +99,9 @@ class UniversalCsvImport {
 		//lecture de la première ligne contenant intitulé des colonnes : séparateur ';'
 		$dummy = fgetcsv($fp, 3000, ';');
 		//lecture des lignes de données
+		$cpt = 2;
 		while ($ligneData = fgetcsv($fp, 3000, ';')) {		
-			$enreg = array();
+			$enreg = array('ligne' => $cpt++);
 			foreach($this->_modele as $key => $colonne) {
 				if ($colonne['active']) {
 					if ($codage == CODAGE_UTF8) {
@@ -99,6 +126,16 @@ class UniversalCsvImport {
 		return $this->_modele;
 	}
 
+	//positionnement du champ "colonne" pour la colonne $id
+	public function getColonne($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['colonne']; else return getLib('ERREUR');}
+	public function getLibelle($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['libelle']; else return getLib('ERREUR');}
+	public function getSqlField($id)	{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['sqlField']; else return getLib('ERREUR');}
+	public function getMatch($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['match']; else return getLib('ERREUR');}
+	public function getActive($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['active']; else return getLib('ERREUR');}
+	public function getCommentaire($id)	{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['commentaire']; else return getLib('ERREUR');}
+	public function getCss($id)			{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['css']; else return getLib('ERREUR');}
+	public function getDefaut($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['defaut']; else return getLib('ERREUR');}
+
 	public function getNbColonnes() {
 		return count($this->_modele);
 	}
@@ -107,45 +144,84 @@ class UniversalCsvImport {
 		return $this->_entete;
 	}
 
-	public function getNumCol($id) {
-		return $this->_modele[$id]['colonne'];
-	}
-
-	public function getLibelle($id) {
-		return $this->_modele[$id]['libelle'];
-	}
-
 	//--------------------------------------
 	// SETTERS
 	//--------------------------------------
 
-	// défini le champ sql qui correspond à la colonne du fichier csv
-	public function setSqlField($colonne, $sql) {
-		$this->_keyExists($colonne);
-		$this->_modele[$colonne]['sql'] = $sql;
+	//positionnement du champ "colonne" pour la colonne $id
+	public function setColonne($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['colonne'] = $valeur;
 	}
-
+	//positionnement du champ "libelle" pour la colonne $id
+	public function setLibelle($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['libelle'] = $valeur;
+	}
+	//positionnement du champ "sqlField" pour la colonne $id
+	public function setSqlField($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['sqlField'] = $valeur;
+	}
+	//positionnement du champ "match" pour la colonne $id
 	// ajoute un test match à la colonne
-	public function setMatch($colonne, $match) {
-		$this->_keyExists($colonne);
+	public function setMatch($id, $match) {
+		$this->_keyExists($id);
 		if (empty($match)) {
-			$this->_modele[$colonne]['match'] = array();
+			$this->_modele[$id]['match'] = array();
 		}
 		else {
-			$this->_modele[$colonne]['match'] = array_unique(array_merge($this->_modele[$colonne]['match'], $match));
+			$this->_modele[$id]['match'] = array_unique(array_merge($this->_modele[$id]['match'], $match));
 		}
 	}
+	//positionnement du champ "active" pour la colonne $id
+	public function setActive($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['active'] = $valeur;
+	}
+	//positionnement du champ "commentaire" pour la colonne $id
+	public function setCommentaire($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['commentaire'] = $valeur;
+	}
+	//positionnement du champ "css" pour la colonne $id
+	public function setCss($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['css'] = $valeur;
+	}
+	//positionnement du champ "defaut" pour la colonne $id
+	public function setDefaut($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['defaut'] = $valeur;
+	}
 
-	// création d'une colonne dans le modèle d'import
-	public function createColonne($id, $num, $libelle, $sql, $match=array()) {
+	//--------------------------------------
+	// Création d'une colonne dans le modèle d'import
+	//------------------------------------------
+	// Entrée :
+	//		$id : identifiant de la colonne CSV dans le modèle
+	//		$donnees : tableau de définition de la colonne CSV
+	// Retour : 
+	//		plante si colonne déjà créée, rien sinon
+	//--------------------------------------
+	public function createColonne($id, array $donnees) {
+		//test de l'existence de la colonne dans le modèle
 		if (isset($this->_modele[$id])) {
 			die('La colonne "'.$id.'" existe déjà dans le modèle');
 		}
-		$this->_modele[$id] = array('colonne' => $num, 
-									'libelle' => $libelle, 
-									'sql' => $sql, 
-									'match' => (array)$match, 
-									'active' => true);
+		//creation de l'enregistrement par défaut
+		$this->_modele[$id] = array(
+			'colonne' => -1,				//numéro de la colonne dans le csv
+			'libelle' => '',				//libellé à afficher pour la colonne
+			'sqlField' => '',				//champ SQL correspondant
+			'match' => array(),				//définitions des tests primaires
+			'commentaire' => '',			//commentaire
+			'css' => '',					//code css à appliquer au commentaire
+			'defaut' => '',					//valeur par défaut à appliquer au champ si le match 'DEFAULT' est positionné
+			'active' => true);				//colonne active (à prendre en compte) ?
+		//hydratation avec les paramètres de la colonne $id
+		$this->_hydrate($id, $donnees);
+		//reconstruction du tableau entete (contient les couples "Numéro de Colonne CSV / identifiant du modèle")
 		$this->_entete = array();
 		foreach($this->_modele as $key => $valeur) {
 			$this->_entete[$valeur['colonne']] = $key;
@@ -153,13 +229,17 @@ class UniversalCsvImport {
 
 	}
 
-	//--------------------------------------
-	// Méthodes publiques
-	//--------------------------------------
-
-	//Affichage d'un libellé correspondant à un therme (constante)
-	//Si jamais une fonction getLib() existe dans l'application, c'est cette fonction qui sera appelée
-	//Ceci permet par exemple aux application de gérer le multi-langues
+	//------------------------------------------
+	// Affichage d'un libellé correspondant à un therme (constante)
+	// Si jamais une fonction getLib() existe déjà dans l'application, elle sera appelée en priorité
+	// Ceci permet par exemple aux application de gérer le multi-langues
+	//------------------------------------------
+	// Entrée
+	//		$mnemo : donnée mnémonique correspondant à la chaine de caratère demandée
+	//		$param : 1 paramètre éventuel
+	// Retour
+	//		Affichage de la chaine souhaitée et correspondante
+	//------------------------------------------
 	public function getLib($mnemo, $param1='') {
 		if (function_exists('getLib')) return getLib($mnemo, $param1);
 		//dans le cas contraire
@@ -209,24 +289,52 @@ class UniversalCsvImport {
 		return sprintf($libelles[$mnemo], $param1);
 	}
 
-	// active une colonne pour qu'elle soit pruise en compte dans la lecture
+	//------------------------------------------
+	// Active une colonne pour qu'elle soit pruise en compte dans la lecture
 	// par défaut, toutes les colonnes sont actives à leur création
-	public function active($colonne) {
-		$this->_modele[$colonne]['active'] = true;
+	//------------------------------------------
+	// Entrée : 
+	//		$id : identifiant de la colonne
+	// Retour : 
+	//		Rien
+	//------------------------------------------
+	public function active($id) {
+		$this->_modele[$id]['active'] = true;
 	}
 
-	// desactive une colonne pour qu'elle ne soit pas prise en compte dans la lecture
+	//------------------------------------------
+	// Désactive une colonne pour qu'elle ne soit pas prise en compte dans la lecture
 	// par défaut, toutes les colonnes sont actives à leur création
-	public function desactive($colonne) {
-		$this->_modele[$colonne]['active'] = false;
+	//------------------------------------------
+	// Entrée : 
+	//		$id : identifiant de la colonne
+	// Retour : 
+	//		Rien
+	//------------------------------------------
+	public function desactive($id) {
+		$this->_modele[$id]['active'] = false;
 	}
 
-	// compte le nombre de colonne dans le modele
+	//------------------------------------------
+	// Compte le nombre de colonne dans le modele
+	//------------------------------------------
+	// Entrée : 
+	//		Rien
+	// Retour : 
+	//		Le nombre de colonnes définies dans le modèle
+	//------------------------------------------
 	public function modeleColCount() {
 		return count($this->_modele);
 	}
 
-	// charge les données du fichier CVS
+	//------------------------------------------
+	// Charge les données du fichier CVS
+	//------------------------------------------
+	// Entrée : 
+	//		$file : fichier CSV
+	// Retour : 
+	//		Le contenu du fichier CSV codé en UTF-8
+	//------------------------------------------
 	public function charge($file) {
 		$this->_filename = $file;
 		return $this->_loadCSV(CODAGE_UTF8);
@@ -247,8 +355,10 @@ class UniversalCsvImport {
 	//		[erreur] => 
 	//	)
 	//--------------------------------------
-	// Entrée : l'enregistrement à tester (modifié si erreur(s) rencontrée(s))
-	// Sortie : true (au loins une erreur rencontrée) / false (pas d'erreur)
+	// Entrée : 
+	//		$enregistrement : l'enregistrement à tester (modifié si erreur(s) rencontrée(s))
+	// Sortie : 
+	//		true (au moins une erreur rencontrée) / false (pas d'erreur)
 	//--------------------------------------
 	public function testColonnes(&$enregistrement) {
 		// pour chaque colonne du modele
@@ -256,8 +366,14 @@ class UniversalCsvImport {
 			//pour chaque match du modele
 			foreach($colonneModele['match'] as $test) {
 	
-				//test si le champ est vide
-				if ($test == 'REQUIRED') {
+				if ($test == 'DEFAULT') {
+					//On se sert de la methode de test des colonnes pour forcer le champ à la valeur par défaut si il est vide.
+					if ($enregistrement[$keyModele] == '') {
+						$enregistrement[$keyModele] = $colonneModele['defaut'];
+						break;
+					}
+				}	
+				elseif ($test == 'REQUIRED') {
 					if ($enregistrement[$keyModele] == '') {
 						$enregistrement[$keyModele] = '<span class="text-danger">'.getLib('UFC_CHAMP_REQUIS').'</span>';
 						$enregistrement['erreur'] = true;
@@ -432,6 +548,12 @@ class UniversalCsvImport {
 	// Propose code HTML / BOOTSTRAP pour affichage des 
 	// lignes en erreur dans un tableau classique (1 colonne par champs)
 	//-----------------------------------------------------------
+	// Entrée : 
+	//		$data : jeu de données
+	//		$nbErreur : nombre d'erreurs rencontrées dans le jeu de données
+	// Retour :
+	//		Affichage des données sur la sortie standard
+	//-----------------------------------------------------------
 	public function displayErrorsTab($data, $nbErreur) {
 		$chaine = '';
 			$chaine.= '<div class="row">';
@@ -444,7 +566,7 @@ class UniversalCsvImport {
 					$chaine.= '<table class="table table-hover table-striped">';
 						$chaine.= '<thead>';
 							$chaine.= '<tr>';
-								$chaine.= '<th class="text-center" width="5%">ligne</th>';
+								$chaine.= '<th class="text-center" width="5%">CSV</th>';
 								foreach ($this->_modele as $key => $colonne) {
 									$chaine.= '<th class="text-left" width="'.div(95, $this->getNbColonnes()).'%">'.$key.'</th>';
 								}
@@ -454,7 +576,7 @@ class UniversalCsvImport {
 							foreach ($data as $numLine => $enreg) {
 								if ($data[$numLine]['erreur'] == true) {
 									$chaine.= '<tr>';
-										$chaine.= '<td width="5%" align="center">'.($numLine + 2).'</td>';
+										$chaine.= '<td width="5%" align="center">'.$data[$numLine]['ligne'].'</td>';
 										foreach ($this->_modele as $key => $colonne) {
 											$chaine.= '<td align="left" width="'.div(95, $this->getNbColonnes()).'%" class="small">'.$enreg[$key].'</td>';
 										}
@@ -473,6 +595,12 @@ class UniversalCsvImport {
 	// en erreur dans un tableau regroupé (tous les champs dans la colonne).
 	// plus lisible
 	//-----------------------------------------------------------
+	// Entrée : 
+	//		$data : jeu de données
+	//		$nbErreur : nombre d'erreurs rencontrées dans le jeu de données
+	// Retour :
+	//		Affichage des données sur la sortie standard
+	//-----------------------------------------------------------
 	public function displayErrors($data, $nbErreur) {
 		$chaine = '';
 			$chaine.= '<div class="row">';
@@ -487,7 +615,7 @@ class UniversalCsvImport {
 					$chaine.= '<table class="table table-hover table-striped">';
 						$chaine.= '<thead>';
 							$chaine.= '<tr>';
-								$chaine.= '<th class="text-center" width="5%">ligne</th>';
+								$chaine.= '<th class="text-center" width="5%">CSV</th>';
 								$chaine.= '<th class="text-left" width="95%">contenu</th>';
 							$chaine.= '</tr>';
 						$chaine.= '</thead>';
@@ -495,7 +623,7 @@ class UniversalCsvImport {
 							foreach ($data as $numLine => $enreg) {
 								if ($data[$numLine]['erreur'] == true) {
 									$chaine.= '<tr>';
-										$chaine.= '<td width="5%" align="center">'.($numLine + 2).'</td>';
+										$chaine.= '<td width="5%" align="center">'.$data[$numLine]['ligne'].'</td>';
 										$chaine.= '<td align="left" width="95%">';
 										foreach ($enreg as $key => $colonne) {
 											$chaine.= '<mark>'.$key.'</mark> : '.$enreg[$key].'<br />';
@@ -514,6 +642,12 @@ class UniversalCsvImport {
 	//-----------------------------------------------------------
 	// Propose code HTML simple pour affichage des lignes en erreur
 	//-----------------------------------------------------------
+	// Entrée : 
+	//		$data : jeu de données
+	//		$nbErreur : nombre d'erreurs rencontrées dans le jeu de données
+	// Retour :
+	//		Affichage des données sur la sortie standard
+	//-----------------------------------------------------------
 	public function displayRawErrors($data, $nbErreur) {
 		$chaine = '<h1>Erreurs à corriger avant importation</h1>';
 		$chaine.= '<p>';
@@ -524,7 +658,7 @@ class UniversalCsvImport {
 		$chaine.= '</p>';
 		foreach ($data as $numLine => $enreg) {
 			if ($data[$numLine]['erreur'] == true) {
-				$chaine.= '<p>ligne n°'.($numLine + 2).'</p>';
+				$chaine.= '<p>ligne CSV n°'.$data[$numLine]['ligne'].'</p>';
 				$chaine.= '<pre>';
 				foreach($enreg as $key => $value) {
 					$chaine.= '['.$key.'] => '.$value.'<br />';

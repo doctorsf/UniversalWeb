@@ -27,7 +27,7 @@ function import($importFile) {
 		$csv = new Exemple_csvimport();
 		$csv->buildModele();
 		$data = $csv->charge($importFile);
-		
+
 		// affinage des données avant traitement
 		//-------------------------------------------
 		foreach ($data as $numLine => $enreg) {
@@ -61,7 +61,7 @@ function import($importFile) {
 		//-------------------------------------------
 		else {
 			//affichage des infos non valide dans un tableau
-			echo $csv->displayRawErrors($data, $nbErreur);
+			echo $csv->displayErrors($data, $nbErreur);
 			if ($nbErreur == 1) {
 				echo '<p class="lead text-danger">1 ligne comporte une ou plusieurs erreurs&hellip;</p>';
 			}
@@ -133,6 +133,8 @@ echo '<body>';
 						//sauvegarde de la page de retour
 						$frm->init();
 						echo $frm->afficher();
+						//affichage de la structure du modèle d'import
+						include_once('exemple_import_csv_modele.php');
 						break;
 					}
 					//--------------------------------------
@@ -142,6 +144,8 @@ echo '<body>';
 						if (!$frm->tester()) {
 							$frm->recopieErreurs();
 							echo $frm->afficher();
+							//affichage de la structure du modèle d'import
+							include_once('exemple_import_csv_modele.php');
 						}
 						else {
 							//ok ajouter

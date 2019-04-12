@@ -409,28 +409,6 @@ class Form_user extends UniversalForm {
 		return $res;
 	}
 
-	//Initialise certains champs avec des données LDAP
-	public function initWithLdapInfos($infos) {
-		$this->initDonnees();				//initialisation des données
-		$this->construitChamps();
-		//on force les valeurs de certains champs interessants avec les données du LDAP trouvées
-		$this->field('uid')->setValue($infos['uid']);
-		$this->field('nom')->setValue(ucfirst(strtolower($infos['nom'])));
-		$this->field('prenom')->setValue($infos['prenom']);
-		$this->field('email')->setValue($infos['email']);
-		$affichable = (accesAutorise('FONC_ADM_APP') && 
-						(($this->getOperation() != self::MODIFIER) || ($this->getIdTravail() != $_SESSION[_APP_LOGIN_]->getId()))
-					  );
-		if ($affichable) $this->field('notesPrivees')->setValue('Service : '.$infos['service']);
-		return true;
-	}
-
-	//monte une erreur sur l'objet champ 'recherche'
-	public function setRechercheLdapErreur($erreur) {
-		$this->field('recherche')->setErreur(true);
-		$this->field('recherche')->setLiberreur($erreur);
-	}
-
 	//--------------------------------------
 	// Tests supplémentaires sur certains champs, en plus des test de			
 	// validation définit à la construction	par le paramètre : testMatches
