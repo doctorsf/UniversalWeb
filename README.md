@@ -1,54 +1,55 @@
-UniversalWeb - Squelette d'application Web
+# UniversalWeb
+## Squelette d'application Web
 
 UniversalWeb est un squelette d’application Web permettant de construire rapidement votre site Internet multilingue. A base de PHP et s’appuyant sur une base de données MySQL, Il propose en standard un frontend (site visible par l’internaute final) et un backend (site d’administration du frontend). UniversalWeb fournit également une aide non négligeable à la programmation en PHP et au développement de ces deux modules par la mise en place de nombreuses classes utilitaires. Ce n’est pas à proprement parler un framework mais plutôt une collection d’outils PHP mis en œuvre dans un squelette d’applications et les intègre auprès d’outils tiers tels que Bootstrap, JQuery ou encore Font-Awesome.
 
 -----------------
 V 1.0.0
 -----------------
-- Version de base (ExtraWeb)
+1. Version de base (ExtraWeb)
 
 -----------------
 V 1.0.1 (20.10.2014)
 -----------------
-- Correction de bug sur les classes "UniversalFieldCancel" et "UniversalFieldButton" : Ces éléments de type html button ne renvoyant aucun POST, la propriété 'value' était réinitialisée à '0' par l'objet parent UniversalField. Conséquence directe : le libellé du champ disparaisait ! Il a donc suffit d'interdire l'appel à la méthode relever() d'UniversalField en la surchargeant pour les classes "UniversalFieldCancel" et "UniversalFieldButton".
-- Ajout et prise en compte des paramètres 'group', lineType' et 'lineClass' pour les classes de boutons "UniversalFieldSubmit", "UniversalFieldReset", "UniversalFieldCancel" et "UniversalFieldButton"
+1. Correction de bug sur les classes "UniversalFieldCancel" et "UniversalFieldButton" : Ces éléments de type html button ne renvoyant aucun POST, la propriété 'value' était réinitialisée à '0' par l'objet parent UniversalField. Conséquence directe : le libellé du champ disparaisait ! Il a donc suffit d'interdire l'appel à la méthode relever() d'UniversalField en la surchargeant pour les classes "UniversalFieldCancel" et "UniversalFieldButton".
+2. Ajout et prise en compte des paramètres 'group', lineType' et 'lineClass' pour les classes de boutons "UniversalFieldSubmit", "UniversalFieldReset", "UniversalFieldCancel" et "UniversalFieldButton"
 
 -----------------
 V 1.0.2 (18.12.2014)
 -----------------
-– Amélioration classe UniversalField : Modification de la méthode test() pour que les tests soit fait si le champ n'est pas vide. Si le champ vide ne doit pas être accepté alors il faut maintenant jouter le paramètre "REQUIRED"
+1. Amélioration classe UniversalField : Modification de la méthode test() pour que les tests soit fait si le champ n'est pas vide. Si le champ vide ne doit pas être accepté alors il faut maintenant jouter le paramètre "REQUIRED"
 
 -----------------
 V 1.0.3 (21.01.2015)
 -----------------
-- Ajout dans "defines.inc.php" du paramétrage de l'IP du développeur pour affichage de la fenêtre de debug.
-– Corrections mineures sur "listing_users.inc.php"
-– Correction bug dans "routines.inc.php", fonctions généralistes goPageBack() et lance() : Il fallait ajouter un "die()" une fois la redirection faite afin de s'assurer que le reste du code n'est pas exécuté. 
-– Forçage de la case des noms, prénoms des utilisateurs (premières lettres en majuscules seulement)
-– Amélioration de la requête "sqlUsers_getListing" de listing des utilisateur pour permettre un tri sur plusieurs champs concaténés (ex : "nom,prenom")
-– Sur le listing des utilisateurs, suppression de l'icône poubelle pour son propre compte
-– Ajout du test CHECK_ALPHA_NOMS sur les champs de formulaires
+1. Ajout dans "defines.inc.php" du paramétrage de l'IP du développeur pour affichage de la fenêtre de debug.
+2. Corrections mineures sur "listing_users.inc.php"
+3. Correction bug dans "routines.inc.php", fonctions généralistes goPageBack() et lance() : Il fallait ajouter un "die()" une fois la redirection faite afin de s'assurer que le reste du code n'est pas exécuté. 
+4. Forçage de la case des noms, prénoms des utilisateurs (premières lettres en majuscules seulement)
+5. Amélioration de la requête "sqlUsers_getListing" de listing des utilisateur pour permettre un tri sur plusieurs champs concaténés (ex : "nom,prenom")
+6. Sur le listing des utilisateurs, suppression de l'icône poubelle pour son propre compte
+7. Ajout du test CHECK_ALPHA_NOMS sur les champs de formulaires
 
 -----------------
 V 1.0.4
 -----------------
-– Correction "listing_users.inc.php" et "user.php" pour que le retour vers listing (après ajout/modif/suppr) prennent en compte la page d'origine affichée et se positionne dessus.
+1. Correction "listing_users.inc.php" et "user.php" pour que le retour vers listing (après ajout/modif/suppr) prennent en compte la page d'origine affichée et se positionne dessus.
 
 -----------------
 V 1.0.5
 -----------------
-- UniversalForm -> Ajout de la classe getFieldObjectByName()
-– UniversalFormXxxx -> Modifications mineures
+1. UniversalForm -> Ajout de la classe getFieldObjectByName()
+2. UniversalFormXxxx -> Modifications mineures
 
 -----------------
 V 2.0 (06.02.2015)
 -----------------
-- Utilise les nouvelles classes de UniversalFORM
+1. Utilise les nouvelles classes de UniversalFORM
 
 -----------------
 V2.10 (20.03.2015)
 -----------------
-- Modification UniversalForm.class.php
+1. Modification UniversalForm.class.php
 	- Ajout des fonctions 'mySqlDataProtect' et 'rnTo13' hors classe
 	- Correction disfonctionnement -> Ajout d'un test d'existence des champs dans getData()
 
