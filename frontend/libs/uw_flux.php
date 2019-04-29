@@ -31,66 +31,78 @@
 //		- Modification saveDataBase() : supprime le fichier de la sauvegarde si celle-ci ne s'est pas bien passé (on avait des fichiers de sauvegarde vide !)
 // 26.11.2018
 //		- Renommé la fonction writeLog() en writeStdLog()
+// 22.04.2019
+//		fonction loadCSV()
+//		- Correction bug (déclaré $tableRes avant traitement)
+//		- Ajout de 2 nouveau paramètres facultatifs ($delimiter et $premiereLigneExiste)
+//		- Création de 2 constantes supplémentaires (LOADCSV_DELIMITER_SEMICOLON et LOADCSV_DELIMITER_TAB)
+//		- Nom de variable $flag changé en $presentation plus parlant
+// 22.04.2019
+//		fonction saveCSV()
+//		- Ajout d'1 nouveau paramètre facultatif ($delimiter)
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
+// loadCSV: Charge un fichier CSV dans un tableau array()
 // Auteur : Fabrice Labrousse
-// Date : 07.08.2009
-// Attention fonction valable pour PHP5
+// 07.08.2009
+//		- Première création
+// 22.04.2019
+//		- Correction bug (déclaré $tableRes avant traitement)
+//		- Ajout de 2 nouveau paramètres facultatifs ($delimiter et $premiereLigneExiste)
+//		- Création de 2 constantes supplémentaires (LOADCSV_DELIMITER_SEMICOLON et LOADCSV_DELIMITER_TAB)
+//		- Nom de variable $flag changé en $presentation plus parlant
 //----------------------------------------------------------------------
-// loadCSV
-// Charge un fichier CSV dans une Array
-// Auteur : Fabrice Labrousse (c)2009
-//
 // Entrée :
-//		$fichier_destination : nom du fichier csv à lire
-//		$flag : choix de présentation du tableau résultat
-//			si $flag = LOADCSV_INDICE alors le tableau resultat est
-//				classé par indice [0]
-//			si $flag = LOADCSV_COLONNE alors le tableau resultat est
-//				classé par nom de colonne ["nom"]. On assume que la
-//				première ligne du CSV contient les noms de colonnes
+//		$inLeFichier : chemin complet du fichier CSV à lire
+//		$presentation : choix de présentation du tableau résultat
+//			- LOADCSV_INDICE (défaut) : le tableau resultat est présenté par indices [0..x]
+//			- LOADCSV_COLONNE : le tableau resultat est présenté par nom de colonne ["nom"]. Dans ce cas là, le fichier CSV doit contenir une colonne d'entête avec les noms des colonnes
+//		$codage : type de codage du tableau résultat 
+//			- CODAGE_ANSI (défaut)
+//			- CODAGE_UTF8
+//		$delimiter : spécifie le délimiteur pour le fichier CSV. 
+//			- LOADCSV_DELIMITER_SEMICOLON (défaut) : pour le ;
+//			- LOADCSV_DELIMITER_TAB : pour une tabulation
+//			- On peut passer un délimiteur pseronnalisé mais 1 seule caratère autorisé et le passer entre "" (ex "|")
+//		$premiereLigneExiste : booléen définit si le fichier CSV contient une ligne d'entête. 
+//			Si le fichier ne contient pas de ligne d'entête, le paramètre $presentation est forcé à LOADCSV_INDICE
 // Sortie :
-//		Une array
-//
-// Exemple :
-// $csv = loadCSV($leFichierCSV, LOADCSV_COLONNE);
-// foreach ($csv as $indice => $ligne) {
-//		echo '<pre>';
-//		print_r($ligne);
-//		echo '</pre>';
-// }
+//		Le tableau chargé.
+//		Si le fichier n'existe pas un tableau vide est renvoyé.
 //----------------------------------------------------------------------
 defined('LOADCSV_INDICE') || define('LOADCSV_INDICE', 0);
 defined('LOADCSV_COLONNE') || define('LOADCSV_COLONNE', 1);
+defined('LOADCSV_DELIMITER_TAB') || define('LOADCSV_DELIMITER_TAB', "\t");
+defined('LOADCSV_DELIMITER_SEMICOLON') || define('LOADCSV_DELIMITER_SEMICOLON', ";");
 
-//----------------------------------------------------------------------
-// Chargement du fichier CSV
-// par défaut le codage est ANSI (CODAGE_ANSI) mais on peut demander
-// un codage CODAGE_UTF8
-//----------------------------------------------------------------------
-function loadCSV($inLeFichier, $flag, $codage = CODAGE_ANSI)
+function loadCSV($inLeFichier, $presentation, $codage = CODAGE_ANSI, $delimiter = LOADCSV_DELIMITER_SEMICOLON, $premiereLigneExiste = true)
 {
-	if (($inLeFichier != null) && (file_exists($inLeFichier))) 
-	{
-		$tabRes = Array();
+	$tabRes = array();
+	if (($inLeFichier != null) && (file_exists($inLeFichier))) {
 		$fp = fopen($inLeFichier, 'r');
-		//lecture de la première ligne contenant intitulé des colonnes : séparateur ';'
-		$tabHeader = fgetcsv($fp, 3000, ';');
-		if ($codage == CODAGE_UTF8) {
-			//on transforme les intitulés de colonne en UTF-8
-			foreach ($tabHeader as $indice => $header) {
-				$tabHeader[$indice] = convert_utf8($tabHeader[$indice]);
+		if ($premiereLigneExiste) {
+			//lecture de la première ligne contenant intitulé des colonnes : séparateur ';'
+			$tabHeader = fgetcsv($fp, 3000, $delimiter);
+			if ($codage == CODAGE_UTF8) {
+				//on transforme les intitulés de colonne en UTF-8
+				foreach ($tabHeader as $indice => $header) {
+					$tabHeader[$indice] = convert_utf8($tabHeader[$indice]);
+				}
 			}
+			print_r($tabHeader);			
 		}
-//		print_r($tabHeader);			
+		else {
+			//puisqu'il n'y a pas de première ligne de définition des colonnes, on force le flag à LOADCSV_INDICE
+			$presentation = LOADCSV_INDICE;
+		}
 		//lecture des autres lignes et remplissage d'une Array
-		while ($tableau = fgetcsv($fp, 3000, ';'))
+		while ($tableau = fgetcsv($fp, 3000, $delimiter))
 		{		
 			foreach ($tableau as $indice => $valeur)
 			{
-				//selon le $flag, on passe le nom de la colonne ou son indice
-				if ($flag == LOADCSV_INDICE) {
+				//selon le mode de presentation choisi, on passe le nom de la colonne ou son indice
+				if ($presentation == LOADCSV_INDICE) {
 					if ($codage == CODAGE_UTF8) {
 						$tabInterne[$indice] = convert_utf8($valeur);
 					} 
@@ -110,21 +122,26 @@ function loadCSV($inLeFichier, $flag, $codage = CODAGE_ANSI)
 }
 
 //----------------------------------------------------------------------
-// Procédure de création d'un fichier CSV
+// Création d'un fichier CSV
+// Auteur : Fabrice Labrousse
 // Entrée :
-//		$inLeFichier : le nom du fichier csv a générer
-//		$lesDonnees : le tableau de données à exporter
-//		$codage : codage ANSI ou UTF-8 du fichier de sortie. Par défaut
-//			le fichier de sortie sera en ANSI (CODAGE_ANSI)
-//			si $codage = 0 -> CODAGE_ANSI
-//			si $codage = 1 -> CODAGE_UTF8
+//		$inLeFichier : chemin complet du fichier CSV à générer
+//		$lesDonnees : le tableau de données à exporter (les clés du premier tuple servent de titres de colonnes)
+//		$codage : type de codage du fichier résultat 
+//			- CODAGE_ANSI (défaut)
+//			- CODAGE_UTF8
+//		$delimiter : spécifie le délimiteur pour le fichier CSV. 
+//			- LOADCSV_DELIMITER_SEMICOLON (défaut) : pour le ;
+//			- LOADCSV_DELIMITER_TAB : pour une tabulation
+//			- On peut passer un délimiteur pseronnalisé mais 1 seule caratère autorisé et le passer entre "" (ex "|")
+// Retour : 
+//		Rien (fichier CSV créé)
 //----------------------------------------------------------------------
-// Par défaut l'encodage de l'application est UTF8 car les sources sont 
-// enregistrés en UTF8. C'est pour ceci que l'on "décode" de l'utf8 pour 
-// avoir de l'ANSI.
+// Comme l'encodage de l'application est UTF8 (car les sources sont enregistrés en UTF8) on 
+// "décode" de l'utf8 pour avoir de l'ANSI.
 // NB : Pour tout ce qui est fichier CSV, préférer un encodage ANSI
 //----------------------------------------------------------------------
-function saveCSV($inLeFichier, $lesDonnees, $codage=CODAGE_ANSI)
+function saveCSV($inLeFichier, $lesDonnees, $codage=CODAGE_ANSI, $delimiter = LOADCSV_DELIMITER_SEMICOLON)
 {
 	if ($inLeFichier != null) {
 		//creation du fichier csv
@@ -134,10 +151,10 @@ function saveCSV($inLeFichier, $lesDonnees, $codage=CODAGE_ANSI)
 		$entete = @array_keys($lesDonnees[0]);
 		foreach($entete as $colonne) {
 			if ($codage == CODAGE_ANSI) {
-				fwrite($fp, utf8_decode($colonne).';');
+				fwrite($fp, utf8_decode($colonne).$delimiter);
 			}
 			else {
-				fwrite($fp, $colonne.';');
+				fwrite($fp, $colonne.$delimiter);
 			}
 		}
 		fwrite($fp, "\r\n");
@@ -147,10 +164,10 @@ function saveCSV($inLeFichier, $lesDonnees, $codage=CODAGE_ANSI)
 			for ($index = 0; $index < count($entete); $index++) {
 				$valeur = $ligne[$entete[$index]];
 				if ($codage == CODAGE_ANSI) {
-					fwrite($fp, utf8_decode($valeur).';');
+					fwrite($fp, utf8_decode($valeur).$delimiter);
 				}
 				else {
-					fwrite($fp, $valeur.';');
+					fwrite($fp, $valeur.$delimiter);
 				}
 			}
 			fwrite($fp, "\r\n");
@@ -202,8 +219,10 @@ function lit_rss($fichier, $objets, $maximum=1000)
 // de fait, un appel à cette fonction remplace la fonction php
 // file_get_contents(url) pour laquelle les directives citées ci-dessus
 // doivent obligatoirement passée sur ON.
-// ENTREE : url à interroger
-// retour : le contenu de l'url passée ne paramètre
+// Entrée : 
+//		url à interroger
+// Retour : 
+//		le contenu de l'url passée en paramètre
 //----------------------------------------------------------------------
 function chargeUrlExterne($url)
 {
@@ -347,8 +366,8 @@ function restoreDatabase($repertoire_sauvegardes, $fichier)
 //		$file : chemin complet du fichier de log
 //		$msg : message à logger
 //		$keepAccents : true (conserve les éventuels accents), false (supprime les accents dans le message) 
-// Retour
-//		rien
+// Retour :
+//		Aucun
 //----------------------------------------------------------------------
 function writeStdLog($file, $msg, $keepAccents=false) 
 {
@@ -360,7 +379,13 @@ function writeStdLog($file, $msg, $keepAccents=false)
 
 //----------------------------------------------------------------------
 // Surcharge de la fonction fwrite pour écrire en ANSI ou UTF-8
-// Par défaut c'est de l'UTF-8 parce que le code (.php) est en UTF-8
+// Par défaut préferer l'UTF-8 (parce que le code (.php) est en UTF-8)
+// Entrée : 
+//		$pf : pointeur sur le fichier sitemap
+//		$codage : codage de l'info (CODAGE_UTF8 ou CODAGE_ANSI)
+//		$texte : texte à écrire
+// Retour : 
+//		Aucun
 //----------------------------------------------------------------------
 function myFwrite($pf, $codage, $texte)
 {
@@ -393,12 +418,15 @@ function writeSitemapEntry($pf, $chaine, $periodicite, $priorite, $codage=CODAGE
 
 //----------------------------------------------------------------------
 // Ecriture d'une entrée de fichier sitemap image
-// $pf : pointeur sur le fichier sitemap
-// $urlpage : url de la page htmp ou se trouve l'image
-// $urlimage : url de l'image
-// $titre : titre de l'image (optionnel)
-// $legende : légende de l'image (optionnel)
-// $codage : codage de l'info (optionnel, par défaut UTF-8)
+// Entrée : 
+//		$pf : pointeur sur le fichier sitemap
+//		$urlpage : url de la page htmp ou se trouve l'image
+//		$urlimage : url de l'image
+//		$titre : titre de l'image (optionnel)
+//		$legende : légende de l'image (optionnel)
+//		$codage : codage de l'info (optionnel, par défaut UTF-8)
+// Entrée : 
+//		Aucun
 //----------------------------------------------------------------------
 function writeSitemapImageEntry($pf, $urlpage, $urlimage, $titre='', $legende='', $codage=CODAGE_UTF8)
 {

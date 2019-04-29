@@ -188,6 +188,9 @@
 //		- En plus d'une valeur vide, le testMatch REQUIRED_SELECTION (pour les select) teste maintenant aussi sur la "chaine de caractère" 'NULL' (et non pas NULL)
 //		- Ajout du test matches CHECK_EMAIL_APOSTROPHE (idem CHECK_EMAIL mais autorise l'apostrpohe en plus)
 //		- Ajout de la constante COPYRIGHT
+// Version 3.12.0 du 17.04.2019
+//		- Les positionnements de tooltips sont maintenant positionnés par défaut à "auto" (rappel : les tooltips ne s'affichent pas si leur 'title' est vide). 
+//			Le mode "auto" est nouveau, c'est popper qui décide de la meilleure position en fonction du contexte.
 //==============================================================
 
 //-------------------------------------------------------------------------
@@ -234,7 +237,7 @@ class UniversalForm {
 	private $_message = '';				//éventuel message qu'il est possible de faire passer à l'objet
 	private $_ligneEncours = false;		//dessin d'une ligne de champs en cours ?
 
-	const VERSION = 'v3.11.3 (2019-01-17)';
+	const VERSION = 'v3.12.0 (2019-04-17)';
 	const COPYRIGHT = '&copy;2014-2019 Fabrice Labrousse';
 	const CONSULTER = 'consulter';
 	const AJOUTER = 'ajouter';

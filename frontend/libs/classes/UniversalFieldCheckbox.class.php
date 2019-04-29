@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'checkbox'
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 class UniversalFieldCheckbox extends UniversalField {
@@ -101,7 +101,7 @@ class UniversalFieldCheckbox extends UniversalField {
 		($this->lclass() != '') ? $lclass = $this->lclass() : $lclass = '';
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
 		$chaine = '<div id="'.$this->idztitre().'" style="'.$style.'">';
 			if ($labelHelp == '') {
@@ -206,7 +206,7 @@ class UniversalFieldCheckbox extends UniversalField {
 			if ($this->titre() != '') {
 				($this->tlong() != '') ? $tlong = ' '.$this->tlong() : $tlong = '';
 				($this->tclass() != '') ? $tclass = ' '.$this->tclass() : $tclass = '';
-				($this->titreHelpPos() != '') ? $titreHelp = ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp = '';
+				($this->titreHelpPos() != '') ? $titreHelp = ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp = ' data-placement="auto"';
 				($this->titreHelp() != '') ? $titreHelp.= ' title="'.$this->titreHelp().'"' : $titreHelp.= '';
 				$classeTitre = 'col-form-label'.$tlong.$tclass;
 				$style = '';

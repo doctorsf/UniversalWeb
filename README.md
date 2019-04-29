@@ -563,4 +563,39 @@ V3.11.0.0 (11.04.2019)
 -----------------
 V3.11.1.0 (12.04.2019)
 -----------------
-- Correction bug infos_systeme.php (certains serveurs ne connaissent pas la fonction apache_get_version())
+1. Correction bug infos_systeme.php (certains serveurs ne connaissent pas la fonction apache_get_version())
+
+-----------------
+V3.11.2.0 (15.04.2019)
+-----------------
+1. infos_systeme.php : Test de l'existence des classes UniverslaWeb pour affichage sans bug en cas de non présence de la classe. la fonction php class_exists() ne convient pas !
+
+-----------------
+V3.11.3.0 (16.04.2019)
+-----------------
+1. UniversalList en Version V2.7.0
+	- Modification de la table xx_listings : ajout du champ last_update qui donne le timestamp de la création de la liste et de sa dernière modification (public function createTable())
+
+-----------------
+V3.11.4.0 (17.04.2019)
+-----------------
+1. UniversalForm en Version V3.12.0
+	- Les positionnement des tooltips sont par défaut 'auto'
+2. Changement variable _VERSION_APP_ en _APP_VERSION_
+3. sql_logs.inc.php
+	- Correction méthode purge() : contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées l'ancienne méthode renvoyait toujours 0
+4. maintenance.php
+	- Correction bug
+	- correction purgelog()
+5. infos_systeme.php
+	- ajout info _APP_VERSION_
+
+-----------------
+V3.12.0.0 (22.04.2019)
+-----------------
+1. Dépose par défaut du fichier d'erreurs errors.txt dans dossier "armoire" protégé par .htaccess
+2. Présentation des informations système dans une série d'onglets
+3. Amélioration du contenu des informations système : 
+	- Ajout de la configuration UniversalWeb pour le Frontend
+	- Listage et épuration des erreurs PHP du backend (évite de gérer le fichier errors.txt manuellement)
+	- Listage et épuration des erreurs PHP du frontend (évite de gérer le fichier errors.txt manuellement)

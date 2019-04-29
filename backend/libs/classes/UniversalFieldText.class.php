@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'text'
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 class UniversalFieldText extends UniversalField {
@@ -65,7 +65,7 @@ class UniversalFieldText extends UniversalField {
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 		($this->lclass() != '') ? $lclass = ' '.$this->lclass() : $lclass = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
 		$style = '';
 		if ($this->label() == '') {
@@ -114,9 +114,9 @@ class UniversalFieldText extends UniversalField {
 	private function _drawLabelOnline() {
 		//label online
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
-		($this->labelPlusHelpPos() != '') ? $labelPlusHelp = ' data-placement="'.$this->labelPlusHelpPos().'"' : $labelPlusHelp = '';
+		($this->labelPlusHelpPos() != '') ? $labelPlusHelp = ' data-placement="'.$this->labelPlusHelpPos().'"' : $labelPlusHelp = ' data-placement="auto"';
 		($this->labelPlusHelp() != '') ? $labelPlusHelp.= ' title="'.htmlspecialchars($this->labelPlusHelp()).'"' : $labelPlusHelp.= '';
 		$style = '';
 		if ($this->label() == '') {

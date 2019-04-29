@@ -35,7 +35,7 @@ defined('_APP_TITLE_')			|| define('_APP_TITLE_',		'Saisie vidéothèque');
 defined('_EMAIL_WEBMASTER_')	|| define('_EMAIL_WEBMASTER_',	'webmaster@yoursite.fr');
 defined('_AUTEUR_')				|| define('_AUTEUR_',			'Auteur');
 defined('_COPYRIGHT_')			|| define('_COPYRIGHT_',		'Auteur - 2016');
-defined('_VERSION_APP_')		|| define('_VERSION_APP_',		'v0.0.0');
+defined('_APP_VERSION_')		|| define('_APP_VERSION_',		'v0.0.0');
 defined('_LG_')					|| define('_LG_',				'fr');
 defined('_IP_DEVELOPPEMENT_')	|| define('_IP_DEVELOPPEMENT_',	array('120.146.72.10'));
 

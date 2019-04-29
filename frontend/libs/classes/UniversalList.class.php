@@ -76,6 +76,8 @@
 //	- Ajout des méthodes UniversalListColonne::setHeader() et UniversalListColonne:: getHeader() pour prendre en compte le nouveau paramètre "header"
 //	- Affichage du listing : supprimé la taille de la colonne pour permettre à du code javascript de la modifier en drag & drop 
 //	(voir code https://www.brainbell.com/javascript/making-resizable-table-js.html)
+// 16.04.2019 : VERSION 2.7.0
+//	- Modification de la table xx_listings : ajout du champ last_update qui donne le timestamp de la création de la liste et de sa dernière modification (public function createTable())
 //------------------------------------------------------------------
 
 //*****************************************************************************************
@@ -807,7 +809,7 @@ class UniversalList {
 	private $_headClass = '';				//classe CSS de l'entête de la table
 	private $_filtresClass = 'thead-light';	//classe CSS du bandeau de filtres (première ligne du tableau)
 
-	const VERSION = 'V2.6.0 (2019.03.12)';
+	const VERSION = 'V2.7.0 (2019.04.16)';
 	const NB_LIGNES_PAR_PAGE = 25;
 	const SHOW_BUTTONS = true;
 
@@ -1112,16 +1114,17 @@ class UniversalList {
 	//-------------------------------------
 	public function createTable() {
 		$requete = "CREATE TABLE IF NOT EXISTS "._PREFIXE_TABLES_."listings (";
-		$requete.= "id tinyint(3) unsigned NOT NULL AUTO_INCREMENT, ";
+		$requete.= "id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, ";
 		$requete.= "titre varchar(255) NOT NULL, ";
 		$requete.= "id_user varchar(100) NOT NULL, ";
 		$requete.= "id_listing varchar(30) NOT NULL, ";
+		$requete.= "last_update timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, ";
 		$requete.= "data text NOT NULL, ";
 		$requete.= "PRIMARY KEY (id), ";
 		$requete.= "KEY titre (titre), ";
 		$requete.= "KEY id_user_2 (id_user), ";
-		$requete.= "KEY id_listing (id_listing)";
-		$requete.= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+		$requete.= "KEY id_listing (id_listing)"; 
+		$requete.= ") ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		return $res;
 	}

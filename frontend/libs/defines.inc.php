@@ -68,6 +68,7 @@ defined('_CLASSES_')				|| define('_CLASSES_',					_LIBS_.'classes/');
 defined('_BRIQUES_')				|| define('_BRIQUES_',					_LIBS_.'briques/');
 defined('_LANGUES_')				|| define('_LANGUES_',					_LIBS_.'langues/');
 defined('_SQL_')					|| define('_SQL_',						_LIBS_.'sql/');
+defined('_ARMOIRE_')				|| define('_ARMOIRE_',					_LIBS_.'armoire/');
 
 //paramètres utilisés pour rendre l'application unique
 defined('_APP_ID_')					|| define('_APP_ID_',					md5(_APP_BLOWFISH_));			//id de l'application
@@ -76,6 +77,9 @@ defined('_APP_LOGIN_')				|| define('_APP_LOGIN_',				_APP_ID_.'_login');				//v
 defined('_APP_LANGUE_ENCOURS_')		|| define('_APP_LANGUE_ENCOURS_',		_APP_ID_.'_langue_en_cours');	//var. session contient la langue en cours de l'appli
 defined('_APP_LANGUE_CHANGEE_')		|| define('_APP_LANGUE_CHANGEE_',		_APP_ID_.'_langue_changee');	//var. session contient la langue changée de l'appli
 defined('_APP_INPUT_')				|| define('_APP_INPUT_',				_APP_ID_.'_input');				//var. session contient l'entrée saisie du formulaire de classe Form_input
+
+//fichiers
+defined('_PHP_FILE_ERRORS_')		|| define('_PHP_FILE_ERRORS_',			_ARMOIRE_.'errors.txt');
 
 //type de logs possibles
 defined('_LOG_CONNEXION_')			|| define('_LOG_CONNEXION_',			'1');

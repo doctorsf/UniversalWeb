@@ -67,6 +67,7 @@ $_LIBELLES = array(
 	// ERREURS
 	//------------------------------------------
 	'ERREUR'						=> 'Error',
+	'ERREUR_AUCUNE'					=> 'No Error',
 	'ERREUR_SQL'					=> 'SQL error&hellip;',
 	'ERREUR_COMMANDE'				=> 'Choice error&hellip;',
 	'ERREUR_ANNUAIRE'				=> 'LDAP Connexion Error',
@@ -77,6 +78,9 @@ $_LIBELLES = array(
 	'ERREUR_SUPPR_USER_X'			=> 'Error while deleting user %s',
 	'ERREUR_SUICIDE'				=> 'It is impossible to delete your own account. Ask another administrator to do this for you...',
 	'ERREUR_FICHIER_INEXISTANT'		=> 'File not found',
+	'PHP_ERROR_FILE_VIDER'			=> 'Empty PHP Errors File',
+	'PHP_ERROR_FILE_DELETED'		=> 'PHP Errors File deleted with success&hellip;',
+	'PHP_ERROR_FILE_ERROR'			=> 'Error while deleting PHP Errors File!',
 
 	//------------------------------------------
 	// MOTS / VERBES
@@ -131,6 +135,9 @@ $_LIBELLES = array(
 	'REFERENCIEL'					=> 'Filing',
 	'SOUS-MENU'						=> 'Submenu',
 	'EXAMPLES'						=> 'Examples',
+	'MANQUANT'						=> 'Missing',
+	'COMPOSANTS'					=> 'Components',
+	'CONFIGURATION'					=> 'Configuration',
 
 	//------------------------------------------
 	// LOGS
@@ -147,6 +154,7 @@ $_LIBELLES = array(
 	'LOG_RETIRE_AUCUN'				=> 'No log deleted&hellip;',
 	'LOG_RETIRE_X'					=> '%d logs successfull deleted&hellip;',
 	'LOGS_PURGER'					=> 'Purge logs',
+	'LOG_PURGE'						=> 'Log purge successful&hellip;',
 	'LOGS_VIDER'					=> 'Delete logs',
 	'LOG_TYPE_DATE'					=> 'by type of log, then by date',
 	'LOG_OPERATION_DATE'			=> 'by opération, then by date',
@@ -275,10 +283,12 @@ $_LIBELLES = array(
 	//------------------------------------------
 	// SYSTEME
 	//------------------------------------------
+	'SYSTEME'						=> 'System',
 	'INFORMATIONS_SYSTEME'			=> 'System Information',
 	'SIGNATURE_CODE'				=> 'Code Hash',
 	'SIGNATURE_FINALE'				=> 'Final hash',
 	'VERSION_PHP'					=> 'PHP Version',
+	'INFOS_PHP'						=> 'PHP Infos',
 	'MEM_REELLE_PHP'				=> 'Actual memory allocated to PHP',
 	'MEM_USED_PHP'					=> 'Memory used by PHP',
 	'ACCEDER_PHPMYADMIN'			=> 'Run phpMyAdmin',
@@ -294,6 +304,8 @@ $_LIBELLES = array(
 	'PAS_OBJET'						=> 'No subject',
 	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'Bad email for a recipient',
 	'EMAIL_ENVOI_ERREUR'			=> 'Error sending email',
+	'ERREURS_BACKEND'				=> 'Backend Errors',
+	'ERREURS_FRONTEND'				=> 'Frontend Errors',
 
 	//------------------------------------------
 	// AUTRE

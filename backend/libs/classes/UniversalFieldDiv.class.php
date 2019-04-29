@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Elements 'div' et 'divfin'
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 class UniversalFieldDiv extends UniversalField {

@@ -67,6 +67,7 @@ $_LIBELLES = array(
 	// ERREURS
 	//------------------------------------------
 	'ERREUR'						=> 'Erreur',
+	'ERREUR_AUCUNE'					=> 'Aucune erreur',
 	'ERREUR_SQL'					=> 'Erreur SQL&hellip;',
 	'ERREUR_COMMANDE'				=> 'Erreur commande&hellip;',
 	'ERREUR_ANNUAIRE'				=> 'Erreur de connexion à l\'annuaire',
@@ -77,6 +78,11 @@ $_LIBELLES = array(
 	'ERREUR_SUPPR_USER_X'			=> 'Erreur lors de la suppression de l\'utilisateur %s',
 	'ERREUR_SUICIDE'				=> 'Impossible de s\'auto-supprimer. Demandez à un autre administrateur d\'effectuer cette opération pour vous...',
 	'ERREUR_FICHIER_INEXISTANT'		=> 'Fichier inexistant',
+	'PHP_ERROR_FILE_VIDER'			=> 'Vider le fichier d\'erreurs PHP',
+	'PHP_ERROR_FILE_DELETED'		=> 'Suppression du fichier d\'erreurs PHP réussie&hellip;',
+	'PHP_ERROR_FILE_ERROR'			=> 'Erreur lors de la suppression du fichier d\'erreurs PHP!',
+	'ERREURS_BACKEND'				=> 'Erreurs Backend',
+	'ERREURS_FRONTEND'				=> 'Erreurs Frontend',
 
 	//------------------------------------------
 	// MOTS / VERBES
@@ -131,6 +137,9 @@ $_LIBELLES = array(
 	'REFERENCIEL'					=> 'Référentiel',
 	'SOUS-MENU'						=> 'Sous-menu',
 	'EXAMPLES'						=> 'Exemples',
+	'MANQUANT'						=> 'Manquant',
+	'COMPOSANTS'					=> 'Composants',
+	'CONFIGURATION'					=> 'Configuration',
 
 	//------------------------------------------
 	// LOGS
@@ -146,6 +155,7 @@ $_LIBELLES = array(
 	'LOG_USER_BAD_PASSWORD'			=> 'Mot de passe érroné pour %s',
 	'LOG_RETIRE_AUCUN'				=> 'Aucun log n\'a été retiré&hellip;',
 	'LOG_RETIRE_X'					=> '%d logs retirés avec succès&hellip;',
+	'LOG_PURGE'						=> 'Journaux purgés avec succès&hellip;',
 	'LOGS_PURGER'					=> 'Purger les logs',
 	'LOGS_VIDER'					=> 'Vider les logs',
 	'LOG_TYPE_DATE'					=> 'par type de log, puis par date',
@@ -275,10 +285,12 @@ $_LIBELLES = array(
 	//------------------------------------------
 	// SYSTEME
 	//------------------------------------------
+	'SYSTEME'						=> 'Système',
 	'INFORMATIONS_SYSTEME'			=> 'Informations système',
 	'SIGNATURE_CODE'				=> 'Signature du code',
 	'SIGNATURE_FINALE'				=> 'Signature finale',
 	'VERSION_PHP'					=> 'Version PHP',
+	'INFOS_PHP'						=> 'Infos PHP',
 	'MEM_REELLE_PHP'				=> 'Mémoire réelle allouée à PHP',
 	'MEM_USED_PHP'					=> 'Mémoire utilisée par PHP',
 	'ACCEDER_PHPMYADMIN'			=> 'Accéder à phpMyAdmin',

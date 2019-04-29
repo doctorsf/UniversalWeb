@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'filtreselect' (select avec label en forme de bouton)
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 class UniversalFieldFiltreselect extends UniversalField {
@@ -296,7 +296,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 		//design 'inline' (label à la suite (ou après) du champ)
 		if ($this->design() == 'inline') {
 			//prise en compte de certaines données
-			($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+			($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 			($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
 			($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 			($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
@@ -321,7 +321,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 		//design 'online' (label au-dessus (ou après) du champ)
 		if ($this->design() == 'online') {
 			//prise en compte de certaines données
-			($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+			($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 			($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
 			($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 			($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';

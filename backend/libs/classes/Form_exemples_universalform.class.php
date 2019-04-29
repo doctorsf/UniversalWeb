@@ -775,6 +775,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'label' => 'Compris',						//label
 				'lclass' => 'bleu',							//classe du label
 				'labelHelp' => 'Avec envoi d\'erreur',		//aide sur le label
+				'labelHelpPos' => 'left',					//aide sur le label
 				'lpos' => 'before',							//position du label par rapport à la checkbox : before (defaut) / after
 				'clong' => 'col-4',							//longueur du champ en colonnes boostrap
 				'cclass' => '',								//classe de la checkbox
@@ -1949,6 +1950,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'tclass' => 'vert',						//classe du titre
 				'talign' => 'right',					//cadrage du titre à droite
 				'titreHelp' => 'Aide sur le titre',		//Aide sur le titre
+				'titreHelpPos' => 'bottom',				//Aide sur le titre
 				'label' => 'Juste le label',			//label
 				'lclass' => 'btn btn-success',
 				'lalign' => 'right',
@@ -1957,6 +1959,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'dbfield' => 'filtre1',					//retour de la saisie
 				'inputType' => '',						//search(defaut), text, time, date, etc.
 				'labelHelp' => 'Aide sur le filtre',	//aide sur le champ
+				'labelHelpPos' => 'right',	//aide sur le champ
 				'clong' => 'col-4',						//longueur du bloc champ (ici cadré à droite)
 				'cclass' => '',							//classe de la zone de saisie
 				'maxlength' => 10,						//taille maximum de la saisie en nombre de caractèresz

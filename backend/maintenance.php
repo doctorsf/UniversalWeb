@@ -8,6 +8,8 @@
 //			d'application dans le nom de la sauvegarde
 //		- ajout de l'entrée 'deldb' de suppression de la sauvegarde
 //		- présentation de la liste des sauvegardes disponibles sous forme de table
+// 22.04.2019
+//		- Ajout entrées "reseterrors" et "reseterrorsfrontend"
 //-----------------------------------------------------------
 require_once('libs/common.inc.php');
 
@@ -42,6 +44,40 @@ echo '<body>';
 				switch($operation)
 				{
 					//--------------------------------------
+					// Supprime le fichier d'erreurs _FRONTEND_PHP_FILE_ERRORS_
+					//--------------------------------------
+					case 'reseterrorsfrontend' : 
+					{
+						$res = unlink(_FRONTEND_PHP_FILE_ERRORS_);
+						if ($res) {
+							riseMessage(getLib('PHP_ERROR_FILE_DELETED'));
+						}
+						else {
+							riseErrorMessage(getLib('PHP_ERROR_FILE_ERROR'));
+						}
+						//retour
+						goReferer();
+						break;
+					}
+
+					//--------------------------------------
+					// Supprime le fichier d'erreurs _PHP_FILE_ERRORS_
+					//--------------------------------------
+					case 'reseterrors' : 
+					{
+						$res = unlink(_PHP_FILE_ERRORS_);
+						if ($res) {
+							riseMessage(getLib('PHP_ERROR_FILE_DELETED'));
+						}
+						else {
+							riseErrorMessage(getLib('PHP_ERROR_FILE_ERROR'));
+						}
+						//retour
+						goReferer();
+						break;
+					}
+
+					//--------------------------------------
 					// Purger les log > 3 mois
 					//--------------------------------------
 					case 'epurelog' : 
@@ -70,10 +106,10 @@ echo '<body>';
 						$log = new sqlLogs();
 						$nombre = $log->purge();
 						if ($nombre === false) {
-							riseErrorMessage('Erreur SQL&hellip;');
+							riseErrorMessage(getLib('ERREUR_SQL'));
 						}
 						else {
-							riseMessage('Journaux purgés avec succès&hellip;');
+							riseMessage(getLib('LOG_PURGE'));
 						}
 						//retour
 						goReferer();
@@ -87,7 +123,7 @@ echo '<body>';
 					//--------------------------------------
 					case 'savedb':
 					{
-						$res = saveDatabase(_APP_BLOWFISH_, _VERSION_APP_, _SAUVEGARDE_BASE_);
+						$res = saveDatabase(_APP_BLOWFISH_, _APP_VERSION_, _SAUVEGARDE_BASE_);
 						if ($res) {
 							riseMessage(getLib('SAUVEGARDE_OK')); 
 						}
@@ -116,7 +152,7 @@ echo '<body>';
 							$parts = explode('_', $ligne);
 							if (count($parts) == 4) { 
 								//vérification de la cohérence de version de base de données
-								if ($parts[1] === _VERSION_APP_) {
+								if ($parts[1] === _APP_VERSION_) {
 									$colorLink = 'success';
 									$conseil = '';
 								}
@@ -173,12 +209,12 @@ echo '<body>';
 					//--------------------------------------
 					case 'gorestoredb':
 					{
-						echo '<h1 class="display-4">'.RESTORATION_BD.'</h1>';
+						echo '<h1 class="display-4">'.getLib('RESTORATION_BD').'</h1>';
 						//recuperation du fichier. sql à restorer
 						(isset($_GET['fichier'])) ? $fichier = MySQLDataProtect($_GET['fichier']) : $fichier = 'aucun';
 						if ($fichier != 'aucun') {
 							//petite sauvegarde systeme (true) avant... quand même
-							$res1 = saveDatabase('systemsecuritybackup', _VERSION_APP_, _SAUVEGARDE_BASE_, null, _SAVE_DB_SYSTEM_);
+							$res1 = saveDatabase('systemsecuritybackup', _APP_VERSION_, _SAUVEGARDE_BASE_, null, _SAVE_DB_SYSTEM_);
 							if ($res1) {
 								$res2 = restoreDatabase(_SAUVEGARDE_BASE_, $fichier);
 								if ($res2) {

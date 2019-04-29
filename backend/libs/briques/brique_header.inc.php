@@ -17,7 +17,7 @@ echo '<header>';
 				// Bloc LOGO
 				//--------------------------------------
 				echo '<div class="col-sm-12 col-md-6">';
-					echo '<h2 class="d-inline mb-0">'._APP_TITLE_.' '._VERSION_APP_._APP_RELEASE_;
+					echo '<h2 class="d-inline mb-0">'._APP_TITLE_.' '._APP_VERSION_._APP_RELEASE_;
 					if (strpos($_SERVER['SERVER_NAME'], 'localhost') !== false) echo ' <span class="text-warning">LOCALHOST</span>';
 					echo '</h2>';
 					echo '<p class="small mb-1">'.getLib('TODAY_IS').' '.MySQLToDateClair(date('Y-m-d'), _LG_).'</p>';

@@ -42,7 +42,7 @@ echo '<footer>';
 	if (getScriptName() == _URL_INDEX_) {
 		echo '<div class="row bg-gris fixed-bottom" id="pannel-signature">';
 			echo '<div class="col bg-gris">';
-				echo '<p class="lead text-center" style="margin-bottom:0">'._COPYRIGHT_.' - '._VERSION_APP_.'</p>';
+				echo '<p class="lead text-center" style="margin-bottom:0">'._COPYRIGHT_.' - '._APP_VERSION_.'</p>';
 				if (in_array($_SERVER['REMOTE_ADDR'], array_merge(array('127.0.0.1', '::1'), _IP_DEVELOPPEMENT_))) {
 					echo '<p class="text-center" style="margin-bottom:0">UniversalForm '.UniversalForm::VERSION.' - jQuery '._JQUERY_VERSION_.' - Bootstrap '._BOOTSTRAP_VERSION_.' - FontAwesome '._FONTAWESOME_VERSION_.'</p>';
 				}

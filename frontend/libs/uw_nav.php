@@ -27,6 +27,8 @@
 //		- Ajout de la fonction getVersionNavigateur() qui envoie la version, du navigateur utilisé par le lcient
 // 03.01.2018
 //		- Déplacement du fichier d'erreurs dans le répertoire LIBS : fonction userErrorHandler()
+// 22.04.2019
+//		- Modification userErrorHandler pour prise en compte du fichier d'erreur standardisé _PHP_FILE_ERRORS_
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -55,8 +57,7 @@ function userErrorHandler ($errno, $errmsg, $filename, $linenum, $vars) {
 	$errlevel=$errortype[$errno]; 
 
 	//Write error to log file (CSV format) 
-	defined('_LIBS_') || define('_LIBS_', 'libs/');
-	$errfile = fopen(_LIBS_.'errors.txt','a');
+	$errfile = fopen(_PHP_FILE_ERRORS_, 'a');
 	fputs($errfile, $time."\t".$filename.' : '.$linenum."\t".($errlevel).' '.$errmsg."\t".$_SERVER['REQUEST_URI']."\t".$_SERVER['REMOTE_ADDR']."\r\n"); 
 	fclose($errfile);
 
@@ -222,9 +223,9 @@ function getRefererScriptName()
 //--------------------------------------------------------------------------
 function getUrlWithoutFirstSlash($url)
 {
-	$url = parse_url($url);
-	if (empty($url['path'])) return $url;
-	$parts = explode('/', $url['path']);
+	$parse = parse_url($url);
+	if (empty($parse['path'])) return $url;
+	$parts = explode('/', $parse['path']);
 	if (isset($parts[0])) unset($parts[0]);
 	$url = implode('/', $parts);
 	return $url;

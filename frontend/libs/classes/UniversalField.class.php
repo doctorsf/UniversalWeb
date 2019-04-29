@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element parent
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -48,7 +48,7 @@ class UniversalField {
 
 	private $_titre = '';			//titre de groupe (permet par exemple de mettre sur une seule ligne plusieurs radio buttons)
 	private $_titreHelp = '';		//chaine de caractere sur titre de groupe (agit comme title="" sur un label titre de groupe)
-	private $_titreHelpPos = '';	//position du libellé d'aide sur le titre (left, top (defaut), right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
+	private $_titreHelpPos = 'auto';//position du libellé d'aide sur le titre (auto (defaut), left, top, right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
 	private $_tlong = '';			//longueur (1..12) du titre (légende)(pour radio et checkbox seulement)
 	private $_tclass = '';			//classe css du titre
 	private $_talign = 'left';		//alignement du titre -> left / right / center / justify
@@ -57,12 +57,12 @@ class UniversalField {
 	private $_llong = '';			//longueur (1..12) du bloc zone titre
 	private $_lclass = '';			//classe css du label correspondant
 	private $_labelHelp = '';		//chaine de caractere (agit comme title="" sur le label)
-	private $_labelHelpPos = '';	//position du libellé d'aide sur le label (left, top (defaut), right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
+	private $_labelHelpPos = 'auto';//position du libellé d'aide sur le label (auto (defaut), left, top, right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
 	private $_lalign = 'left';		//alignement du label -> left / right / center / justify
 	
 	private $_labelPlus = '';		//Permet de scinder le label en 2 parties : à gauche contenu de label, à droite le texte (ou code) contenu ici. En pratique (souvent) une icone cadrée à droite.
 	private $_labelPlusHelp = '';	//chaine de caractere (agit comme title="" sur le label)
-	private $_labelPlusHelpPos = '';//position du libellé d'aide sur le label (left, top (defaut), right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
+	private $_labelPlusHelpPos = 'auto';//position du libellé d'aide sur le label (auto (defaut), left, top, right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
 
 	private $_spellcheck = true;	//si true la correction automatique est activée sur le champ, false sinon
 	private $_placeholder = '';		//placeholder sur les champs text

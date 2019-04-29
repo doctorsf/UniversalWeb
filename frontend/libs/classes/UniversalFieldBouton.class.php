@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'bouton'
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 class UniversalFieldBouton extends UniversalField {
@@ -82,7 +82,7 @@ class UniversalFieldBouton extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' designError' : $erreur = '';
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
 		$zchampClasses = trim($clong.$border.$erreur.$invisible);
 		$buttonClasses = trim($llong.$lclass);

@@ -25,7 +25,7 @@ defined('_APP_TITLE_')			|| define('_APP_TITLE_',		'Exemples UniversalForm');
 defined('_EMAIL_WEBMASTER_')	|| define('_EMAIL_WEBMASTER_',	'fabrice.labrousse@intradef.gouv.fr');
 defined('_AUTEUR_')				|| define('_AUTEUR_',			'Fabrice Labrousse');
 defined('_COPYRIGHT_')			|| define('_COPYRIGHT_',		'Auteur : Fabrice Labrousse - 2016');
-defined('_VERSION_APP_')		|| define('_VERSION_APP_',		'v0.0.0');
+defined('_APP_VERSION_')		|| define('_APP_VERSION_',		'v0.0.0');
 defined('_LG_')					|| define('_LG_',				'fr');
 defined('_IP_DEVELOPPEMENT_')	|| define('_IP_DEVELOPPEMENT_',	array('20.46.72.1'));
 

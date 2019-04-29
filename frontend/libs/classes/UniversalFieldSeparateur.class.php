@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'separateur'
-// Version 3.11.3 du 17.01.2019
+// Version 3.12.0 du 17.04.2019
 //==============================================================
 
 class UniversalFieldSeparateur extends UniversalField {
@@ -49,7 +49,7 @@ class UniversalFieldSeparateur extends UniversalField {
 		}
 
 		($this->invisible()) ? $invisible = ' invisible' : $invisible = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = '';
+		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
 		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
 		($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';

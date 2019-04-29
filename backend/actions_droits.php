@@ -22,7 +22,7 @@ switch($operation)
 	case 'export':
 	{
 		$listeDesTables = array(_PREFIXE_TABLES_.'profils', _PREFIXE_TABLES_.'fonctionnalites', _PREFIXE_TABLES_.'droits');
-		$res = saveDatabase('droits', _VERSION_APP_, _ARMOIRE_, $listeDesTables, _SAVE_DB_NODATE_);
+		$res = saveDatabase('droits', _APP_VERSION_, _ARMOIRE_, $listeDesTables, _SAVE_DB_NODATE_);
 		if ($res) {
 			riseMessage(getLib('EXPORT_DROITS_OK')); 
 		}
@@ -38,7 +38,7 @@ switch($operation)
 	//------------------------------------------
 	case 'import':
 	{
-		$fichier = 'droits_'._VERSION_APP_.'_no_date';
+		$fichier = 'droits_'._APP_VERSION_.'_no_date';
 		$res = restoreDatabase(_ARMOIRE_, $fichier);
 		if ($res) {
 			riseMessage(getLib('IMPORT_DROITS_OK')); 

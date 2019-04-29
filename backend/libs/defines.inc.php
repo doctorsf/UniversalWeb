@@ -86,6 +86,13 @@ defined('_APP_INPUT_')				|| define('_APP_INPUT_',				_APP_ID_.'_input');				//v
 defined('_LOG_CONNEXION_')			|| define('_LOG_CONNEXION_',			'1');
 defined('_LOG_ERREUR_')				|| define('_LOG_ERREUR_',				'2');
 
+//fichiers
+defined('_PHP_FILE_ERRORS_')		|| define('_PHP_FILE_ERRORS_',			_ARMOIRE_.'errors.txt');
+
+//accès frontend
+defined('_FRONTEND_PHP_FILE_ERRORS_')	|| define('_FRONTEND_PHP_FILE_ERRORS_',		'../frontend/libs/armoire/errors.txt');
+defined('_FRONTEND_CLASSES_')			|| define('_FRONTEND_CLASSES_',				'../frontend/libs/classes/');
+
 //versions de logiciels tiers
 defined('_JQUERY_VERSION_')			|| define('_JQUERY_VERSION_',			'3.3.1');
 defined('_JQUERY_')					|| define('_JQUERY_',					'jquery-3.3.1.min.js');			//jQuery
