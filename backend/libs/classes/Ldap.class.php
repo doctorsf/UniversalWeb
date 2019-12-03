@@ -31,7 +31,7 @@ class Ldap {
 	private $_connected;		//booleen dit si ldap connecté ou non
 	private $_erreur;			//tableau d'informations sur l'erreur rencontrée
 	private $_ldapInfos;		//tableau des informations recupérées du ldap
-	private $_serviceAccount;	//compte de service permettrant d'accéder à la base (pas de connexion anonyme acceptée)
+	private $_serviceAccount;	//compte de service permettant d'accéder à la base (pas de connexion anonyme acceptée)
 	private $_servicePwd;		//mot de passe du compte de service d'accès à la base
 
 	private	$_LDAP_ERREURS = array(
@@ -195,7 +195,7 @@ class Ldap {
 
 	//---------------------------------------
 	// décode un SID microsoft AD
-	// Entree : la valeur du SID codéerien
+	// Entree : la valeur du SID codée
 	// Retour : chaine de caractère du SID décodé
 	//---------------------------------------
 	public function decodeSID($value) {
@@ -226,14 +226,14 @@ class Ldap {
 	//---------------------------------------
 	public function search($valeur, &$lesInfos) {
 
-		//rajouté par Nico le 23/07/2018
+		//rajouté le 23/07/2018
 		//voir https://forum.phpfrance.com/php-avance/suivre-referral-ldap-t35236.html
 		//ou https://www.developpez.net/forums/d123654/php/bibliotheques-frameworks/ldap-ldap_search/
 		//le referral est une définition dans OpenLDAP qui permet de dire au CLIENT d'aller voir ailleurs s'il ne trouve pas la réponse dans l'OpenLDAP directement.
 		//Mettre LDAP_OPT_REFERRALS à 0 permets donc de virer l'OU lorsque l'on souhaite faire une recherche sur l'intégralité de l'AD.
 		@ldap_set_option($this->_ldapConnexionId, LDAP_OPT_REFERRALS, 0);         // NFE/2S : Patch to look beyond OU
 		@ldap_set_option($this->_ldapConnexionId, LDAP_OPT_PROTOCOL_VERSION, 3);  // NFE/2S : Patch to look beyond OU
-		//fin rajouté par Nico le 23/07/2018
+		//fin rajouté le 23/07/2018
 
 		$searchId = @ldap_search($this->_ldapConnexionId, $this->_dn, $valeur);
 		$this->_readError();
@@ -248,7 +248,7 @@ class Ldap {
 	}
 	
 	//---------------------------------------
-	//test de l'authentification d'une utilisateur selon son uid / mod de passe
+	// Test de l'authentification d'un utilisateur selon son uid / mod de passe
 	// Entree : $uid (id de l'utilisateur à tester)
 	//			$mdp (mot de passe de l'utilisateur)
 	// Retour : true / false
@@ -285,7 +285,7 @@ class Ldap {
 	}
 
 	//---------------------------------------
-	// Effface un attribut à une entrée de l'annuaire
+	// Efface un attribut à une entrée de l'annuaire
 	// Entree : $valeur (valeur à ajouter)
 	// Retour : true / false
 	//---------------------------------------

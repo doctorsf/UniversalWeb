@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'filtreselect' (select avec label en forme de bouton)
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldFiltreselect extends UniversalField {
@@ -296,13 +296,16 @@ class UniversalFieldFiltreselect extends UniversalField {
 		//design 'inline' (label à la suite (ou après) du champ)
 		if ($this->design() == 'inline') {
 			//prise en compte de certaines données
-			($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-			($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
+			$labelHelp = '';
+			if ($this->labelHelp() != '') {
+				$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+				($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			}
 			($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 			($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 			$classes = trim($clong.$invisible);
 			//dessin
-			$html.= '<div id="'.$this->idbchamp().'" class="mb-3 '.$classes.'"'.$labelHelp.' data-toggle="tooltip">';
+			$html.= '<div id="'.$this->idbchamp().'" class="mb-3 '.$classes.'"'.$labelHelp.'>';
 				$html.= '<div class="input-group">';
 					if ($this->lpos() == 'before') {
 						$html.= $this->_drawLabelInline($enable);
@@ -321,13 +324,16 @@ class UniversalFieldFiltreselect extends UniversalField {
 		//design 'online' (label au-dessus (ou après) du champ)
 		if ($this->design() == 'online') {
 			//prise en compte de certaines données
-			($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-			($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
+			$labelHelp = '';
+			if ($this->labelHelp() != '') {
+				$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+				($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			}
 			($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 			($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 			$classes = trim($clong.$invisible);
 			//dessin
-			$html.= '<div id="'.$this->idbchamp().'" class="mb-3 '.$classes.'"'.$labelHelp.' data-toggle="tooltip">';
+			$html.= '<div id="'.$this->idbchamp().'" class="mb-3 '.$classes.'"'.$labelHelp.'>';
 					if ($this->lpos() == 'before') {
 						$html.= $this->_drawLabelOnline($enable);
 						$html.= $this->_drawChampOnline($enable);

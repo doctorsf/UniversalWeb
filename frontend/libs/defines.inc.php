@@ -61,8 +61,8 @@ defined('_IMAGES_COMMUN_')			|| define('_IMAGES_COMMUN_',			_IMAGES_.'commun/');
 defined('_IMAGES_DRAPEAUX_')		|| define('_IMAGES_DRAPEAUX_',			_IMAGES_.'drapeaux/');
 defined('_CSS_')					|| define('_CSS_',						'css/');
 defined('_JAVASCRIPT_')				|| define('_JAVASCRIPT_',				'js/');
-defined('_BOOTSTRAP_')				|| define('_BOOTSTRAP_',				'bootstrap-4.3.1-dist/');
-defined('_FONT_AWSOME_')			|| define('_FONT_AWSOME_',				'fontawesome-free-5.7.2-web/');
+defined('_BOOTSTRAP_')				|| define('_BOOTSTRAP_',				'bootstrap-4.4.1-dist/');
+defined('_FONT_AWSOME_')			|| define('_FONT_AWSOME_',				'fontawesome-free-5.11.2-web/');
 defined('_LIBS_')					|| define('_LIBS_',						'libs/');
 defined('_CLASSES_')				|| define('_CLASSES_',					_LIBS_.'classes/');
 defined('_BRIQUES_')				|| define('_BRIQUES_',					_LIBS_.'briques/');
@@ -86,12 +86,12 @@ defined('_LOG_CONNEXION_')			|| define('_LOG_CONNEXION_',			'1');
 defined('_LOG_ERREUR_')				|| define('_LOG_ERREUR_',				'2');
 
 //versions de logiciels tiers
-defined('_JQUERY_VERSION_')			|| define('_JQUERY_VERSION_',			'3.3.1');
-defined('_JQUERY_')					|| define('_JQUERY_',					'jquery-3.3.1.min.js');			//jQuery
-defined('_BOOTSTRAP_VERSION_')		|| define('_BOOTSTRAP_VERSION_',		'4.3.1');
+defined('_JQUERY_VERSION_')			|| define('_JQUERY_VERSION_',			'3.4.1');
+defined('_JQUERY_')					|| define('_JQUERY_',					'jquery-3.4.1.min.js');			//jQuery
+defined('_BOOTSTRAP_VERSION_')		|| define('_BOOTSTRAP_VERSION_',		'4.4.1');
 defined('_BOOTSTRAP_JS_')			|| define('_BOOTSTRAP_JS_',				_BOOTSTRAP_.'js/bootstrap.bundle.min.js');
 defined('_BOOTSTRAP_CSS_')			|| define('_BOOTSTRAP_CSS_',			_BOOTSTRAP_.'css/bootstrap.min.css');
-defined('_FONTAWESOME_VERSION_')	|| define('_FONTAWESOME_VERSION_',		'5.7.2');
+defined('_FONTAWESOME_VERSION_')	|| define('_FONTAWESOME_VERSION_',		'5.11.2');
 defined('_FONT_AWSOME_CSS_')		|| define('_FONT_AWSOME_CSS_',			_FONT_AWSOME_.'css/all.min.css');
 
 //briques et scripts

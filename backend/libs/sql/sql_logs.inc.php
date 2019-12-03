@@ -31,6 +31,8 @@ delete()			: supprime un tuple
 11.04.2019
 	- Correction méthode purge() : contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
 	l'ancienne méthode renvoyait toujours 0
+12.11.2019
+	- Modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
 ------------------------------------------------------------------------*/
 
 //- CREATION tables logs --------------------------------------
@@ -70,9 +72,9 @@ function sqlLogs_createTableLogsTypes()
 //-----------------------------------------------------------------------
 
 class sqlLogs extends SqlSimple {
-	public $_table	= _PREFIXE_TABLES_.'logs';							//saisir le nom de la table de référence (ex : "db_reference")
-	public $_index	= 'id_log';											//Saisir ici le champ index unique de la table (ex : "id_tuple")
-	public $_champs	= 'id_log, id_log_type, id_user, operation';		//Saisir ici la liste des champs de la table à lister (ex : "id_tuple, libelle, famille")
+	public $table	= _PREFIXE_TABLES_.'logs';							//saisir le nom de la table de référence (ex : "db_reference")
+	public $index	= 'id_log';											//Saisir ici le champ index unique de la table (ex : "id_tuple")
+	public $champs	= 'id_log, id_log_type, id_user, operation';		//Saisir ici la liste des champs de la table à lister (ex : "id_tuple, libelle, famille")
 
 	public function add($donnees, $debug = false) {
 		$requete = "NULL, ";
@@ -85,7 +87,7 @@ class sqlLogs extends SqlSimple {
 
 	//purge les logs de plus de 3 mois
 	public function epure() {
-		$requete.= "DELETE FROM ".$this->_table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+		$requete.= "DELETE FROM ".$this->table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $nombre;
@@ -97,7 +99,7 @@ class sqlLogs extends SqlSimple {
 	//Contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
 	//la méthode retourne donc true ou false
 	public function purge() {
-		$requete.= "TRUNCATE TABLE ".$this->_table;
+		$requete.= "TRUNCATE TABLE ".$this->table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return true;
@@ -111,7 +113,7 @@ class sqlLogs extends SqlSimple {
 //--------------------------------------
 function sqlLogs_log($id_log_type, $operation) {
 	$log = new sqlLogs();
-	$donnees['id_log_type'] = _LOG_CONNEXION_;
+	$donnees['id_log_type'] = $id_log_type;
 	$donnees['id_user'] = $_SESSION[_APP_LOGIN_]->getId();
 	$donnees['operation'] = addslashes($operation);
 	$log->add($donnees);

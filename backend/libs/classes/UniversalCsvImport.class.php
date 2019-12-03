@@ -33,6 +33,8 @@
 //		- ajout dans chaque enregistrement de données du numéro de ligne CSV ou se trouve la donnée
 //		- ajout champ 'defaut' dans le modèle
 //		- ajout du test 'DEFAULT' qui n'en est pas un : si test DEFAULT posé, alors le champ prend la valeur définie par 'defaut' si il est à l'origine vide
+// V2.1.0 (2019-09-06)
+//		- ajout des tests 'MIN_LENGTH_X' (longueur minimale de saisie) et 'MAX_LENGTH_X' (longueur maximale de saisie)
 //----------------------------------------------------------------------
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -65,7 +67,7 @@ class UniversalCsvImport {
 	private $_modele = array();			//modele (structure) du fichier d'import
 	private $_entete = array();			//tableau contenant l'entete (Numéro de Colonne CSV / identifiant du modèle)
 
-	const VERSION = 'v2.0.0 (2019-04-03)';
+	const VERSION = 'v2.1.0 (2019-09-06)';
 
 	//--------------------------------------
 	// Méthodes privées
@@ -135,6 +137,7 @@ class UniversalCsvImport {
 	public function getCommentaire($id)	{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['commentaire']; else return getLib('ERREUR');}
 	public function getCss($id)			{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['css']; else return getLib('ERREUR');}
 	public function getDefaut($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['defaut']; else return getLib('ERREUR');}
+	public function getOnError($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['onError']; else return getLib('ERREUR');}
 
 	public function getNbColonnes() {
 		return count($this->_modele);
@@ -194,6 +197,11 @@ class UniversalCsvImport {
 		$this->_keyExists($id);
 		$this->_modele[$id]['defaut'] = $valeur;
 	}
+	//positionnement du champ "onError" pour la colonne $id
+	public function setOnError($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['onError'] = $valeur;
+	}
 
 	//--------------------------------------
 	// Création d'une colonne dans le modèle d'import
@@ -236,7 +244,7 @@ class UniversalCsvImport {
 	//------------------------------------------
 	// Entrée
 	//		$mnemo : donnée mnémonique correspondant à la chaine de caratère demandée
-	//		$param : 1 paramètre éventuel
+	//		$param1 : paramètre éventuel
 	// Retour
 	//		Affichage de la chaine souhaitée et correspondante
 	//------------------------------------------
@@ -284,9 +292,11 @@ class UniversalCsvImport {
 			'UFC_DOSSIER_TEMP_MANQUANT'		=> 'Un dossier temporaire est manquant',
 			'UFC_ECHEC_ECRITURE_DISQUE'		=> 'Échec de l\'écriture du fichier sur le disque',
 			'UFC_ECHEC'						=> 'Échec&hellip;',
-			'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!'
+			'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
+			'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
+			'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)'
 		);
-		return sprintf($libelles[$mnemo], $param1);
+		return vsprintf($libelles[$mnemo], $params);
 	}
 
 	//------------------------------------------
@@ -299,7 +309,7 @@ class UniversalCsvImport {
 	//		Rien
 	//------------------------------------------
 	public function active($id) {
-		$this->setActive($id, true);
+		$this->_modele[$id]['active'] = true;
 	}
 
 	//------------------------------------------
@@ -312,7 +322,7 @@ class UniversalCsvImport {
 	//		Rien
 	//------------------------------------------
 	public function desactive($id) {
-		$this->setActive($id, false);
+		$this->_modele[$id]['active'] = false;
 	}
 
 	//------------------------------------------
@@ -527,10 +537,40 @@ class UniversalCsvImport {
 						break;
 					}
 				}
+				elseif (($res = utf8_left($test, 11)) == 'MIN_LENGTH_') {
+					if ($enregistrement[$keyModele] != '') {
+						//test chaines inférieures à X caractères
+						$longueurMin = utf8_right($test, 11);
+						if (is_numeric($longueurMin)) {
+							$longueur = utf8_strlen($enregistrement[$keyModele]);
+							if ($longueur < $longueurMin) {
+								$enregistrement[$keyModele] = '<span class="text-danger">'.getLib('UFC_MIN_LENGTH', $longueurMin, $longueur).'</span>';
+								$enregistrement['erreur'] = true;
+							}
+							break;
+						}
+					}
+				}
+				elseif (($res = utf8_left($test, 11)) == 'MAX_LENGTH_') {
+					if ($enregistrement[$keyModele] != '') {
+						//test chaines supérieures à X caractères
+						$longueurMax = utf8_right($test, 11);
+						if (is_numeric($longueurMax)) {
+							$longueur = utf8_strlen($enregistrement[$keyModele]);
+							if ($longueur > $longueurMax) {
+								$enregistrement[$keyModele] = '<span class="text-danger">'.getLib('UFC_MAX_LENGTH', $longueurMax, $longueur).'</span>';
+								$enregistrement['erreur'] = true;
+							}
+							break;
+						}
+					}
+				}
 				elseif (($res = utf8_left($test, 5)) == 'PARMI') {
 					//pour tous les PARMI (autres)
 					if (($enregistrement[$keyModele] != '') && (!in_array($enregistrement[$keyModele], $this->$test))) {
-						$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : Saisie attendue parmi : '.implode(', ', $this->$test).'</span>';
+//						$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : Saisie attendue parmi : '.implode(', ', $this->$test).'</span>';
+						//modification de la classe pour Wyniss : on affiche pas la liste des choix attendus
+						$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : Saisie non conforme</span>';
 						$enregistrement['erreur'] = true;
 						break;
 					}

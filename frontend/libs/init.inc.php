@@ -21,13 +21,17 @@ $_NB_QUERY = 0;
 if (_RUN_MODE_ == _DEVELOPPEMENT_) {
 	//execution des requetes SQL en mode debug
 	defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_DEBUG);
-	//rapporte toutes les erreurs PHP
+	//rapporte et affiche toutes les erreurs PHP
+	ini_set('display_startup_errors', 'On');
+	ini_set('display_errors', 'stdout');
 	error_reporting(-1);
 }
 else {
 	//execution des requete en mode silencieux
 	defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_SILENT);
-	//Désactiver le rapport d'erreurs
+	//Désactiver le rapport d'erreurs et n'affiche aucune erreur
+	ini_set('display_startup_errors', 'Off');
+	ini_set('display_errors', 'stderr');
 	error_reporting(0); 
 	//Spécifie la fonction utilisateur "userErrorHandler" comme gestionnaire d'erreurs
 	$old_error_handler = set_error_handler("userErrorHandler");

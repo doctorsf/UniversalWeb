@@ -1,6 +1,6 @@
 <?php
 //----------------------------------------------------------------------------------
-// LANGUE ANGLAIS
+//								LANGUE ANGLAIS
 //----------------------------------------------------------------------------------
 // Fichier de langue ANGLAIS
 //----------------------------------------------------------------------------------
@@ -42,6 +42,7 @@ $_LIBELLES = array(
 	'UFC_DATETIME'					=> 'Datetime expected : yyyy-mm-jj hh:mm:ss',
 	'UFC_EMAIL'						=> 'eMail expected',
 	'UFC_EMAIL_APOSTROPHE'			=> 'eMail expected (apostrophe welcome)',
+	'UFC_ALPHA_CODE'				=> 'Coding characters awaited',
 	'UFC_ALPHA_SIMPLE'				=> 'Simple text expected',
 	'UFC_ALPHA_NOMS'				=> 'Simple alphanum with emphasis expected',
 	'UFC_FILE_NAME'					=> 'File name characters expected only',
@@ -51,7 +52,7 @@ $_LIBELLES = array(
 	'UFC_SHA1'						=> '40 hex chars awaited',
 	'UFC_MAJ_VERROUILLEES'			=> 'Caps Lock is on',
 	'UFC_FICHIER_INEXISTANT'		=> 'This file does not exist&hellip;',
-	'UFC_TYPE_FICHIER_NON_AUTORISE'	=> 'This file type is not allowed. Are allowed: ',
+	'UFC_TYPE_FICHIER_NON_AUTORISE'	=> 'File type not allowed. Are allowed: ',
 	'UFC_NOM_FICHIER_NON_VALIDE'	=> 'Invalid filename.',
 	'UFC_POIDS_FICHIER_MOINS_DE'	=> 'Your file must not exceed ',
 	'UFC_UPLOAD_MAX_FILE_SIZE_INI'	=> 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
@@ -62,6 +63,8 @@ $_LIBELLES = array(
 	'UFC_ECHEC_ECRITURE_DISQUE'		=> 'Failed to write file to disk',
 	'UFC_ECHEC'						=> 'Failure&hellip;',
 	'UFC_MATCH_INVALIDE'			=> 'Unknown testMatches property!',
+	'UFC_MAX_LENGTH'				=> 'length > %d chars (%d)',
+	'UFC_MIN_LENGTH'				=> 'length < %d chars (%d)',
 
 	//------------------------------------------
 	// ERREURS
@@ -81,6 +84,8 @@ $_LIBELLES = array(
 	'PHP_ERROR_FILE_VIDER'			=> 'Empty PHP Errors File',
 	'PHP_ERROR_FILE_DELETED'		=> 'PHP Errors File deleted with success&hellip;',
 	'PHP_ERROR_FILE_ERROR'			=> 'Error while deleting PHP Errors File!',
+	'ERREURS_BACKEND'				=> 'Backend Errors',
+	'ERREURS_FRONTEND'				=> 'Frontend Errors',
 
 	//------------------------------------------
 	// MOTS / VERBES
@@ -153,8 +158,8 @@ $_LIBELLES = array(
 	'LOG_USER_BAD_PASSWORD'			=> 'Wrong password for %s',
 	'LOG_RETIRE_AUCUN'				=> 'No log deleted&hellip;',
 	'LOG_RETIRE_X'					=> '%d logs successfull deleted&hellip;',
-	'LOGS_PURGER'					=> 'Purge logs',
 	'LOG_PURGE'						=> 'Log purge successful&hellip;',
+	'LOGS_PURGER'					=> 'Purge logs',
 	'LOGS_VIDER'					=> 'Delete logs',
 	'LOG_TYPE_DATE'					=> 'by type of log, then by date',
 	'LOG_OPERATION_DATE'			=> 'by opération, then by date',
@@ -249,7 +254,18 @@ $_LIBELLES = array(
 	'IMPORT_DROITS_KO'				=> 'Right policies import failed! Check if file "%s" exists',
 	'MODIFICATION_DROIT_INTERDITE'	=> 'Updating this policie is prohibited&hellip;',
 	'NOUVELLE_SAISIE'				=> 'New input',
+	'GROUPE_AJOUTER'				=> 'Add a group of functionalities',
 	'MODIF_ADMIN_INTERDITE'			=> 'Administrative change is denied&hellip;',
+	'GROUPE_FONCTIONNALITE_AUCUNE'	=> 'There is no functionality in this group',
+	'GROUPE_SUPPR'					=> 'Delete this group of functionalities',
+	'GROUPE_SUPPR_INTERDIT'			=> 'Deleting this group of functionalities is forbidden&hellip;',
+	'GROUPE_SUPPR_IMPOSSIBLE'		=> 'It is not possible to delete a group that still contains functionalities&hellip;',
+	'GROUPE_SUPPR_CERTAIN'			=> 'Do you really want to definitively delete this group of functionalities ?',
+	'GROUPE_REN_ERREUR'				=> 'SQL error while renaming the label of this group of functionalities',
+	'FONC_REN_ID_EXISTE_DEJA'		=> 'This functionality Id already exists&hellip;',
+	'FONC_REN_CODE_EXISTE_DEJA'		=> 'This functionality code already exists&hellip;',
+	'PROFIL_REN_ID_EXISTE_DEJA'		=> 'This profile Id already exists&hellip;',
+	'PROFIL_REN_CODE_EXISTE_DEJA'	=> 'This profile code already exists&hellip;',
 
 	//------------------------------------------
 	// BASE DE DONNEES
@@ -265,12 +281,15 @@ $_LIBELLES = array(
 	'RESTAURATION_OK'				=> 'Backup restore success',
 	'RESTAURATION_KO'				=> 'Backup restore failed!',
 	'SAUVEGARDE_SECURITE_KO'		=> 'Security backup failed!',
-	'NON_CONSEILLEE'				=> 'not safe',
+	'NON_CONSEILLE'					=> 'not safe',
 	'FORMAT_IGNORE'					=> 'Unknown file format',
 	'SUPPRIMER_LA_SAUVEGARDE'		=> 'Delete this backup',
 	'SAUVEGARDE_SUPPRIMEE_OK'		=> 'Backup deleted&hellip;',
 	'SAUVEGARDE_SUPPRIMEE_KO'		=> 'Deleting the backup failed!',
 	'SAUVEGARDE_INEXISTANTE'		=> 'This backup does not exist&hellip;',
+	'PHP_ERROR_FILE_VIDER'			=> 'Empty the PHP errors file',
+	'PHP_ERROR_FILE_DELETED'		=> 'PHP error file has been emptied&hellip;',
+	'PHP_ERROR_FILE_ERROR'			=> 'Error while emptying PHP error file!',
 
 	//------------------------------------------
 	// MOT DE PASSE
@@ -306,6 +325,7 @@ $_LIBELLES = array(
 	'EMAIL_ENVOI_ERREUR'			=> 'Error sending email',
 	'ERREURS_BACKEND'				=> 'Backend Errors',
 	'ERREURS_FRONTEND'				=> 'Frontend Errors',
+	'VOTRE_IP'						=> 'Your IP',
 
 	//------------------------------------------
 	// AUTRE
@@ -315,7 +335,8 @@ $_LIBELLES = array(
 	'AUCUNE_REF_TROUVEE'			=> 'No result found',
 	'1_REF_TROUVEE'					=> '1 result found',
 	'X_REF_TROUVEE'					=> '%d results found',
-	'NOM_COLONNE'					=> 'Column Name?'
+	'NOM_COLONNE'					=> 'Column Name?',
+	'ACTIONS'						=> '<span class="fas fa-child fa-lg"></span>'
 );
 
 $_MOIS_EN_CLAIR	= array('', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'); 
@@ -339,10 +360,9 @@ function getLib($indice, $param1='', $param2='', $param3='', $param4='', $param5
 {
 	global $_LIBELLES;
 	$chaine = sprintf($_LIBELLES[$indice], $param1, $param2, $param3, $param4, $param5);
-	if ($chaine == '') $chaine = 'TEXTE ABSENT';
-	return $chaine;
+	if ($chaine) return $chaine; else return 'MISSING TEXT';
 }
 function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $param5='')
 {
-	return '<span class="maj">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+	return '<span class="text-uppercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
 }

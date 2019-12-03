@@ -1,6 +1,6 @@
 <?php
 //----------------------------------------------------------------------------------
-// LANGUE FRANCE
+//								LANGUE FRANCAIS
 //----------------------------------------------------------------------------------
 // Fichier de langue FRANCAIS
 //----------------------------------------------------------------------------------
@@ -42,6 +42,7 @@ $_LIBELLES = array(
 	'UFC_DATETIME'					=> 'Format date heure attendu : yyyy-mm-jj hh:mm:ss',
 	'UFC_EMAIL'						=> 'eMail attendue',
 	'UFC_EMAIL_APOSTROPHE'			=> 'eMail attendue (apostrophe autorisée)',
+	'UFC_ALPHA_CODE'				=> 'Caractères de codage attendus',
 	'UFC_ALPHA_SIMPLE'				=> 'Caractères alphanumériques attendus',
 	'UFC_ALPHA_NOMS'				=> 'Caractères alphanumériques accentués attendus',
 	'UFC_FILE_NAME'					=> 'Caractères compatibles avec nomage de fichiers attendus',
@@ -51,7 +52,7 @@ $_LIBELLES = array(
 	'UFC_SHA1'						=> '40 caractères hexadécimaux attendus',
 	'UFC_MAJ_VERROUILLEES'			=> 'Attention, les majuscules sont verrouilllées !',
 	'UFC_FICHIER_INEXISTANT'		=> 'Fichier inexistant&hellip;',
-	'UFC_TYPE_FICHIER_NON_AUTORISE'	=> 'Ce type de fichier n\'est pas autorisé. Sont autorisés : ',
+	'UFC_TYPE_FICHIER_NON_AUTORISE'	=> 'Type de fichier non autorisé. Sont autorisés : ',
 	'UFC_NOM_FICHIER_NON_VALIDE'	=> 'Nom de fichier non valide.',
 	'UFC_POIDS_FICHIER_MOINS_DE'	=> 'Votre fichier doit faire moins de ',
 	'UFC_UPLOAD_MAX_FILE_SIZE_INI'	=> 'Le poids du fichier dépasse celui précisé par la directive upload_max_filesize du fichier php.ini',
@@ -62,6 +63,8 @@ $_LIBELLES = array(
 	'UFC_ECHEC_ECRITURE_DISQUE'		=> 'Échec de l\'écriture du fichier sur le disque',
 	'UFC_ECHEC'						=> 'Échec&hellip;',
 	'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
+	'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
+	'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)',
 
 	//------------------------------------------
 	// ERREURS
@@ -251,7 +254,18 @@ $_LIBELLES = array(
 	'IMPORT_DROITS_KO'				=> 'L\'importation des droits a échoué! Vérifiez l\'existence du fichier "%s"',
 	'MODIFICATION_DROIT_INTERDITE'	=> 'La modification de ce droit est interdite&hellip;',
 	'NOUVELLE_SAISIE'				=> 'Nouvelle saisie',
+	'GROUPE_AJOUTER'				=> 'Ajouter un groupe de fonctionnalités',
 	'MODIF_ADMIN_INTERDITE'			=> 'La modification administrative est interdite&hellip;',
+	'GROUPE_FONCTIONNALITE_AUCUNE'	=> 'Aucune fonctionnalité dans ce groupe',
+	'GROUPE_SUPPR'					=> 'Supprimer ce groupe de foncitonnalités',
+	'GROUPE_SUPPR_INTERDIT'			=> 'La suppression de ce groupe est interdite&hellip;',
+	'GROUPE_SUPPR_IMPOSSIBLE'		=> 'On ne peut pas supprimer un groupe qui contient des fonctionnalités&hellip;',
+	'GROUPE_SUPPR_CERTAIN'			=> 'Etes-vous certain de vouloir supprimer définitivement ce groupe de fonctionnalités ?',
+	'GROUPE_REN_ERREUR'				=> 'Erreur SQL lors du renommage du libellé du groupe de fonctionnalités',
+	'FONC_REN_ID_EXISTE_DEJA'		=> 'L\'id de cette fonctionnalité existe déjà&hellip;',
+	'FONC_REN_CODE_EXISTE_DEJA'		=> 'Le code de cette fonctionnalité existe déjà&hellip;',
+	'PROFIL_REN_ID_EXISTE_DEJA'		=> 'L\'id de cet profil existe déjà&hellip;',
+	'PROFIL_REN_CODE_EXISTE_DEJA'	=> 'Le code de ce profil existe déjà&hellip;',
 
 	//------------------------------------------
 	// BASE DE DONNEES
@@ -273,6 +287,9 @@ $_LIBELLES = array(
 	'SAUVEGARDE_SUPPRIMEE_OK'		=> 'La sauvegarde a été supprimée&hellip;',
 	'SAUVEGARDE_SUPPRIMEE_KO'		=> 'La suppression de la sauvegarde a échoué!',
 	'SAUVEGARDE_INEXISTANTE'		=> 'La sauvegarde est inexistante&hellip;',
+	'PHP_ERROR_FILE_VIDER'			=> 'Vider le fichier d\'erreurs PHP',
+	'PHP_ERROR_FILE_DELETED'		=> 'Suppression du fichier d\'erreurs PHP réussie&hellip;',
+	'PHP_ERROR_FILE_ERROR'			=> 'Erreur lors de la suppression du fichier d\'erreurs PHP!',
 
 	//------------------------------------------
 	// MOT DE PASSE
@@ -306,6 +323,9 @@ $_LIBELLES = array(
 	'PAS_OBJET'						=> 'Pas d\'objet déclaré',
 	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'eMail d\'un destinataire non valide',
 	'EMAIL_ENVOI_ERREUR'			=> 'Erreur lors de l\'envoi du mail',
+	'ERREURS_BACKEND'				=> 'Erreurs Backend',
+	'ERREURS_FRONTEND'				=> 'Erreurs Frontend',
+	'VOTRE_IP'						=> 'Votre IP',
 
 	//------------------------------------------
 	// AUTRE
@@ -315,7 +335,8 @@ $_LIBELLES = array(
 	'AUCUNE_REF_TROUVEE'			=> 'Aucune référence trouvée',
 	'1_REF_TROUVEE'					=> '1 référence trouvée',
 	'X_REF_TROUVEE'					=> '%d références trouvées',
-	'NOM_COLONNE'					=> 'Nom Colonne ?'
+	'NOM_COLONNE'					=> 'Nom Colonne ?',
+	'ACTIONS'						=> '<span class="fas fa-child fa-lg"></span>'
 );
 
 $_MOIS_EN_CLAIR	= array('', 'janvier', 'février', 'mars','avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'); 
@@ -339,10 +360,9 @@ function getLib($indice, $param1='', $param2='', $param3='', $param4='', $param5
 {
 	global $_LIBELLES;
 	$chaine = sprintf($_LIBELLES[$indice], $param1, $param2, $param3, $param4, $param5);
-	if ($chaine == '') $chaine = 'TEXTE ABSENT';
-	return $chaine;
+	if ($chaine) return $chaine; else return 'TEXTE ABSENT';
 }
 function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $param5='')
 {
-	return '<span class="maj">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+	return '<span class="text-uppercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
 }

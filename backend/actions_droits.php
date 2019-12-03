@@ -6,6 +6,9 @@
 // version : 01.06.2018
 // 27.11.2018
 //		- Standardisation noms de fichier de sauvegarde
+// 28.05.2019
+//		- Ajout de actions sur les groupes de fonctionnalités
+//		- Ajout de controles sur la saisie
 //--------------------------------------------------------------------------
 require_once('libs/common.inc.php');
 
@@ -46,7 +49,7 @@ switch($operation)
 			die();
 		}
 		else {
-			riseErrorMessage(getLib('IMPORT_DROITS_KO', $fichier);
+			riseErrorMessage(getLib('IMPORT_DROITS_KO', $fichier));
 		}
 		goReferer();
 		break;
@@ -54,6 +57,7 @@ switch($operation)
 
 	//------------------------------------------
 	// Modification des droits d'un couple fonctionnalite/profil
+	// Cette fonction n'est plus utilisée depuis la gestion des droits via javascript 
 	//------------------------------------------
 	case 'droits':
 	{
@@ -91,6 +95,8 @@ switch($operation)
 	case 'addniv':
 	{
 		$res = sqlDroits_addProfil();
+		//on force le déploiement du groupe "Non classée"
+		$_SESSION[_APP_DROITS_GROUPE_DEPLOYE_] = 1;
 		//suppression de l'objet Droit (il sera recréé au chargement de la page)
 		$_SESSION[_APP_DROITS_] = null;
 		//retour
@@ -122,6 +128,8 @@ switch($operation)
 	case 'addfonc':
 	{
 		$res = sqlDroits_addFonctionnalite();
+		//on force le déploiement du groupe "Non classée"
+		$_SESSION[_APP_DROITS_GROUPE_DEPLOYE_] = 1;
 		//suppression de l'objet Droit (il sera recréé au chargement de la page)
 		$_SESSION[_APP_DROITS_] = null;
 		//retour
@@ -130,7 +138,7 @@ switch($operation)
 	}
 
 	//------------------------------------------
-	// Supprimer une foncionalite
+	// Supprimer une fonctionalite
 	//------------------------------------------
 	case 'delfonc':
 	{
@@ -147,10 +155,56 @@ switch($operation)
 	}
 
 	//------------------------------------------
-	// Demande de renommage d'un profil ou d'une fonctionnalite
+	// Ajout d'un groupe de fonctionnalités
+	// Voir sqlDroits_addGroupeFonctionnalites()
+	//------------------------------------------
+	case 'addgrp':
+	{
+		$res = sqlDroits_addGroupeFonctionnalites();
+		//suppression de l'objet Droit (il sera recréé au chargement de la page)
+		$_SESSION[_APP_DROITS_] = null;
+		//retour
+		goPageBack();
+		break;
+	}
+
+	//------------------------------------------
+	// Suppression d'un groupe de fonctionnalités
+	// On peut supprimer seulement les groupes vides 
+	// On ne peut pas supprimer les groupes "Non classée" et "Administration"
+	//------------------------------------------
+	case 'delgrp':
+	{
+		(isset($_GET['do'])) ? $do = MySQLDataProtect($_GET['do']) : $do = 'aucun';
+		if ($do != 'aucun') {
+			if ($do > 2) {
+				//ok, on supprime si ce n'est pas un des groupes "Non classée" et "Administration"
+				//il n'est pas nécessaire de recrééer les droits puisque les droits se moquent des groupes
+				if (SqlSimple::existValeur(_PREFIXE_TABLES_.'fonctionnalites', 'id_groupe_fonctionnalite', $do) == 0) {
+					$res = sqlDroits_deleteGroupeFonctionnalites($do);
+				}
+				else {
+					riseWarningMessage(getLib('GROUPE_SUPPR_IMPOSSIBLE'));
+				}
+			}
+			else {
+				riseWarningMessage(getLib('GROUPE_SUPPR_INTERDIT'));
+			}
+		}
+		//retour au listing des droits
+		goPageBack();
+		break;
+	}
+
+	//------------------------------------------
+	// Demande de renommage d'un profil, fonctionnalité ou groupe
 	// renniv		: renomme le libellé du profil
 	// rennivcode	: renomme le code PHP du profil
 	// rennivid		: renomme l'id du profil
+	// renfonc		: renomme le libellé d'une fonctionnalité
+	// renfonccode	: renomme le code PHP d'une fonctionnalité
+	// renfoncid	: renomme l'id d'une fonctionnalité
+	// rengrp		: renomme le libellé d'un groupe de fonctionnalité
 	//------------------------------------------
 	case 'renniv':
 	case 'rennivcode':
@@ -158,20 +212,29 @@ switch($operation)
 	case 'renfonc':
 	case 'renfonccode':
 	case 'renfoncid':
+	case 'rengrp':
 	{
 		//on récupere l'id du profil ou de la fonctionnalite dont on veut modifier un champ
 		(isset($_GET['do'])) ? $do = MySQLDataProtect($_GET['do']) : $do = 0;
 		//on interdit toute modification de code 1 (administration)
 		if ($do != 1) {
-			//création du formulaire d'entrée
+			//création de l'adresse de callback, c'est à dire la page qui sera appelée après validation de la saisie
 			unset($_SESSION[_APP_INPUT_]);
-			$_SESSION[_APP_INPUT_]['form_title'] = getLib('NOUVELLE_SAISIE');								//libelle du formulaire
-			$_SESSION[_APP_INPUT_]['callback'] = _URL_ACTIONS_DROITS_.'?operation=valid_'.$operation;		//adresse de callback, c'est à dire la page qui sera appelée après validation de la saisie
-			(($operation == 'rennivid') || ($operation == 'renfoncid')) ? $testMatch = array('REQUIRED', 'NUMERIC') : $testMatch = array('REQUIRED');
-			$_SESSION[_APP_INPUT_]['champs']['saisie'] = array('type' => 'text',							//champ n°1
+			$_SESSION[_APP_INPUT_]['form_title'] = 'Nouvelle saisie';
+			$_SESSION[_APP_INPUT_]['callback'] = _URL_ACTIONS_DROITS_.'?operation=valid_'.$operation;
+			$_SESSION[_APP_INPUT_]['champs']['saisie'] = array('type' => 'text', 
 															'label' => 'Saisie', 
-															'testMatches' => $testMatch,
+															'testMatches' => array('REQUIRED'),
 															'value' => '');
+			if (($operation == 'rennivid') || ($operation == 'renfoncid')) {
+				$_SESSION[_APP_INPUT_]['champs']['saisie']['testMatches'][] = 'CHECK_UNSIGNED_INTEGER';
+				$_SESSION[_APP_INPUT_]['champs']['saisie']['testMatches'][] = 'NOT_ZERO';
+			}
+			if (($operation == 'rennivcode') || ($operation == 'renfonccode')) {
+				$_SESSION[_APP_INPUT_]['champs']['saisie']['testMatches'][] = 'CHECK_ALPHA_CODE';
+				$_SESSION[_APP_INPUT_]['champs']['saisie']['testMatches'][] = 'UPPERCASE';
+			}
+			//DEBUG_('_APP_INPUT_', $_SESSION[_APP_INPUT_]['champs']['saisie']);
 			//on passe l'id du tuple à modifier en champ caché dans le formulaire de saisie pour pouvoir le récupérer à la validation
 			$_SESSION[_APP_INPUT_]['champs']['id'] = array('type' => 'hidden', 'value' => $do);
 			//on lance le formulaire de saisie
@@ -185,16 +248,17 @@ switch($operation)
 		break;
 	}
 
-	//==================================================
-	// Validation du renommage / modification de profil 
-	// ou de fonctionnalité
-	//==================================================
+	//------------------------------------------
+	// Validation du renommage / modification de profil, de 
+	// fonctionnalité ou de groupe
+	//------------------------------------------
 	case 'valid_renniv':
 	case 'valid_rennivcode':
 	case 'valid_rennivid':
 	case 'valid_renfonc':
 	case 'valid_renfonccode':
 	case 'valid_renfoncid':
+	case 'valid_rengrp':
 	{
 		//le retour de la saisie se trouve dans le tableau $_SESSION[_APP_INPUT_]['values']
 		$saisie = $_SESSION[_APP_INPUT_]['values']['saisie'];		//valeur saisie
@@ -209,38 +273,65 @@ switch($operation)
 			}
 		}
 		//code profil
-		elseif ($operation == 'valid_rennivcode') {
-			$res = sqlDroits_renameCodeProfil($id, $saisie);
-			if (!$res) {
-				riseErrorMessage(getLib('ERREUR_REN_CODE_PROFIL'));
+		else if ($operation == 'valid_rennivcode') {
+			if (SqlSimple::existValeur(_PREFIXE_TABLES_.'profils', 'code', $saisie) == 0) {
+				$res = sqlDroits_renameCodeProfil($id, $saisie);
+				if (!$res) {
+					riseErrorMessage(getLib('ERREUR_REN_CODE_PROFIL'));
+				}
+			}
+			else {
+				riseWarningMessage(getLib('PROFIL_REN_CODE_EXISTE_DEJA'));
 			}
 		}	
 		//id profil
-		elseif ($operation == 'valid_rennivid') {
-			$res = sqlDroits_renameIdProfil($id, $saisie);
-			if (!$res) {
-				riseErrorMessage(getLib('ERREUR_REN_ID_PROFIL'));
+		else if ($operation == 'valid_rennivid') {
+			if (SqlSimple::existValeur(_PREFIXE_TABLES_.'profils', 'id_profil', $saisie) == 0) {
+				$res = sqlDroits_renameIdProfil($id, $saisie);
+				if (!$res) {
+					riseErrorMessage(getLib('ERREUR_REN_ID_PROFIL'));
+				}
+			}
+			else {
+				riseWarningMessage(getLib('PROFIL_REN_ID_EXISTE_DEJA'));
 			}
 		}
 		//libelle fonctionnalite
-		elseif ($operation == 'valid_renfonc') {
+		else if ($operation == 'valid_renfonc') {
 			$res = sqlDroits_renameFonctionnalite($id, $saisie);
 			if (!$res) {
 				riseErrorMessage(getLib('ERREUR_REN_LIB_FONC'));
 			}
 		}
 		//code fonctionnalite
-		elseif ($operation == 'valid_renfonccode') {
-			$res = sqlDroits_renameCodeFonctionnalite($id, $saisie);
-			if (!$res) {
-				riseErrorMessage(getLib('ERREUR_REN_CODE_FONC'));
+		else if ($operation == 'valid_renfonccode') {
+			if (SqlSimple::existValeur(_PREFIXE_TABLES_.'fonctionnalites', 'code', $saisie) == 0) {
+				$res = sqlDroits_renameCodeFonctionnalite($id, $saisie);
+				if (!$res) {
+					riseErrorMessage(getLib('ERREUR_REN_CODE_FONC'));
+				}
+			}
+			else {
+				riseWarningMessage(getLib('FONC_REN_CODE_EXISTE_DEJA'));
 			}
 		}
 		//id fonctionnalite
-		elseif ($operation == 'valid_renfoncid') {
-			$res = sqlDroits_renameIdFonctionnalite($id, $saisie);
+		else if ($operation == 'valid_renfoncid') {
+			if (SqlSimple::existValeur(_PREFIXE_TABLES_.'fonctionnalites', 'id_fonctionnalite', $saisie) == 0) {
+				$res = sqlDroits_renameIdFonctionnalite($id, $saisie);
+				if (!$res) {
+					riseErrorMessage(getLib('ERREUR_REN_ID_FONC'));
+				}
+			}
+			else {
+				riseWarningMessage(getLib('FONC_REN_ID_EXISTE_DEJA'));
+			}
+		}
+		//libellé groupe de fonctionnalité
+		else if ($operation == 'valid_rengrp') {
+			$res = sqlDroits_renameGroupeFonctionnalites($id, $saisie);
 			if (!$res) {
-				riseErrorMessage(getLib('ERREUR_REN_ID_FONC'));
+				riseErrorMessage(getLib('GROUPE_REN_ERREUR'));
 			}
 		}
 

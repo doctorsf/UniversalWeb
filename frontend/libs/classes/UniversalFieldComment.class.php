@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'comment' (commentaire)
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldComment extends UniversalField {
@@ -40,18 +40,21 @@ class UniversalFieldComment extends UniversalField {
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 		($this->lclass() != '') ? $lclass = ' '.$this->lclass() : $lclass = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->llong().$lclass.$invisible.'"'.$style.'>';
 			if ($labelHelp == '') {
 				//il n'y a pas d'aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
+				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'"><span>'.$this->label().'</span></label>';
 			}
 			else {
 				//on ajoute une aide sur le label
 				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
-					$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
+					$html.= '<span '.$labelHelp.'>'.$this->label().'</span>';
 				$html.= '</label>';
 			}
 		$html.= '</div>';
@@ -77,7 +80,7 @@ class UniversalFieldComment extends UniversalField {
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.'">';
 			$valeur = htmlentities(stripslashes($this->value()));
-			$html.= '<div class="form-control h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="'.$border.'text-align:justify">'.$valeur.'</div>';
+			$html.= '<div class="form-control h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="text-align:justify;'.$border.'">'.$valeur.'</div>';
 			$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$valeur.'" />';
 			if ($this->erreur()) $html.= '<p class="form_error" title="'.$this->libErreurHelp().'">'.$this->libErreur().'</p>';
 		$html.= '</div>';
@@ -88,18 +91,21 @@ class UniversalFieldComment extends UniversalField {
 	private function _drawLabelOnline() {
 		//label online
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->lclass().'"'.$style.'>';
 			if ($labelHelp == '') {
 				//il n'y a pas d'aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
+				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'"><span>'.$this->label().'</span></label>';
 			}
 			else {
 				//on ajoute une aide sur le label
 				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
-					$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
+					$html.= '<span '.$labelHelp.'>'.$this->label().'</span>';
 				$html.= '</label>';
 			}
 		$html.= '</div>';
@@ -124,7 +130,7 @@ class UniversalFieldComment extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		$html = '<div id="'.$this->idzchamp().'">';
 			$valeur = htmlentities(stripslashes($this->value()));
-			$html.= '<div class="form-control h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="'.$border.'text-align:justify">'.$valeur.'</div>';
+			$html.= '<div class="form-control h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="text-align:justify;'.$border.'">'.$valeur.'</div>';
 			$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$valeur.'" />';
 			if ($this->erreur()) $html.= '<p class="form_error" title="'.$this->libErreurHelp().'">'.$this->libErreur().'</p>';
 		$html.= '</div>';

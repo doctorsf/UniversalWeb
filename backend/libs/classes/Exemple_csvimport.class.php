@@ -2,12 +2,15 @@
 //----------------------------------------------------------------------
 // Classe d'import CSV pour la videothèque
 //----------------------------------------------------------------------
+// 12.11.2019
+//		modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
+//----------------------------------------------------------------------
 
 // classe permettant d'utiliser la classe SqlSimple
 class SqlTableFilms extends SqlSimple {
-	public $_table = 'films';
-	public $_index = 'titre';
-	public $_champs = 'titre, annee, realisateur, visuel, genre';
+	public $table = 'films';
+	public $index = 'titre';
+	public $champs = 'titre, annee, realisateur, visuel, genre';
 }
 
 class Exemple_csvimport extends UniversalCsvImport {
@@ -82,8 +85,9 @@ class Exemple_csvimport extends UniversalCsvImport {
 	//		Nombre d'insertions dnas la base de données
 	//---------------------------------------
 	public function import($data) {
+		if (empty($data)) return 0;
 		$sqlFilms = new SqlTableFilms();
-		$masqueSql = "'[0]', '[1]', '[2]', '[3]', '[4]'";
+		$masqueSql = "'[1]', '[2]', '[3]', '[4]', '[5]'";
 		$nbInsertions = $sqlFilms->importMany($masqueSql, $data, 3, false);
 		return $nbInsertions;
 	}

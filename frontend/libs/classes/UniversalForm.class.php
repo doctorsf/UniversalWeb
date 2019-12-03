@@ -191,6 +191,19 @@
 // Version 3.12.0 du 17.04.2019
 //		- Les positionnements de tooltips sont maintenant positionnés par défaut à "auto" (rappel : les tooltips ne s'affichent pas si leur 'title' est vide). 
 //			Le mode "auto" est nouveau, c'est popper qui décide de la meilleure position en fonction du contexte.
+// Version 3.13.0 du 24.05.2019
+//		- Création du Match 'CHECK_ALPHA_CODE' (majuscule + minuscules + '-' + '_' + '.')
+// Version 3.14.0 du 29.07.2019
+//		- Ajout de la propriété "multiple" pour l'objet UniversalFieldText. Seulement pris en compte pour les champs de type "file". Grâce à cette propriété on peut maintenant 
+//			selectionner plusieurs fichiers en une seule fois. De ce fait la structure envoyée par getData() (pour les champs text de type file seulement) a changé.
+// Version 3.15.0 du 02.08.2019
+//		- Ajout de zoneTitre et zoneChamp pour les objets DIV 
+//		- Ajout du paramètre 'accept' pour les champs texte de type file (selecteur de fichier ne propose que les extentions dans accept)
+// Version 3.15.1 du 03.10.2019
+//		- Correction bug : le passage de la souris affichait le ? même sur les champs qui n'avaient pas de texte d'aide
+// Version 3.16.0 du 26.11.2019
+//		- Ajout du composant "switch"
+//		- Ajout des propiétés : min, max, step, pattern, autocomplete et autofocus pour les <input> de type text (UniversalFieldText)
 //==============================================================
 
 //-------------------------------------------------------------------------
@@ -237,7 +250,7 @@ class UniversalForm {
 	private $_message = '';				//éventuel message qu'il est possible de faire passer à l'objet
 	private $_ligneEncours = false;		//dessin d'une ligne de champs en cours ?
 
-	const VERSION = 'v3.12.0 (2019-04-17)';
+	const VERSION = 'v3.16.0 (2019-11-26)';
 	const COPYRIGHT = '&copy;2014-2019 Fabrice Labrousse';
 	const CONSULTER = 'consulter';
 	const AJOUTER = 'ajouter';
@@ -373,6 +386,7 @@ class UniversalForm {
 		//création de l'objet champ
 		if		($fieldType == 'area')			$this->_lesChamps[$idField] = new UniversalFieldArea($tabInfos, $this->_idForm);
 		elseif	($fieldType == 'bouton')		$this->_lesChamps[$idField] = new UniversalFieldBouton($tabInfos, $this->_idForm);
+		elseif	($fieldType == 'switch')		$this->_lesChamps[$idField] = new UniversalFieldSwitch($tabInfos, $this->_idForm);
 		elseif	($fieldType == 'checkbox') {
 			//recherche si il existe déjà un checkbox nommé groupName
 			//ceci afin de recopier systématiquement dans tous les checkbox du même groupe les valeurs de : 
@@ -722,7 +736,6 @@ class UniversalForm {
 
 	//tester la validité de la saisie
 	public function tester() {
-
 		$erreurSaisie = false;
 		if(isset($_POST['hidSoumissionFormulaire'.'_'.$this->_idForm])) {
 

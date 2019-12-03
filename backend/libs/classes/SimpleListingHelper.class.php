@@ -17,6 +17,9 @@
 //		Ajout du paramètre "header" dans la construction de la colonne de la table. true (la colonne est une entete pour la ligne), false sinon (valeur par défaut)
 //			ce paramètre indique si la donnée de la colonne doit servir d'entête pour la ligne.
 //		Ajout du paramètre $css à la methode drawHead (personnalisation de l'entête)
+// 17.05.2019
+//		- Correction manque </th> méthode drawHead
+//		- Ajout du paramètre 'css' aux colonnes
 //--------------------------------------------------------------------------
 
 class SimpleListingHelper {
@@ -36,6 +39,7 @@ class SimpleListingHelper {
 		if (($tableau['tri'] != '') && ($tableau['sens'] == '')) $tableau['sens'] = 'ASC';	//sens du tri souhaité par défaut (ASC par defaut) si tri demandé
 		if (!isset($tableau['title'])) $tableau['title'] = '';								//info bulle sur la colonne (vide par défaut)
 		if (!isset($tableau['header'])) $tableau['header'] = false;							//booléen indique si la colonne contient l'information d'entete pour la ligne (scope="row")
+		if (!isset($tableau['css'])) $tableau['css'] = '';									//css du libellé de la colonne
 		return $tableau;
 	}
 
@@ -142,7 +146,8 @@ class SimpleListingHelper {
 		$tabUrl = parse_url($leLienColonne);
 		$possedeParams = (isset($tabUrl['query']));
 		foreach($cols as $colonne) {
-			echo '<th scope="col" class="text-'.$colonne['align'].'" width="'.$colonne['size'].'%">';
+			$class = trim('text-'.$colonne['align'].' '.$colonne['css']);
+			echo '<th scope="col" class="'.$class.'" width="'.$colonne['size'].'%">';
 			if ($colonne['tri'] != '') {
 				if ($colonne['title'] != '') {
 					echo '<span data-toggle="tooltip" title="'.$colonne['title'].'">';
@@ -170,6 +175,7 @@ class SimpleListingHelper {
 					echo '</span>';
 				}
 			}
+			echo '</th>';
 		}
 		echo '</thead>';
 	}

@@ -1,9 +1,9 @@
 <?php
-/*----------------------------------------------------------------------------------*/
-/*								LANGUE FRANCE										*/
-/*----------------------------------------------------------------------------------*/
-/* Fichier de langue FRANCAIS														*/
-/*----------------------------------------------------------------------------------*/
+//----------------------------------------------------------------------------------
+//								LANGUE FRANCAIS
+//----------------------------------------------------------------------------------
+// Fichier de langue FRANCAIS
+//----------------------------------------------------------------------------------
 
 defined('_LG_')						|| define('_LG_', 'fr');
 defined('_FR_')						|| define('_FR_', 'fr');
@@ -39,6 +39,7 @@ $_LIBELLES = array(
 	'UFC_DATETIME'					=> 'Format date heure attendu : yyyy-mm-jj hh:mm:ss',
 	'UFC_EMAIL'						=> 'eMail attendue',
 	'UFC_EMAIL_APOSTROPHE'			=> 'eMail attendue (apostrophe autorisée)',
+	'UFC_ALPHA_CODE'				=> 'Caractères de codage attendus',
 	'UFC_ALPHA_SIMPLE'				=> 'Caractères alphanumériques attendus',
 	'UFC_ALPHA_NOMS'				=> 'Caractères alphanumériques accentués attendus',
 	'UFC_FILE_NAME'					=> 'Caractères compatibles avec nomage de fichiers attendus',
@@ -59,6 +60,8 @@ $_LIBELLES = array(
 	'UFC_ECHEC_ECRITURE_DISQUE'		=> 'Échec de l\'écriture du fichier sur le disque',
 	'UFC_ECHEC'						=> 'Échec&hellip;',
 	'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
+	'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
+	'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)',
 
 	/*------------------------------------------*/
 	/* ERREURS									*/
@@ -203,28 +206,27 @@ $_LIBELLES = array(
 $_MOIS_EN_CLAIR	= array('', 'janvier', 'février', 'mars','avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'); 
 $_CIVILITE = array('', 'M.', 'Mme', 'Melle', 'Inconnue');
 
-/*------------------------------------------------------------------*/
-/* Construction d'une chaine avec des paramètres passés en option	*/
-/* Entrée :															*/
-/*		$indice : indice du template de la chaine dans $_LIBELLE	*/
-/*		$param1 : paramètre 1 de remplacement (facultatif)			*/
-/*		$param2 : paramètre 2 de remplacement (facultatif)			*/
-/*		$param3 : paramètre 3 de remplacement (facultatif)			*/
-/*		$param4 : paramètre 4 de remplacement (facultatif)			*/
-/* Sortie :															*/
-/*		La chaine formattée											*/
-/* Exemple d'appel :												*/
-/*		getLib('PREF_FILMS_ADD', 30)								*/
-/*		donne: Ajoutez ce titre à la liste de vos 30 films préférés */
-/*------------------------------------------------------------------*/
+//------------------------------------------------------------------
+// Construction d'une chaine avec des paramètres passés en option
+// Entrée :
+//		$indice : indice du template de la chaine dans $_LIBELLE
+//		$param1 : paramètre 1 de remplacement (facultatif)
+//		$param2 : paramètre 2 de remplacement (facultatif)
+//		$param3 : paramètre 3 de remplacement (facultatif)
+//		$param4 : paramètre 4 de remplacement (facultatif)
+// Sortie :
+//		La chaine formattée
+// Exemple d'appel :
+//		getLib('PREF_FILMS_ADD', 30)
+//		donne: Ajoutez ce titre à la liste de vos 30 films préférés
+//------------------------------------------------------------------
 function getLib($indice, $param1='', $param2='', $param3='', $param4='', $param5='')
 {
 	global $_LIBELLES;
 	$chaine = sprintf($_LIBELLES[$indice], $param1, $param2, $param3, $param4, $param5);
-	if ($chaine == '') $chaine = 'TEXTE ABSENT';
-	return $chaine;
+	if ($chaine) return $chaine; else return 'TEXTE ABSENT';
 }
 function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $param5='')
 {
-	return '<span class="maj">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+	return '<span class="text-uppercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
 }

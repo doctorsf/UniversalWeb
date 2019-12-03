@@ -8,6 +8,10 @@
 //		Modification sqlDroits_addProfil() et sqlDroits_addFonctionnalite() : 
 //		Maintenant à chaque création de profil ou de fonctionnalité, les droits 
 //		sont automatiquement ajouté dans la table "droits" avec interdiction (0)
+// 24.05.2019
+//		Ajout de la notion de groupes de fonctionnalités avec gestion complète
+// 27.05.2019
+//		Ajout de la fonction sqlDroits_swapAutorisationProfil() qui swappe un droit
 //--------------------------------------------------------------------------
 // éè : UTF-8
 //--------------------------------------------------------------------------
@@ -33,22 +37,42 @@ function sqlDroits_createTableProfils()
 	return $res;
 }
 
+//- CREATION table groupes de fonctionnalites basique --------------------------
+function sqlDroits_createTableGroupesFonctionnalites()
+{
+	$requete = "CREATE TABLE IF NOT EXISTS `"._PREFIXE_TABLES_."groupes_fonctionnalites` (";
+	$requete.= "`id_groupe_fonctionnalite` tinyint(3) UNSIGNED NOT NULL, ";
+	$requete.= "`libelle` varchar(128) NOT NULL, ";
+	$requete.= "`ordre` tinyint(3) UNSIGNED NOT NULL DEFAULT '1', ";
+	$requete.= "PRIMARY KEY (`id_groupe_fonctionnalite`)";
+	$requete.= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	if ($res !== false) {
+		//Contenu de la table `fonctionnalites`
+		$requete = "INSERT IGNORE INTO `"._PREFIXE_TABLES_."groupes_fonctionnalites` (`id_groupe_fonctionnalite`, `libelle`, `ordre`) VALUES ";
+		$requete.= "(1, 'Non classée', 1),";
+		$requete.= "(2, 'Administration', 2)";
+		$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	}
+	return $res;
+}
+
 //- CREATION table fonctionnalites basique --------------------------------------
 function sqlDroits_createTableFonctionnalites()
 {
 	$requete = "CREATE TABLE IF NOT EXISTS `"._PREFIXE_TABLES_."fonctionnalites` (";
-	$requete.= "`id_fonctionnalite` tinyint(3) unsigned NOT NULL, ";
+	$requete.= "`id_fonctionnalite` tinyint(3) UNSIGNED NOT NULL, ";
+	$requete.= "`id_groupe_fonctionnalite` tinyint(3) UNSIGNED NOT NULL DEFAULT '1', ";
 	$requete.= "`libelle` varchar(128) NOT NULL, ";
 	$requete.= "`code` varchar(30) NOT NULL, ";
 	$requete.= "PRIMARY KEY (`id_fonctionnalite`), ";
-	$requete.= "UNIQUE KEY `id_fontionnalite` (`id_fonctionnalite`), ";
 	$requete.= "UNIQUE KEY `code` (`code`)";
 	$requete.= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
 		//Contenu de la table `fonctionnalites`
-		$requete = "INSERT IGNORE INTO `"._PREFIXE_TABLES_."fonctionnalites` (`id_fonctionnalite`, `libelle`, `code`) VALUES ";
-		$requete.= "(1, 'Administrer l''application', 'FONC_ADM_APP');";
+		$requete = "INSERT IGNORE INTO `"._PREFIXE_TABLES_."fonctionnalites` (`id_fonctionnalite`, `id_groupe_fonctionnalite`, `libelle`, `code`) VALUES ";
+		$requete.= "(1, 2, 'Administrer l\'application', 'FONC_ADM_APP');";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	}
 	return $res;
@@ -98,22 +122,51 @@ function sqlDroits_updateAutorisationProfil($fonctionnalite, $profil, $valeur)
 }
 
 //----------------------------------------------------------------------
+// Swap l'autorisation d'un profil d'accès pour une fonctionalité particulière
+// Entree :
+//		$fonctionnalite : id de la fonctionalité
+//		$profil : id du profil concerné
+// Retour :
+//		true : modification effectuée
+//		false : erreur SQL
+//----------------------------------------------------------------------
+function sqlDroits_swapAutorisationProfil($fonctionnalite, $profil)
+{
+	$requete = "UPDATE "._PREFIXE_TABLES_."droits ";
+	$requete.= "SET autorisation = IF(autorisation = '1', '0', '1') ";
+	$requete.= "WHERE id_fonctionnalite = '".$fonctionnalite."' AND id_profil = '".$profil."';";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	return $res;
+}
+
+//----------------------------------------------------------------------
 // Charge les droits administratifs de l'application
 // Charge les fonctionnalites, profils et droits
 // Entree :
 //		$laListe : tableau des droits chargés
+//		$notionGroupes : true (on utilise la notion de groupes) / false (pas de notion de groupe)
 // Retour : 
 //		true / false
 //----------------------------------------------------------------------
-function sqlDroits_loadFonctionnalites(&$laListe)
+function sqlDroits_loadFonctionnalites(&$laListe, $notionGroupes)
 {
 	$laListe = array();
-	$requete = "SELECT id_fonctionnalite, libelle, code ";
-	$requete.= "FROM "._PREFIXE_TABLES_."fonctionnalites ORDER BY id_fonctionnalite";
+	$requete = "SELECT id_fonctionnalite, "._PREFIXE_TABLES_."fonctionnalites.id_groupe_fonctionnalite, "._PREFIXE_TABLES_."groupes_fonctionnalites.libelle groupe, ";
+	$requete.= _PREFIXE_TABLES_."fonctionnalites.libelle, code ";
+	$requete.= "FROM "._PREFIXE_TABLES_."fonctionnalites, "._PREFIXE_TABLES_."groupes_fonctionnalites ";
+	$requete.= "WHERE "._PREFIXE_TABLES_."fonctionnalites.id_groupe_fonctionnalite = "._PREFIXE_TABLES_."groupes_fonctionnalites.id_groupe_fonctionnalite ";
+	if ($notionGroupes) {
+		$requete.= "ORDER BY ordre, id_fonctionnalite";
+	}
+	else {
+		$requete.= "ORDER BY id_fonctionnalite";
+	}
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
 		foreach($res as $ligne) {
 			$laListe[$ligne['code']]['id_fonctionnalite'] = $ligne['id_fonctionnalite'];
+			$laListe[$ligne['code']]['id_groupe_fonctionnalite'] = $ligne['id_groupe_fonctionnalite'];
+			$laListe[$ligne['code']]['groupe'] = $ligne['groupe'];
 			$laListe[$ligne['code']]['code'] = $ligne['code'];
 			$laListe[$ligne['code']]['libelle'] = $ligne['libelle'];
 		}
@@ -276,7 +329,7 @@ function sqlDroits_renameIdProfil($profil, $newLibelle)
 //----------------------------------------------------------------------
 // Ajouter une fonctionnalite
 // Entree :
-//		$id : id de la nouvelle fonctionnalite. option. Si non fourni ou
+//		$id_fonctionnalite : id de la nouvelle fonctionnalite. option. Si non fourni ou
 //				vide, alors on donne id le plus grand + 1
 //		$libelle : libelle de la nouvelle fonctionnalite. option. Si non
 //				fourni ou vide, alors 'Fonctionnalité n°x'
@@ -297,7 +350,7 @@ function sqlDroits_addFonctionnalite($id_fonctionnalite='', $libelle='', $code='
 	if ($libelle == '') {	//proposer un libelle par défaut
 		$libelle = 'Fonctionnalite n°'.$id_fonctionnalite;
 	}
-	if ($code == '') {	//proposer un code de fonctionnalite par défaut
+	if ($code == '') {		//proposer un code de fonctionnalite par défaut
 		$code = 'FONCTIONNALITE_'.$id_fonctionnalite;
 	}
 	//creation
@@ -405,4 +458,158 @@ function sqlDroits_buildProfilesList($defaut)
 		}
 	}
 	return $texte;
+}
+
+//----------------------------------------------------------------------
+// Récupération des informations pour l'affichage du listing des droits
+// Ici on récupère toutes les fonctionnalités de tous les groupes, y 
+// compris les groupes qui ne possèdent aucune fonctionnalité
+// Entree : 
+//		$laListe : tableau en retour des informations
+//		$notionGroupes : true (on utilise la notion de groupes) / false (pas de notion de groupe)
+// Retour : true / false
+//----------------------------------------------------------------------
+function sqlDroits_getInfosListing(&$laListe, $notionGroupes)
+{
+	$requete = "SELECT ";
+	$requete.= "A.id_groupe_fonctionnalite, A.libelle groupe, A.ordre, B.id_fonctionnalite, B.libelle, B.code ";
+	$requete.= "FROM "._PREFIXE_TABLES_."groupes_fonctionnalites A ";
+	$requete.= "LEFT OUTER JOIN "._PREFIXE_TABLES_."fonctionnalites B ON B.id_groupe_fonctionnalite = A.id_groupe_fonctionnalite ";
+	if ($notionGroupes) {
+		$requete.= "ORDER BY A.ordre, B.id_fonctionnalite";
+	}
+	else {
+		$requete.= "ORDER BY B.id_fonctionnalite";
+	}
+	$laListe = executeQuery($requete, $nombre, _SQL_MODE_);
+	if ($laListe !== false) {
+		return true;
+	}
+	$laListe = null;
+	return false;
+}
+
+//----------------------------------------------------------------------
+// Ajoute un nouveau groupe de fonctionnalités. 
+// Le groupe ajouté est positionné en dernier.
+// Entrée : rien
+// Retour : true (groupe ajoutée) / false (erreur)
+//----------------------------------------------------------------------
+function sqlDroits_addGroupeFonctionnalites()
+{
+	//proposition id_groupe_fonctionnalite et ordre
+	$requete = "SELECT MAX(id_groupe_fonctionnalite) + 1 id, MAX(ordre) + 1 ordre FROM "._PREFIXE_TABLES_."groupes_fonctionnalites";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	if ($res !== false) {
+		$id_groupe_fonctionnalite = $res[0]['id'];
+		$ordre = $res[0]['ordre'];
+	}
+	else return false;
+	//proposition libellé
+	$libelle = 'Groupe n°'.$id_groupe_fonctionnalite;
+	//creation
+	$requete = "INSERT IGNORE INTO "._PREFIXE_TABLES_."groupes_fonctionnalites (id_groupe_fonctionnalite, libelle, ordre) VALUES ";
+	$requete.= "('".$id_groupe_fonctionnalite."', '".$libelle."', '".$ordre."')";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	return $res;
+}
+
+//----------------------------------------------------------------------
+// Supprime un groupe de fonctionnalités (attention ne fait aucun test sur 
+// les fonctionnalités qu'il pouvait contenir).
+//----------------------------------------------------------------------
+function sqlDroits_deleteGroupeFonctionnalites($id_groupe)
+{
+	$requete = "DELETE FROM "._PREFIXE_TABLES_."groupes_fonctionnalites WHERE id_groupe_fonctionnalite = '".$id_groupe."'";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	return $res;
+}
+
+//----------------------------------------------------------------------
+// Positionne la fonctionnalité $id_fonctionnalite dans le groupe de 
+// fonctionnalités $id_groupe
+// Entree :
+//		$id_fonctionnalite : id de la fonctionnalite à déplacer
+//		$id_groupe : id fu groupe de fonctionnalités cible
+// Retour : true / false
+//----------------------------------------------------------------------
+function sqlDroits_setFonctionnaliteToGroupe($id_fonctionnalite, $id_groupe)
+{
+	$requete = "UPDATE "._PREFIXE_TABLES_."fonctionnalites SET id_groupe_fonctionnalite = '".$id_groupe."' WHERE id_fonctionnalite = '".$id_fonctionnalite."'";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	return $res;
+}
+
+//----------------------------------------------------------------------
+// Renomme le libellé d'un groupe de fonctionnalités
+// Entree :
+//		$id : id du gorupe de fonctionnalité à renommer
+//		$newLibelle : nouveau libelle
+// Retour : true / false
+//----------------------------------------------------------------------
+function sqlDroits_renameGroupeFonctionnalites($id, $newLibelle)
+{
+	$requete = "UPDATE "._PREFIXE_TABLES_."groupes_fonctionnalites SET libelle = '".$newLibelle."' WHERE id_groupe_fonctionnalite = '".$id."'";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	return $res;
+}
+
+//----------------------------------------------------------------------
+// Récupere les informations de groupes de fonctionnalités. En retour la fonction
+// renvoie les groupes des fonctionnalité avec comme clé l'id du groupe
+// Entree : Rien
+// Retour : tableau des groupes de fonctionnalités avec clé = id groupe / false (si erreur)
+//----------------------------------------------------------------------
+function sqlDroits_getGroupes()
+{
+	$requete = "SELECT * FROM "._PREFIXE_TABLES_."groupes_fonctionnalites";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	if ($res !== false) {
+		return array_flip_key($res, 'id_groupe_fonctionnalite');
+	}
+	return $res;
+}
+
+//----------------------------------------------------------------------
+// Cette fonction réarrange l'odre d'affichage des groupes de fonctionnalités.
+// Il positionne le groupe $grSource en dessous du groupe $grCible
+// Entree : 
+//		$grSource : id du groupe de fonctionnalité à déplacer
+//		$grCible : id du groupe de fonctionnalité sous lequel placer le groupe source
+// Sortie
+//		false (erreur SQL)
+//----------------------------------------------------------------------
+function sqlDroits_rearrangeGroupes($grSource, $grCible)
+{
+	$groupes = sqlDroits_getGroupes();
+	if ($groupes !== false) {
+		//DEBUG_('groupes', $groupes);
+		//placer $grSource après $grCible
+		$mem = $groupes[$grCible]['ordre'] * 10 + 5;
+		//DEBUG_('mem', $mem); 
+		//renummérotation de l'ordre de tous les groupes en multipliant par 10
+		foreach($groupes as $id_groupe => $groupe) {
+			$groupes[$id_groupe]['ordre'] = $groupes[$id_groupe]['ordre'] * 10;
+		}
+		//DEBUG_('groupes', $groupes);
+		//insertion de la source à la position memorisée (mem)
+		$groupes[$grSource]['ordre'] = $mem;
+		//DEBUG_('groupes', $groupes);
+		//renummérotation des ordres de 1 en 1
+		$groupes = array_sort($groupes, 'ordre');
+		$compteur = 1;
+		foreach($groupes as $id_groupe => $groupe) {
+			$groupes[$id_groupe]['ordre'] = $compteur++;
+		}
+		//DEBUG_('groupes', $groupes);
+		//réécriture dans la base de données
+		$requetes = '';
+		foreach($groupes as $id_groupe => $groupe) {
+			$requetes.= "UPDATE "._PREFIXE_TABLES_."groupes_fonctionnalites SET ordre = '".$groupe['ordre']."' WHERE id_groupe_fonctionnalite = '".$id_groupe."';";
+		}
+		//DEBUG_('requetes', $requetes);
+		$res = executeQuery($requetes, $nombre, _SQL_MODE_);
+		return $res;
+	}
+	return false;
 }

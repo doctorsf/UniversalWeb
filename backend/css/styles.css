@@ -137,3 +137,11 @@ body {
 .surligne {
 	border-top : 0.1rem solid #5c76a9;
 }
+.small {
+    font-size: 80%;
+    font-weight: 400;
+}
+
+.upload-zone-wait.over {
+	background-color:#F8DADA;
+}

@@ -40,6 +40,8 @@
 // 22.04.2019
 //		fonction saveCSV()
 //		- Ajout d'1 nouveau paramètre facultatif ($delimiter)
+// 15.05.2019
+//		Ajout de l'option -R à la commande Mysqldump qui permet de sauver AUSSI les procédures et fonctions stockées
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -255,7 +257,10 @@ function chargeUrlExterne($url)
 //		false si impossible de créer le répertoire pour la sauvegarde
 //		false si erreur SQL
 //----------------------------------------------------------------------
-// Quel que soit le nom de fichier, il est pimoprtant qu'il possède 3 et (seulement 3) underscore pour être accepté par la restoration
+// Quel que soit le nom de fichier, il est important qu'il possède 3 et (seulement 3) underscore pour être accepté par la restoration
+//----------------------------------------------------------------------
+// 15.09.2019 :
+//		Ajout de l'option -R à la commande Mysqldump qui permet de sauver AUSSI les procédures edt fonctions stockées
 //----------------------------------------------------------------------
 defined('_SAVE_DB_')			|| define('_SAVE_DB_', 0);
 defined('_SAVE_DB_SYSTEM_')		|| define('_SAVE_DB_SYSTEM_', 1);
@@ -309,7 +314,7 @@ function saveDatabase($nomDb, $versionApp, $repertoire_sauvegardes, $listeDesTab
 	}
 
 	//construction de la ligne de commande mysqldump.exe
-	$ligne = $dbMysqldump.' --host='.$dbServer.' --user='.$dbLogin.' --password='.$dbPassword.' '.$dbDatabase.' '.$listeTables.' > '.$repertoire_sauvegardes.$nom_fichier; 
+	$ligne = $dbMysqldump.' --host='.$dbServer.' --user='.$dbLogin.' --password='.$dbPassword.' -R '.$dbDatabase.' '.$listeTables.' > '.$repertoire_sauvegardes.$nom_fichier; 
 	//si ajout de " 2>&1" à la fin de la ligne de commande, alors les erreurs (STDERR) seront écrites dans le fichier de sortie (STDOUT)
 	//$ligne.= " 2>&1"; 
 

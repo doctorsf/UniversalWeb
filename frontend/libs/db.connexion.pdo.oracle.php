@@ -1,10 +1,10 @@
 <?php
-//***********************************************************************
+//-----------------------------------------------------------------------
 // Auteur : Fabrice Labrousse
 // Date : 22.11.2012
 // Version :
 // 11.01.2018 : mySqlDataProtect déclaré si pas encore déclaré
-//***********************************************************************
+//-----------------------------------------------------------------------
 // db.connexion.pdo.php
 // permet de faire la connexion à une base de données quelconque
 // les informations spécifiques à renseigner pour la base de données
@@ -13,7 +13,7 @@
 //		$dbLogin : nom de l'utilisateur ex "root"
 //		$dbPassword : mot de passe d'accès à la base ex ""
 //		$dbDatabase : nom de la base de données ex "test"
-//***********************************************************************
+//-----------------------------------------------------------------------
 // Prend en charge PDO (PHP Database Object)
 // Pour lancer une requete SQL simple :
 //		executeQuery($requete, &$nbenr, $mode)
@@ -35,7 +35,7 @@
 //		Attention : gain de temps encore supérieur mais risques
 //      identiques de saturation du nombre de connexion au serveur SQL
 //		N'est efficace que lors de répétition de requetes identiques.
-//***********************************************************************
+//-----------------------------------------------------------------------
 
 global $dbConnexion_lastInsertId;		// id de connexion
 

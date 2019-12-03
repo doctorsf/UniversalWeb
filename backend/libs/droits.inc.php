@@ -37,8 +37,9 @@ function grantAcces()
 		//-------------------------------------------------
 		case _URL_ACTIONS_DROITS_ : {
 			$droitATester	= 'FONC_ADM_APP';
-			$opAutorises	= array('droits', 'export', 'import', 'delniv', 'addniv', 'addfonc', 'delfonc', 'renniv', 'valid_renniv', 'rennivcode', 'valid_rennivcode', 
-									'rennivid', 'valid_rennivid', 'renfonc', 'valid_renfonc', 'renfonccode', 'valid_renfonccode', 'renfoncid', 'valid_renfoncid');
+			$opAutorises	= array('droits', 'delniv', 'addniv', 'addfonc', 'delfonc', 'renniv', 'valid_renniv', 'rennivcode', 'valid_rennivcode', 
+									'rennivid', 'valid_rennivid', 'renfonc', 'valid_renfonc', 'renfonccode', 'valid_renfonccode', 'renfoncid', 'valid_renfoncid', 
+									'rengrp', 'valid_rengrp', 'addgrp', 'delgrp');
 			if (in_array($operation, $opAutorises)) break;
 
 			$droitATester	= 'erreur';
@@ -48,7 +49,7 @@ function grantAcces()
 		//-------------------------------------------------
 		case _URL_MAINTENANCE_ : {
 			$droitATester	= 'FONC_ADM_APP';
-			$opAutorises	= array('purgelog', 'epurelog', 'savedb', 'loaddb', 'gorestoredb', 'deldb', 'hash', 'hashfrontend');
+			$opAutorises	= array('purgelog', 'epurelog', 'savedb', 'loaddb', 'gorestoredb', 'deldb', 'hash', 'hashfrontend', 'reseterrors');
 			if (in_array($operation, $opAutorises)) break;
 
 			$droitATester	= 'erreur';

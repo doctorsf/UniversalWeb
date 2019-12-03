@@ -105,8 +105,8 @@ function writeHtmlFooter($scriptSup='', $fonctionsJquery='')
 	//-----------------
 	$chaine.= '<script>';
 	$chaine.= '$(document).ready(function () {';
-	//activation tooltip bootstrap
-	$chaine.= '$("[data-toggle=\'tooltip\']").tooltip();';
+	//activation tooltip bootstrap (avec initialisation 800ms a l'affichage et 100 à la disparition)
+	$chaine.= '$("[data-toggle=\'tooltip\']").tooltip({ delay: { show: 800, hide: 100 } });';
 	//code Cookie Disclaimer
 	$chaine.= '$(\'body\').cookieDisclaimer({';
 	$chaine.= 'layout: "bar",';

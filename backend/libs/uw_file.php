@@ -10,6 +10,8 @@
 // 03.05.2018
 //		- Simplification de la fonction etatDuRepertoire()
 //		- Création de la fonction litRepertoire()
+// 14.06.2019
+//		- ajout fonction downloadUrl() qui télécharge une url distante (hors site) vers un fichier cible
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -36,7 +38,7 @@ function deleteFile($fichier)
 }
 
 //----------------------------------------------------------------------
-// creation de répertoir de manière récursive
+// creation de répertoire de manière récursive
 // Entree : chemin à créer : ex : /images/produits/o/thumbs
 //		  : le mode d'écriture : ex '0644' / '0777' (en octal)
 // RETOUR : renvoie TRUE si existe ou créé, FALSE si echec
@@ -164,4 +166,34 @@ function delTree($dir)
 		}
 	}
 	return false;
+}
+
+//----------------------------------------------------------------------
+// Télécharge une url distante $urlSource et pose son contenu dans le 
+// fichier $fichierCible. 
+// Entree
+//		$urlSource : url complète de la ressource à copier
+//		$fichierCible : fichier dans lequel sera copié la ressource externe
+// Retour
+//		true (succès) / (string) erreur en clair sinon
+//----------------------------------------------------------------------
+function downloadUrl($urlSource, $fichierCible)
+{
+	$fp = fopen($fichierCible, 'w');
+	//création ressource curl et transfert url cible
+	$ch = curl_init($urlSource); 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+	curl_setopt($ch, CURLOPT_FILE, $fp); 
+	curl_exec($ch); 
+	$curl_errno = curl_errno($ch);
+	$curl_error = curl_error($ch);
+	curl_close($ch); 
+	//fermeture du fichier cible (doit être réalisée immédiatement après le curl_close())
+	fclose($fp);
+	if ($curl_errno > 0) {
+		return 'Erreur cUrl n°'.$curl_errno.' : '.$curl_error;
+	}
+	else {
+		return true;
+	}
 }

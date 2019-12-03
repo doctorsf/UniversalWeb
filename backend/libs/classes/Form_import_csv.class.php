@@ -40,10 +40,8 @@ class Form_import_csv extends UniversalForm {
 		echo '	document.getElementById(original).click();';
 		echo '}';
 		echo 'function getvalue(original, recopie) {';
-		//echo document.getElementById(\'idUpload1\').value=document.getElementById(\'idFile1\').value;';
-		//on ne garde que le nom du fichier
-		echo '	val = explode(\'\\\\\', document.getElementById(original).value);';
-		echo '	document.getElementById(recopie).value = val[2]';
+		//ne pas utiliser document.getElementById(original).value qui selon le navigateur employé renvoie le fakepath ou non
+		echo '	document.getElementById(recopie).value = document.getElementById(original).files[0].name;';
 		echo '}';
 		echo '</script>';
 
@@ -61,7 +59,7 @@ class Form_import_csv extends UniversalForm {
 			//champ contenant le nom du fichier à uploader (visible)
 			//Comme il est impossible de changer le look d'un champ de type input 'file' on procède à un subterfuge : la création d'un champ texte
 			//et d'un bouton, tous les deux fictifs qui recopient (par code javascript) les infos du champ 'file' que du coup on va cacher.		
-			$label = '<a href="javascript:void()" role="button" onclick="getfile(\'idFile'.$i.'\');">';
+			$label = '<a href="javascript:void(0)" role="button" onclick="getfile(\'idFile'.$i.'\');">';
 			$label.= '<span class="far fa-file"></span>';
 			$label.= '</a>';
 			$this->createField('text', 'upload'.$i, array(
@@ -88,6 +86,7 @@ class Form_import_csv extends UniversalForm {
 				'inputType' => 'file',
 				'complement' => $this->_tabAutorises,
 				'javascript' => 'onChange="getvalue(\'idFile'.$i.'\', \'idUpload'.$i.'\');"',
+				'multiple' => false,
 				'invisible' => true		
 				));
 		}
@@ -158,7 +157,7 @@ class Form_import_csv extends UniversalForm {
 		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
 		$chaine = '';
 
-		$chaine.= '<h1 class="display-4 mt-2">Import CSV</h1>';
+		$chaine.= '<h1 class="mt-2">Import CSV</h1>';
 		$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
 			$chaine.= '<fieldset style="border:1px silver solid;padding:1.5rem">';
 				$chaine.= $this->draw($enable);

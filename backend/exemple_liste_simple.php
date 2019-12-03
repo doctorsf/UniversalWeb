@@ -56,7 +56,7 @@ SimpleListingHelper::getParams('titre', $cols, $page, $tri, $sens);
 //-------------------------------------
 // Récupération des données à afficher
 //-------------------------------------
-$totalLignes = getListe($tri, $sens, $donnees) ;
+$totalLignes = getListe($tri, $sens, $donnees);
 
 //---------------------------------------------------------
 // head

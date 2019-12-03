@@ -1,98 +1,106 @@
 <?php
-/*******************************************************************************
-* FPDF                                                                         *
-*                                                                              *
-* Version: 1.81                                                                *
-* Date:    2015-12-20                                                          *
-* Author:  Olivier PLATHEY  http://www.fpdf.org/                               *
-*******************************************************************************/
+//-----------------------------------------------------------------------
+// FPDF
+//
+// Version: 1.81
+// Date:    2015-12-20
+// Author:  Olivier PLATHEY  http://www.fpdf.org/
+//-----------------------------------------------------------------------
+// M√©thode MultiCell am√©lior√©e le 06.11.2017 par Fabrice LABROUSSE
+// Elle renvoie maintenant le nombre de lignes √©crites dans la cellule
+// Par ajout de la variable $nbLines. Avant la m√©thode ne renvoyait rien
+//-----------------------------------------------------------------------
 
 define('FPDF_VERSION','1.81');
 
-class Fpdf
-{
-protected $page;               // current page number
-protected $n;                  // current object number
-protected $offsets;            // array of object offsets
-protected $buffer;             // buffer holding in-memory PDF
-protected $pages;              // array containing pages
-protected $state;              // current document state
-protected $compress;           // compression flag
-protected $k;                  // scale factor (number of points in user unit)
-protected $DefOrientation;     // default orientation
-protected $CurOrientation;     // current orientation
-protected $StdPageSizes;       // standard page sizes
-protected $DefPageSize;        // default page size
-protected $CurPageSize;        // current page size
-protected $CurRotation;        // current page rotation
-protected $PageInfo;           // page-related data
-protected $wPt, $hPt;          // dimensions of current page in points
-protected $w, $h;              // dimensions of current page in user unit
-protected $lMargin;            // left margin
-protected $tMargin;            // top margin
-protected $rMargin;            // right margin
-protected $bMargin;            // page break margin
-protected $cMargin;            // cell margin
-protected $x, $y;              // current position in user unit
-protected $lasth;              // height of last printed cell
-protected $LineWidth;          // line width in user unit
-protected $fontpath;           // path containing fonts
-protected $CoreFonts;          // array of core font names
-protected $fonts;              // array of used fonts
-protected $FontFiles;          // array of font files
-protected $encodings;          // array of encodings
-protected $cmaps;              // array of ToUnicode CMaps
-protected $FontFamily;         // current font family
-protected $FontStyle;          // current font style
-protected $underline;          // underlining flag
-protected $CurrentFont;        // current font info
-protected $FontSizePt;         // current font size in points
-protected $FontSize;           // current font size in user unit
-protected $DrawColor;          // commands for drawing color
-protected $FillColor;          // commands for filling color
-protected $TextColor;          // commands for text color
-protected $ColorFlag;          // indicates whether fill and text colors are different
-protected $WithAlpha;          // indicates whether alpha channel is used
-protected $ws;                 // word spacing
-protected $images;             // array of used images
-protected $PageLinks;          // array of links in pages
-protected $links;              // array of internal links
-protected $AutoPageBreak;      // automatic page breaking
-protected $PageBreakTrigger;   // threshold used to trigger page breaks
-protected $InHeader;           // flag set when processing header
-protected $InFooter;           // flag set when processing footer
-protected $AliasNbPages;       // alias for total number of pages
-protected $ZoomMode;           // zoom display mode
-protected $LayoutMode;         // layout display mode
-protected $metadata;           // document properties
-protected $PDFVersion;         // PDF version number
+class Fpdf {
+
+	const VERSION = 'v1.81 (2015-12-20)';
+	const COPYRIGHT = '&copy;2015 Olivier Platey &copy;2017 Fabrice Labrousse';
+
+	protected $page;               // current page number
+	protected $n;                  // current object number
+	protected $offsets;            // array of object offsets
+	protected $buffer;             // buffer holding in-memory PDF
+	protected $pages;              // array containing pages
+	protected $state;              // current document state
+	protected $compress;           // compression flag
+	protected $k;                  // scale factor (number of points in user unit)
+	protected $DefOrientation;     // default orientation
+	protected $CurOrientation;     // current orientation
+	protected $StdPageSizes;       // standard page sizes
+	protected $DefPageSize;        // default page size
+	protected $CurPageSize;        // current page size
+	protected $CurRotation;        // current page rotation
+	protected $PageInfo;           // page-related data
+	protected $wPt, $hPt;          // dimensions of current page in points
+	protected $w, $h;              // dimensions of current page in user unit
+	protected $lMargin;            // left margin
+	protected $tMargin;            // top margin
+	protected $rMargin;            // right margin
+	protected $bMargin;            // page break margin
+	protected $cMargin;            // cell margin
+	protected $x, $y;              // current position in user unit
+	protected $lasth;              // height of last printed cell
+	protected $LineWidth;          // line width in user unit
+	protected $fontpath;           // path containing fonts
+	protected $CoreFonts;          // array of core font names
+	protected $fonts;              // array of used fonts
+	protected $FontFiles;          // array of font files
+	protected $encodings;          // array of encodings
+	protected $cmaps;              // array of ToUnicode CMaps
+	protected $FontFamily;         // current font family
+	protected $FontStyle;          // current font style
+	protected $underline;          // underlining flag
+	protected $CurrentFont;        // current font info
+	protected $FontSizePt;         // current font size in points
+	protected $FontSize;           // current font size in user unit
+	protected $DrawColor;          // commands for drawing color
+	protected $FillColor;          // commands for filling color
+	protected $TextColor;          // commands for text color
+	protected $ColorFlag;          // indicates whether fill and text colors are different
+	protected $WithAlpha;          // indicates whether alpha channel is used
+	protected $ws;                 // word spacing
+	protected $images;             // array of used images
+	protected $PageLinks;          // array of links in pages
+	protected $links;              // array of internal links
+	protected $AutoPageBreak;      // automatic page breaking
+	protected $PageBreakTrigger;   // threshold used to trigger page breaks
+	protected $InHeader;           // flag set when processing header
+	protected $InFooter;           // flag set when processing footer
+	protected $AliasNbPages;       // alias for total number of pages
+	protected $ZoomMode;           // zoom display mode
+	protected $LayoutMode;         // layout display mode
+	protected $metadata;           // document properties
+	protected $PDFVersion;         // PDF version number
+	protected $fake = false;
 
 /*******************************************************************************
-*                         MÈthode rajoutÈe ‡ la classe de base				   *
+*                         M√©thode rajout√©e √† la classe de base				   *
 *******************************************************************************/
 
-//mÈthode ajoutÈes par moi
+//m√©thode ajout√©es par moi
 //Getter largeur de la page courante
 function GetW() {
 	return $this->w;
 }
 
-//mÈthode ajoutÈes par moi
+//m√©thode ajout√©es par moi
 //Getter hauteur de la page courante
 function GetH() {
 	return $this->h;
 }
 
 /*
-Auteur      : Antoine MichÈa
+Auteur      : Antoine Mich√©a
 Web         : saturn-share.org
 Programme   : pointilles.php
 Licence     : GPL v2
-Description : Permet de tracer un rectangle en pointillÈs (utile pour les zones ‡ dÈcouper). Les paramËtres sont :
-              x1, y1       : coin supÈrieur gauche du rectangle.
-              x2, y2       : coin infÈrieur droit du rectangle.
-              epaisseur    : Èpaisseur des pointillÈs (1 par dÈfaut).
-              nbPointilles : nombre de pointillÈs par ligne (15 par dÈfaut).
+Description : Permet de tracer un rectangle en pointill√©s (utile pour les zones √† d√©couper). Les param√®tres sont :
+              x1, y1       : coin sup√©rieur gauche du rectangle.
+              x2, y2       : coin inf√©rieur droit du rectangle.
+              epaisseur    : √©paisseur des pointill√©s (1 par d√©faut).
+              nbPointilles : nombre de pointill√©s par ligne (15 par d√©faut).
 Date        : 07/01/2003
 */
 function DashedRect($x1, $y1, $x2, $y2, $epaisseur=1, $nbPointilles=15)
@@ -109,16 +117,16 @@ function DashedRect($x1, $y1, $x2, $y2, $epaisseur=1, $nbPointilles=15)
 	for($i=$x1;$i<=$x2;$i+=$Pointilles+$Pointilles) {
 		for($j=$i;$j<=($i+$Pointilles);$j++) {
 			if($j<=($x2-1)) {
-				$this->Line($j,$y1,$j+1,$y1); // on trace le pointillÈ du haut, point par point
-				$this->Line($j,$y2,$j+1,$y2); // on trace le pointillÈ du bas, point par point
+				$this->Line($j,$y1,$j+1,$y1); // on trace le pointill√© du haut, point par point
+				$this->Line($j,$y2,$j+1,$y2); // on trace le pointill√© du bas, point par point
 			}
 		}
 	}
 	for($i=$y1;$i<=$y2;$i+=$Pointilles+$Pointilles) {
 		for($j=$i;$j<=($i+$Pointilles);$j++) {
 			if($j<=($y2-1)) {
-				$this->Line($x1,$j,$x1,$j+1); // on trace le pointillÈ du haut, point par point
-				$this->Line($x2,$j,$x2,$j+1); // on trace le pointillÈ du bas, point par point
+				$this->Line($x1,$j,$x1,$j+1); // on trace le pointill√© du haut, point par point
+				$this->Line($x2,$j,$x2,$j+1); // on trace le pointill√© du bas, point par point
 			}
 		}
 	}
@@ -223,7 +231,7 @@ function __construct($orientation='P', $unit='mm', $size='A4')
 	// Enable compression
 	$this->SetCompression(true);
 	// Set default PDF version number
-	$this->PDFVersion = '1.3';
+	$this->PDFVersion = '1.81';
 }
 
 function SetMargins($left, $top, $right=null)
@@ -642,14 +650,14 @@ function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link
 		if($ws>0)
 		{
 			$this->ws = 0;
-			$this->_out('0 Tw');
+			if (!$this->fake) $this->_out('0 Tw');
 		}
 		$this->AddPage($this->CurOrientation,$this->CurPageSize,$this->CurRotation);
 		$this->x = $x;
 		if($ws>0)
 		{
 			$this->ws = $ws;
-			$this->_out(sprintf('%.3F Tw',$ws*$k));
+			if (!$this->fake) $this->_out(sprintf('%.3F Tw',$ws*$k));
 		}
 	}
 	if($w==0)
@@ -697,7 +705,7 @@ function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link
 			$this->Link($this->x+$dx,$this->y+.5*$h-.5*$this->FontSize,$this->GetStringWidth($txt),$this->FontSize,$link);
 	}
 	if($s)
-		$this->_out($s);
+		if (!$this->fake) $this->_out($s);
 	$this->lasth = $h;
 	if($ln>0)
 	{
@@ -710,6 +718,11 @@ function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link
 		$this->x += $w;
 }
 
+//--------------------------------------------------------------
+// M√©thode am√©lior√©e le 06.11.2017 par Fabrice LABROUSSE
+// Elle renvoie maintenant le nombre de lignes √©crites dans la cellule
+// Par ajout de la variable $nbLines. Avant la m√©thode ne renvoyait rien
+//--------------------------------------------------------------
 function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 {
 	// Output text with automatic or explicit line breaks
@@ -748,6 +761,7 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 	$l = 0;
 	$ns = 0;
 	$nl = 1;
+	$nbLines = 0;
 	while($i<$nb)
 	{
 		// Get next character
@@ -758,9 +772,10 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 			if($this->ws>0)
 			{
 				$this->ws = 0;
-				$this->_out('0 Tw');
+				$bufout = '0 Tw';
 			}
 			$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+			$nbLines++;
 			$i++;
 			$sep = -1;
 			$j = $i;
@@ -788,18 +803,20 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 				if($this->ws>0)
 				{
 					$this->ws = 0;
-					$this->_out('0 Tw');
+					if (!$this->fake) $this->_out('0 Tw');
 				}
 				$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+				$nbLines++;
 			}
 			else
 			{
 				if($align=='J')
 				{
 					$this->ws = ($ns>1) ? ($wmax-$ls)/1000*$this->FontSize/($ns-1) : 0;
-					$this->_out(sprintf('%.3F Tw',$this->ws*$this->k));
+					if (!$this->fake) $this->_out(sprintf('%.3F Tw',$this->ws*$this->k));
 				}
 				$this->Cell($w,$h,substr($s,$j,$sep-$j),$b,2,$align,$fill);
+				$nbLines++;
 				$i = $sep+1;
 			}
 			$sep = -1;
@@ -817,12 +834,14 @@ function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false)
 	if($this->ws>0)
 	{
 		$this->ws = 0;
-		$this->_out('0 Tw');
+		if (!$this->fake) $this->_out('0 Tw');
 	}
 	if($border && strpos($border,'B')!==false)
 		$b .= 'B';
 	$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+	$nbLines++;
 	$this->x = $this->lMargin;
+	return $nbLines;
 }
 
 function Write($h, $txt, $link='')

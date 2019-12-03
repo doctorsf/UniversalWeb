@@ -1,13 +1,13 @@
 <?php
-//**********************************************************************
+//------------------------------------------------------------------
 // Auteur : Fabrice Labrousse											
 // Classe Login														
 // Date : 05.08.2014													
-//**********************************************************************
+//------------------------------------------------------------------
 // Cette classe s'appuie sur la classe User. Destinée a être instanciée
 // pour l'utilisateur qui est logué
 // éè : UTF-8															
-//**********************************************************************
+//------------------------------------------------------------------
 
 class Login extends User {
 	private $_logged;				//booleen dit si loggué ou non
@@ -80,9 +80,7 @@ class Login extends User {
 	}
 
 	//---------------------------------------------------------------
-	//modifie la préférence de langue de l'utilisateur
-	//cette methode n'est pas utilisée mais sert de modèle pour la
-	//sauvegarde d'une préférences de l'utilisateur
+	// Modifie la préférence de langue de l'utilisateur
 	// Entree : $langue (langue de preference fr/en)
 	// Retour : rien
 	//---------------------------------------------------------------

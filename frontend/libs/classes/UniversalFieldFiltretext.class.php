@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'filtretexte (combiné txt + menu)
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldFiltretext extends UniversalField {
@@ -232,27 +232,31 @@ class UniversalFieldFiltretext extends UniversalField {
 		if ($this->titre() != '') {
 			($this->tlong() != '') ? $tlong = ' '.$this->tlong() : $tlong = '';
 			($this->tclass() != '') ? $tclass = ' '.$this->tclass() : $tclass = '';
-			($this->titreHelpPos() != '') ? $titreHelp = ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp = ' data-placement="auto"';
-			($this->titreHelp() != '') ? $titreHelp.= ' title="'.$this->titreHelp().'"' : $titreHelp.= '';
+			$titreHelp = '';
+			if ($this->titreHelp() != '') {
+				$titreHelp = ' title="'.htmlspecialchars($this->titreHelp()).'" data-toggle="tooltip"';
+				($this->titreHelpPos() != '') ? $titreHelp.= ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp.= ' data-placement="auto"';
+			}
 			($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 			$classeTitre = 'text-'.$this->talign().' col-form-label'.$tlong.$tclass.$invisible;
 			$html.= '<legend class="'.$classeTitre.'">';
-			if ($titreHelp != '') {
-				$html.= '<span data-toggle="tooltip"'.$titreHelp.'>'.$this->titre().'</span>';
-			}
+			$html.= '<span'.$titreHelp.'>'.$this->titre().'</span>';
 			$html.= '</legend>';
 		}
 
 		//design 'online'(toujours pour cet objet)
 		//prise en compte de certaines données
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 		($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		$classes = trim($clong.$invisible);
 		//dessin
-		$html.= '<div id="'.$this->idbchamp().'" class="mb-3 '.$classes.'"'.$labelHelp.' data-toggle="tooltip">';
+		$html.= '<div id="'.$this->idbchamp().'" class="mb-3 '.$classes.'"'.$labelHelp.'>';
 			if ($this->addon()) {
 				if ($this->apos() == 'before') {
 					$html.= $this->_drawAddon($enable, 'first');

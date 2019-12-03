@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'bouton'
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldBouton extends UniversalField {
@@ -82,15 +82,18 @@ class UniversalFieldBouton extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' designError' : $erreur = '';
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.$this->labelHelp().'" data-toggle="tooltip"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$zchampClasses = trim($clong.$border.$erreur.$invisible);
 		$buttonClasses = trim($llong.$lclass);
 
 		$html.= '<div id="'.$this->idzchamp().'" class="mb-3 '.$zchampClasses.'"'.$style.'>';
 			//le libellé du bouton retourné est toujours valueBase (valeur de base) car value peut être "notposted" si le bouton 
 			//submit n'est pas cliqué (cas de plusieurs submits sur le même formulaire
-			$html.= '<button type="'.$this->inputType().'"'.$enable.' id="'.$this->id().'" class="'.$buttonClasses.'"'.$this->javascript().' name="'.$this->postName().'" value="'.$this->valueBase().'"'.$labelHelp.' data-toggle="tooltip"/>'.$this->label().'</button>';
+			$html.= '<button type="'.$this->inputType().'"'.$enable.' id="'.$this->id().'" class="'.$buttonClasses.'"'.$this->javascript().' name="'.$this->postName().'" value="'.$this->valueBase().'"'.$labelHelp.'/>'.$this->label().'</button>';
 			if ($this->showErreur()) $html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
 		$html.= '</div>';
 

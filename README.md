@@ -599,3 +599,59 @@ V3.12.0.0 (22.04.2019)
 	- Ajout de la configuration UniversalWeb pour le Frontend
 	- Listage et épuration des erreurs PHP du backend (évite de gérer le fichier errors.txt manuellement)
 	- Listage et épuration des erreurs PHP du frontend (évite de gérer le fichier errors.txt manuellement)
+
+-----------------
+V3.12.1.0 (non testée)
+-----------------
+1. uw_flux.php -> fonction saveDatabase -> ajout de l'option -R à la commande Mysqldump qui permet de sauver AUSSI les procédures et fonctions stockées
+
+-----------------
+V3.13.0.0 (28.05.2019)
+-----------------
+1. UniversalForm en Version V3.13.0
+2. Ajout de la notion de groupes de fonctionnalités dans la gestion des droits (drag & drop, modification des droit via Ajax etc.)
+
+-----------------
+V3.13.1.0 (non testée)
+-----------------
+1. uw_file.php -> ajout fonction downloadUrl() qui télécharge une url distante (hors site) vers un fichier cible
+2. sqlUsers_updateUser() et sqlUsers_updateUserGlobal() améliorées pouir eviter un notice si toutes les données ne sont pas envoyées
+3. Correction maintenance.php 'hashfrontend' n'affiche plus de warning si le fichier n'est pas trouvé
+
+-----------------
+V3.14.0.0 (en cours)
+-----------------
+1. UniversalForm en Version V3.15.1
+	- Ajout de la propriété "multiple" pour l'objet UniversalFieldText. Seulement pris en compte pour les champs de type "file". Grâce à cette propriété on peut maintenant selectionner plusieurs fichiers en une seule fois. De ce fait la structure envoyée par getData() (pour les champs text de type file seulement) a changé.
+	- Ajout de zoneTitre et zoneChamp pour les objets DIV 
+	- Ajout du paramètre 'accept' pour les champs texte de type file (selecteur de fichier ne propose que les extentions dans accept)
+	- Correction bug : le passage de la souris affichait le ? même sur les champs qui n'avaient pas de texte d'aide
+2. Correction des void() en void(0) (erreur Javascript)
+3. Ajout d'un exemple d'upload de fichiers multiples avec possibilité de glissé / posé
+4. Correction bug "exemple_import_csv.php". Sous Firefox, la recopie du fichier choisi marquait "undefined" (modifié javascript dans fonction getvalue())
+5. UniversalCsvImport en version V2.1.0 (ajout des tests 'MIN_LENGTH_X' et 'MAX_LENGTH_X')
+6. Ajout de la fonction checkDateTimeFormat() à la librairie uw_dates.php qui test la validité de saisie d'une date au regard d'un format (10.09.2019)
+
+-----------------
+V3.15.0.0 (en cours)
+-----------------
+4. Informations système : Affichage de toutes les informations connues de la version MySQL sans restriction (29.10.2019)
+5. Classe SilentMail -> Ajout de constantes pour compte rendu d'erreur (31.10.2019)
+
+-----------------
+V3.16.0.0 (en cours)
+-----------------
+1. UniversalForm en Version V3.16.0 
+	- Ajout composant switch customisable
+	- Ajout des propiétés : min, max, step, pattern, autocomplete et autofocus pour les <input> de type text (UniversalFieldText)
+2. Temporisation de l'affichage des tooltips par défaut (800ms a l'affichage et 100 à la disparition) (fonctions.inc.php)
+
+-----------------
+V3.17.0.0 (en cours)
+-----------------
+1. Passage en JQuery 3.4.1
+2. Passage en Bootstrap 4.4.1
+3. Passage en Font-Awesome 5.11.2
+4. Correction bug script de démonstration exemple_import_csv.php ligne 170 => remplacé continue par break pour compatibilté avec PHP 7.3 (sinon plante)
+5. Amélioration de la page info_systeme.php pour utilisation portables
+6. Backend -> Ajouts icones sur menu administration

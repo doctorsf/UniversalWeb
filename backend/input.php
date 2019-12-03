@@ -1,9 +1,11 @@
 <?php
-/*--------------------------------------------------------------------------*/
-/* Formulaire de saisie simple réutilisable 								*/
-/*--------------------------------------------------------------------------*/
-/* ééàç : pour sauvegarde du fichier en utf-8								*/
-/*--------------------------------------------------------------------------*/
+//--------------------------------------------------------------------------
+// Formulaire de saisie simple réutilisable
+//--------------------------------------------------------------------------
+// ééàç : pour sauvegarde du fichier en utf-8
+// 24.05.2019
+//		correction bug mise de la pose du focus sur le champ
+//--------------------------------------------------------------------------
 require_once('libs/common.inc.php');
 
 $choixOperation = array('saisie');
@@ -16,7 +18,7 @@ $scriptSup = '';
 $fJquery = '';
 echo writeHTMLHeader($titrePage, '', '');
 
-echo '<body onload="document.getElementById(\'idChamp\').focus()">';
+echo '<body onload="document.getElementById(\'idSaisie\').focus()">';
 	echo '<div class="container-fluid">';
 	//--------------------------------------
 	// HEADER								

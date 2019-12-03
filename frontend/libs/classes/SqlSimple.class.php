@@ -1,5 +1,5 @@
 <?php
-//***********************************************************************
+//------------------------------------------------------------------
 // Auteur : Fabrice Labrousse
 // Classe qui gère les données d'une table MySQL générique
 // Date : 19.01.2017
@@ -13,6 +13,8 @@
 //		test de la méthode importMany et utilisation dans exemple fourni avec UniversalWeb
 // 04.04.2019
 //		correction bug importMany()
+// 12.11.2019
+//		modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
 //-----------------------------------------------------------------------
 // Cette classe comporte des méthodes d'acces génériques à une table
 // -------------------------------------
@@ -181,8 +183,8 @@ class SqlSimple {
 	// Retour : false (erreur SQL) / nombre de tuples sinon						
 	//----------------------------------------------------------------------
 	public function getListeNombre($debug=false) {
-		$requete = "SELECT count(".$this->_index.") nombre ";
-		$requete.= "FROM ".$this->_table;
+		$requete = "SELECT count(".$this->index.") nombre ";
+		$requete.= "FROM ".$this->table;
 		if ($debug) {
 			DEBUG_('Requete', $requete); 
 			return true;
@@ -214,8 +216,8 @@ class SqlSimple {
 		//ex si tri est "nom, prenom" il faut écrire "concat(nom, prenom)"
 		if (strpos($tri, ',') !== false) $tri = 'concat('.$tri.')';
 		$laListe = array();
-		$requete = "SELECT ".$this->_champs." ";
-		$requete.= "FROM ".$this->_table." ";
+		$requete = "SELECT ".$this->champs." ";
+		$requete.= "FROM ".$this->table." ";
 		$requete.= "ORDER BY ".$tri." ".$sens." ";
 		$requete.= "LIMIT ".$start.", ".$nb_lignes;
 		if ($debug) {
@@ -240,9 +242,9 @@ class SqlSimple {
 	//----------------------------------------------------------------------
 	public function get($id, &$tuple, $debug=false)
 	{
-		$requete = "SELECT ".$this->_champs." ";
-		$requete.= "FROM ".$this->_table." ";
-		$requete.= "WHERE ".$this->_index." = '".$id."';";
+		$requete = "SELECT ".$this->champs." ";
+		$requete.= "FROM ".$this->table." ";
+		$requete.= "WHERE ".$this->index." = '".$id."';";
 		if ($debug) {
 			DEBUG_('Requete', $requete); 
 			return true;
@@ -266,8 +268,8 @@ class SqlSimple {
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
 	public function add($chaine, $debug=false) {
-		$requete = "INSERT IGNORE INTO ".$this->_table." ";
-		$requete.= "(".$this->_champs.") VALUES (";
+		$requete = "INSERT IGNORE INTO ".$this->table." ";
+		$requete.= "(".$this->champs.") VALUES (";
 		$requete.= $chaine;
 		$requete.= ")";
 		if ($debug) {
@@ -291,8 +293,8 @@ class SqlSimple {
 	//----------------------------------------------------------------------
 	public function addMany($tabDonnees, $debug=false) {
 		if (empty($tabDonnees)) return 0;
-		$requete = "INSERT IGNORE INTO ".$this->_table." ";
-		$requete.= "(".$this->_champs.") VALUES ";
+		$requete = "INSERT IGNORE INTO ".$this->table." ";
+		$requete.= "(".$this->champs.") VALUES ";
 		foreach ($tabDonnees as $indice => $donnee) {
 			$requete.= "(";
 			if (is_array($donnee)) {
@@ -359,8 +361,8 @@ class SqlSimple {
 		$numTuple = 0;
 		foreach($donnees as $enreg) {
 			if (mod($numTuple, $nb_tuple_par_requete) == 0) {
-				$requete = "INSERT IGNORE INTO ".$this->_table." ";
-				$requete.= "(".$this->_champs.") VALUES ";
+				$requete = "INSERT IGNORE INTO ".$this->table." ";
+				$requete.= "(".$this->champs.") VALUES ";
 			}
 			$requete.= "(";
 			//remplacement des placeholders du masque SQL par les valeurs disponibles dans $donnees
@@ -421,9 +423,9 @@ class SqlSimple {
 	public function update($id, $chaine, $debug=false)
 	{
 		//ecriture et lancement requete
-		$requete = "UPDATE IGNORE ".$this->_table." SET ";
+		$requete = "UPDATE IGNORE ".$this->table." SET ";
 		$requete.= $chaine;
-		$requete.= "WHERE ".$this->_index." = '".$id."'";
+		$requete.= "WHERE ".$this->index." = '".$id."'";
 		if ($debug) {
 			DEBUG_('Requete', $requete); 
 			return true;
@@ -445,8 +447,8 @@ class SqlSimple {
 	//----------------------------------------------------------------------
 	public function delete($id, $debug=false)
 	{
-		$requete = "DELETE IGNORE FROM ".$this->_table." ";
-		$requete.= "WHERE ".$this->_index." = '".$id."'";
+		$requete = "DELETE IGNORE FROM ".$this->table." ";
+		$requete.= "WHERE ".$this->index." = '".$id."'";
 		if ($debug) {
 			DEBUG_('Requete', $requete); 
 			return true;

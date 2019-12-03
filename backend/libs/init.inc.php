@@ -24,13 +24,17 @@ defined('_APP_RELEASE_') || define('_APP_RELEASE_', getRelease());
 if (_RUN_MODE_ == _DEVELOPPEMENT_) {
 	//execution des requetes SQL en mode debug
 	defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_DEBUG);
-	//rapporte toutes les erreurs PHP
+	//rapporte et affiche toutes les erreurs PHP
+	ini_set('display_startup_errors', 'On');
+	ini_set('display_errors', 'stdout');
 	error_reporting(-1);
 }
 else {
 	//execution des requete en mode silencieux
 	defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_SILENT);
-	//Désactiver le rapport d'erreurs
+	//Désactiver le rapport d'erreurs et n'affiche aucune erreur
+	ini_set('display_startup_errors', 'Off');
+	ini_set('display_errors', 'stderr');
 	error_reporting(0); 
 	//Spécifie la fonction utilisateur "userErrorHandler" comme gestionnaire d'erreurs
 	$old_error_handler = set_error_handler("userErrorHandler");
@@ -42,11 +46,11 @@ else {
 //----------------------------------------------------------------------
 //$_SESSION[_APP_DROITS_] = null;
 if  ((!isset($_SESSION[_APP_DROITS_])) || ($_SESSION[_APP_DROITS_] == null)) {
-	$_SESSION[_APP_DROITS_] = new Droits();
+	$_SESSION[_APP_DROITS_] = new Droits(true);
 }
 
 //----------------------------------------------------------------------
-// Creation de l'objet _APP_LOGIN_ qui contient les infos de l'utilisateur loggué
+// Creation et mise en session de l'objet _APP_LOGIN_ qui contient les infos de l'utilisateur logué
 // et prise en compte de la langue en cours de l'utilisateur
 //----------------------------------------------------------------------
 //$_SESSION[_APP_LOGIN_] = null;

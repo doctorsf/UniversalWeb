@@ -14,19 +14,30 @@
 //		Notice Array to string conversion.
 // 14.05.2018 : 
 //		Remis les headers avec écriture du tableau
+// 31.10.2019 : 
+//		Ajout de constantes pour compte rendu d'erreur
 //----------------------------------------------------------------------
 
 class SilentMail {
     private $_to = array();
     private $_cc = array();
-    private $_bCc = array();
+    private $_bcc = array();
     private $_from = null; 
     private $_subject = null;
     private $_body = null;
 	private $_erreurMessage = null;
 	private $_erreurNum = null;
 	private $_contentType = 'plain';		//'plain' (texte) par défaut ou 'html' pour message HTML
-    private $_charSet = 'UTF-8'; 
+    private $_charSet = 'UTF-8';			//ex : autres possibilités parmi ISO-8859-1, Windows-1252, CP1252
+
+	const UWSM_SUCCESS				= 1;		//Aucune erreur
+	const UWSM_NO_SENDER			= -1;		//Pas d'expéditeur déclaré
+	const UWSM_BAD_SENDER			= -2;		//Adresse email de l'expéditeur erronée
+	const UWSM_NO_OBJECT			= -3;		//Aucun objet déclaré
+	const UWSM_NO_RECIPIENT			= -4;		//Pas de destinataire déclaré
+	const UWSM_TOO_MANY_RECIPIENTS	= -5;		//Trop de destinataires déclarés
+	const UWSM_BAD_RECIPIENT		= -6;		//Adresse email destinataire erronée
+	const UWSM_ERROR				= -7;		//Autre erreur
 
 	//-------------------
 	//CONSTRUCTEUR
@@ -66,7 +77,7 @@ class SilentMail {
 
     public function setFrom($email, $name = null) {        
         if ($name !== null) {
-            $this->_from = trim($email).' <'.trim($email).'>';
+            $this->_from = trim($name).' <'.trim($email).'>';
         } 
 		else {
             $this->_from = $email;
@@ -75,7 +86,7 @@ class SilentMail {
 
     public function addTo($email, $name = null)		{$this->_addAddress($email, 'to', $name);}
     public function addCC($email, $name = null)		{$this->_addAddress($email, 'cc', $name);}
-    public function addBCC($email, $name = null)	{$this->_addAddress($email, 'bCc', $name);}
+    public function addBCC($email, $name = null)	{$this->_addAddress($email, 'bcc', $name);}
     public function setSubject($subject)			{$this->_subject = trim($subject);}
     public function setBody($body) {
 		foreach($body as $indice => $ligne) {
@@ -89,23 +100,23 @@ class SilentMail {
 	//-------------------
     public function send($trace='off') {
 		if ($this->_from === null) {
-			$this->_setErreur(-1, 'Pas d\'expéditeur déclaré');
+			$this->_setErreur(self::UWSM_NO_SENDER, getLib('PAS_EXPEDITEUR'));
 			return $this->getErreurNum();
         }
 		elseif (!(mb_eregi("^[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,4}$", $this->_from))) {
-			$this->_setErreur(-2, 'eMail expéditeur non valide');
+			$this->_setErreur(self::UWSM_BAD_SENDER, getLib('EMAIL_EXPEDITEUR_KO'));
 			return $this->getErreurNum();
 		}
         elseif (count($this->_to) === 0) {
-			$this->_setErreur(-4, 'Pas de destinaitaire déclaré');
+			$this->_setErreur(self::UWSM_NO_RECIPIENT, getLib('PAS_DESTINATAIRE'));
 			return $this->getErreurNum();
         }
         elseif (count($this->_to) > 3) {
-			$this->_setErreur(-5, 'Trop de destinataires ! 3 maximum autorisés');
+			$this->_setErreur(self::UWSM_TOO_MANY_RECIPIENTS, getLib('TROP_DESTINATAIRES'));
 			return $this->getErreurNum();
 		}
         elseif ($this->_subject === null) {
-			$this->_setErreur(-3, 'Pas d\'objet déclaré');
+			$this->_setErreur(self::UWSM_NO_OBJECT, getLib('PAS_OBJET'));
 			return $this->getErreurNum();
         }        
         elseif ($this->_body === null) {
@@ -114,7 +125,7 @@ class SilentMail {
 		//test si les emails destinataires sont valides
 		foreach($this->_to as $dest) {
 			if (!(mb_eregi("^[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,4}$", $dest))) {
-			$this->_setErreur(-6, 'eMail d\'un destinataire non valide');
+			$this->_setErreur(self::UWSM_BAD_RECIPIENT, getLib('EMAIL_DESTINATAIRE_INVALIDE'));
 				return $this->getErreurNum();
 			}
 		}
@@ -125,13 +136,13 @@ class SilentMail {
         $headers[] = "From: {$this->_from}"; 
         
         if (count($this->_cc) > 0) {
-            foreach ($this->_cc as $bCc) {
-                $headers[] = 'Cc: ' . $bCc;
+            foreach ($this->_cc as $bcc) {
+                $headers[] = 'Cc: ' . $bcc;
             }         
         }
-        if (count($this->_bCc) > 0) {
-            foreach ($this->_bCc as $bCc) {
-                $headers[] = 'Bcc: ' . $bCc;
+        if (count($this->_bcc) > 0) {
+            foreach ($this->_bcc as $bcc) {
+                $headers[] = 'Bcc: ' . $bcc;
             }         
         }
         
@@ -144,16 +155,16 @@ class SilentMail {
         $boSend = @mail($stTo, $this->_subject, $this->_body, $stHeaders);
         if (!$boSend) {
             //throw new Exception('Email fail');
-			$this->_setErreur(-7, 'Erreur lors de l\'envoi du mail');
+			$this->_setErreur(self::UWSM_ERROR, getLib('EMAIL_ENVOI_ERREUR'));
 			return $this->getErreurNum();
         }        
-		return 1;  //pas d'erreur
+		return self::UWSM_SUCCESS;  //pas d'erreur
     }
   
     public function clearAllRecipients() {
         $this->_to = array();
         $this->_cc = array();
-        $this->_bCc = array();
+        $this->_bcc = array();
     }
 
 }

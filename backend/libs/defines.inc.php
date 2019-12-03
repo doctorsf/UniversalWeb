@@ -23,6 +23,8 @@ defined('SQL_MODE_DEBUG')			|| define('SQL_MODE_DEBUG',				2);
 include_once('libs/config.inc.php');
 include_once('libs/config_db.inc.php');
 
+defined('_HOST_SYSTEM_')			|| define('_HOST_SYSTEM_',				(isset($_SERVER['WINDIR'])) ? 'Windows' : 'Linux');
+
 //définitions des chemins frontend et backend
 if (_APP_SCHEMA_ == _SCHEMA_NATUREL_) {
 	//definition inline
@@ -64,8 +66,8 @@ defined('_IMAGES_COMMUN_')			|| define('_IMAGES_COMMUN_',			_IMAGES_.'common/');
 defined('_IMAGES_DRAPEAUX_')		|| define('_IMAGES_DRAPEAUX_',			_IMAGES_.'drapeaux/');
 defined('_CSS_')					|| define('_CSS_',						'css/');
 defined('_JAVASCRIPT_')				|| define('_JAVASCRIPT_',				'js/');
-defined('_BOOTSTRAP_')				|| define('_BOOTSTRAP_',				'bootstrap-4.3.1-dist/');
-defined('_FONT_AWSOME_')			|| define('_FONT_AWSOME_',				'fontawesome-free-5.7.2-web/');
+defined('_BOOTSTRAP_')				|| define('_BOOTSTRAP_',				'bootstrap-4.4.1-dist/');
+defined('_FONT_AWSOME_')			|| define('_FONT_AWSOME_',				'fontawesome-free-5.11.2-web/');
 defined('_LIBS_')					|| define('_LIBS_',						'libs/');
 defined('_CLASSES_')				|| define('_CLASSES_',					_LIBS_.'classes/');
 defined('_BRIQUES_')				|| define('_BRIQUES_',					_LIBS_.'briques/');
@@ -75,12 +77,13 @@ defined('_SAUVEGARDE_BASE_')		|| define('_SAUVEGARDE_BASE_',			_LIBS_.'DB_backup
 defined('_ARMOIRE_')				|| define('_ARMOIRE_',					_LIBS_.'armoire/');
 
 //paramètres utilisés pour rendre l'application unique
-defined('_APP_ID_')					|| define('_APP_ID_',					md5(_APP_BLOWFISH_));			//id de l'application
-defined('_APP_DROITS_')				|| define('_APP_DROITS_',				_APP_ID_.'_droits');			//var. session contient les droits de l'appli
-defined('_APP_LOGIN_')				|| define('_APP_LOGIN_',				_APP_ID_.'_login');				//var. session contient les infos sur l'utilisateur loggué
-defined('_APP_LANGUE_ENCOURS_')		|| define('_APP_LANGUE_ENCOURS_',		_APP_ID_.'_langue_en_cours');	//var. session contient la langue en cours de l'appli
-defined('_APP_LANGUE_CHANGEE_')		|| define('_APP_LANGUE_CHANGEE_',		_APP_ID_.'_langue_changee');	//var. session contient la langue changée de l'appli
-defined('_APP_INPUT_')				|| define('_APP_INPUT_',				_APP_ID_.'_input');				//var. session contient l'entrée saisie du formulaire de classe Form_simple_text
+defined('_APP_ID_')						|| define('_APP_ID_',						md5(_APP_BLOWFISH_));			//id de l'application
+defined('_APP_DROITS_')					|| define('_APP_DROITS_',					_APP_ID_.'_droits');			//var. session contient les droits de l'appli
+defined('_APP_DROITS_GROUPE_DEPLOYE_')	|| define('_APP_DROITS_GROUPE_DEPLOYE_',	_APP_ID_.'_droits_groupe_deploye');		//var. session contient le groupe actuellement déployé
+defined('_APP_LOGIN_')					|| define('_APP_LOGIN_',					_APP_ID_.'_login');				//var. session contient les infos sur l'utilisateur loggué
+defined('_APP_LANGUE_ENCOURS_')			|| define('_APP_LANGUE_ENCOURS_',			_APP_ID_.'_langue_en_cours');	//var. session contient la langue en cours de l'appli
+defined('_APP_LANGUE_CHANGEE_')			|| define('_APP_LANGUE_CHANGEE_',			_APP_ID_.'_langue_changee');	//var. session contient la langue changée de l'appli
+defined('_APP_INPUT_')					|| define('_APP_INPUT_',					_APP_ID_.'_input');				//var. session contient l'entrée saisie du formulaire de classe Form_simple_text
 
 //type de logs possibles
 defined('_LOG_CONNEXION_')			|| define('_LOG_CONNEXION_',			'1');
@@ -94,12 +97,12 @@ defined('_FRONTEND_PHP_FILE_ERRORS_')	|| define('_FRONTEND_PHP_FILE_ERRORS_',		'
 defined('_FRONTEND_CLASSES_')			|| define('_FRONTEND_CLASSES_',				'../frontend/libs/classes/');
 
 //versions de logiciels tiers
-defined('_JQUERY_VERSION_')			|| define('_JQUERY_VERSION_',			'3.3.1');
-defined('_JQUERY_')					|| define('_JQUERY_',					'jquery-3.3.1.min.js');			//jQuery
-defined('_BOOTSTRAP_VERSION_')		|| define('_BOOTSTRAP_VERSION_',		'4.3.1');
+defined('_JQUERY_VERSION_')			|| define('_JQUERY_VERSION_',			'3.4.1');
+defined('_JQUERY_')					|| define('_JQUERY_',					'jquery-3.4.1.min.js');			//jQuery
+defined('_BOOTSTRAP_VERSION_')		|| define('_BOOTSTRAP_VERSION_',		'4.4.1');
 defined('_BOOTSTRAP_JS_')			|| define('_BOOTSTRAP_JS_',				_BOOTSTRAP_.'js/bootstrap.bundle.min.js');
 defined('_BOOTSTRAP_CSS_')			|| define('_BOOTSTRAP_CSS_',			_BOOTSTRAP_.'css/bootstrap.min.css');
-defined('_FONTAWESOME_VERSION_')	|| define('_FONTAWESOME_VERSION_',		'5.7.2');
+defined('_FONTAWESOME_VERSION_')	|| define('_FONTAWESOME_VERSION_',		'5.11.2');
 defined('_FONT_AWSOME_CSS_')		|| define('_FONT_AWSOME_CSS_',			_FONT_AWSOME_.'css/all.min.css');
 
 //briques et scripts

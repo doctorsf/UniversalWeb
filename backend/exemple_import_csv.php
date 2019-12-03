@@ -152,15 +152,24 @@ echo '<body>';
 							$donnees = $frm->getData();
 							//DEBUG_('donnees', $donnees);
 							//import du fichier vers le dossier navette
-							$donnee = $donnees['file1'];
-							$nombre = 0;
-							//transfert des fichiers si aucune erreur !
-							//on ignore les champs non renseignés ou en erreur
-							if (($donnee['name'] == '') || ($donnee['error'] != 0)) continue;
-							//incrémente le nombre de fichier valide
-							$nombre++;
+							$file = $donnees['file1']['files'];
+							//[file1] => Array
+							//	(
+							//		[nbFiles] => 1
+							//		[files] => Array
+							//			(
+							//				[name] => exemple_import.csv
+							//				[type] => application/vnd.ms-excel
+							//				[tmp_name] => D:\xampp-7.2.0\tmp\php4EEF.tmp
+							//				[error] => 0
+							//				[size] => 521
+							//			)
+							//
+							//	)
+							//on ignore les champs non renseignés ou en erreur (correction passage PHP 7.3 : remplacé continue par break)
+							if (($file['name'] == '') || ($file['error'] != 0)) break;
 							//un petit regex sur le fichier cible pour remplacer tous ce qui n'est ni chiffre ni lettre par "_"
-							$dest_fichier = preg_replace('/([^._a-z0-9]+)/i', '-', $donnee['name']);
+							$dest_fichier = preg_replace('/([^._a-z0-9]+)/i', '-', $file['name']);
 							//on enleve tous les accents
 							$dest_fichier = strtr($dest_fichier, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 							//creation du dossier cible si celui-ci n'existe pas
@@ -169,7 +178,7 @@ echo '<body>';
 								mkdir($dest_dossier, 0705); 
 							}
 							//copie du fichier
-							if (move_uploaded_file($donnee['tmp_name'], $dest_dossier.$dest_fichier)) {
+							if (move_uploaded_file($file['tmp_name'], $dest_dossier.$dest_fichier)) {
 								//OK on procède à l'import
 								$res = import($dest_dossier.$dest_fichier);
 								if ($res == false) {
@@ -180,7 +189,7 @@ echo '<body>';
 								}
 							}
 							else {
-								echo '<p class="lead text-danger">Impossible d\'uploader le fichier '.$donnee['name'].' !</p>';
+								echo '<p class="lead text-danger">Impossible d\'uploader le fichier '.$file['name'].' !</p>';
 							}
 						}
 						break;

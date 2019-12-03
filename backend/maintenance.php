@@ -176,7 +176,7 @@ echo '<body>';
 							echo '</a>';
 						}
 						echo '<div class="container">';
-							echo '<h1 class="display-4">'.getLib('RESTORATION_BD').'</h1>';
+							echo '<h1>'.getLib('RESTORATION_BD').'</h1>';
 							echo '<p class="lead">'.getLib('SAUVEGARDES_LISTE').'</p>';
 							$dirname = _SAUVEGARDE_BASE_; 
 							$dir = opendir($dirname); 
@@ -209,7 +209,7 @@ echo '<body>';
 					//--------------------------------------
 					case 'gorestoredb':
 					{
-						echo '<h1 class="display-4">'.getLib('RESTORATION_BD').'</h1>';
+						echo '<h1>'.getLib('RESTORATION_BD').'</h1>';
 						//recuperation du fichier. sql à restorer
 						(isset($_GET['fichier'])) ? $fichier = MySQLDataProtect($_GET['fichier']) : $fichier = 'aucun';
 						if ($fichier != 'aucun') {
@@ -328,6 +328,7 @@ echo '<body>';
 								_CLASSES_.'UniversalFieldSearch.class.php', 
 								_CLASSES_.'UniversalFieldSelect.class.php', 
 								_CLASSES_.'UniversalFieldSeparateur.class.php', 
+								_CLASSES_.'UniversalFieldSwitch.class.php', 
 								_CLASSES_.'UniversalFieldText.class.php', 
 								_CLASSES_.'UniversalForm.class.php', 
 								_CLASSES_.'UniversalList.class.php', 
@@ -370,9 +371,9 @@ echo '<body>';
 							echo '<div class="row">';
 								echo '<div class="col">';
 									echo '<div class="d-flex flex-row align-items-center">';
-										echo '<h1 class="display-4">'.getLib('SIGNATURE_CODE').' (sha1)</h1>';
+										echo '<h1>'.getLib('SIGNATURE_CODE').' (sha1)</h1>';
 									echo '</div>';
-									echo '<table class="table table-hover table-striped">';
+									echo '<table class="table table-hover table-striped table-responsive">';
 										echo '<thead>';
 										echo '<tr>';
 											echo '<th class="text-left" width="60%">'.getLib('FICHIER').'</th>';
@@ -449,6 +450,7 @@ echo '<body>';
 								'../frontend/libs/classes/UniversalFieldSearch.class.php',
 								'../frontend/libs/classes/UniversalFieldSelect.class.php',
 								'../frontend/libs/classes/UniversalFieldSeparateur.class.php',
+								'../frontend/libs/classes/UniversalFieldSwitch.class.php', 
 								'../frontend/libs/classes/UniversalFieldText.class.php',
 								'../frontend/libs/classes/UniversalForm.class.php',
 								'../frontend/libs/classes/UniversalList.class.php',
@@ -482,16 +484,17 @@ echo '<body>';
 							$hashs = '';
 							$chaine = '';
 							foreach($fichiers as $fichier) {
-								$hash = sha1_file($fichier);
-								$hashs.= $hash;
 								$chaine.= '<tr>';
+								if (file_exists($fichier)) {
+									$hash = sha1_file($fichier);
+									$hashs.= $hash;
 									$chaine.= '<td width="60%" align="left">'.$fichier.'</td>';
-									if (file_exists($fichier)) {
-										$chaine.= '<td width="40%" align="left">'.$hash.'</td>';
-									}
-									else {
-										$chaine.= '<td width="40%" align="left"><span class="text-danger">'.getLib('ERREUR_FICHIER_INEXISTANT').'</span></td>';
-									}
+									$chaine.= '<td width="40%" align="left">'.$hash.'</td>';
+								}
+								else {
+									$chaine.= '<td width="40%" align="left"><span class="text-danger">'.getLib('ERREUR_FICHIER_INEXISTANT').'</span></td>';
+									$chaine.= '<td></td>';
+								}
 								$chaine.= '</tr>';
 							}
 							$hashs = sha1($hashs);
@@ -502,9 +505,9 @@ echo '<body>';
 							echo '<div class="row">';
 								echo '<div class="col">';
 									echo '<div class="d-flex flex-row align-items-center">';
-										echo '<h1 class="display-4">'.getLib('SIGNATURE_CODE').' (frontend)(sha1)</h1>';
+										echo '<h1>'.getLib('SIGNATURE_CODE').' (frontend)(sha1)</h1>';
 									echo '</div>';
-									echo '<table class="table table-hover table-striped">';
+									echo '<table class="table table-hover table-striped table-responsive">';
 										echo '<thead>';
 										echo '<tr>';
 											echo '<th class="text-left" width="60%">'.getLib('FICHIER').'</th>';

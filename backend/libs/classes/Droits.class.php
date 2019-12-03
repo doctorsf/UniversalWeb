@@ -8,17 +8,18 @@
 //------------------------------------------------------------------
 // Gères les droits d'accès à l'application
 //------------------------------------------------------------------
-// 1 - Dans la gestion des droits il y a 3 choses à gérer :
+// 1 - Dans la gestion des droits il y a 4 choses à gérer :
 //		- les profils utilisateurs
+//		- les gorupes de fonctionnalités de l'application
 //		- les fonctionnalités de l'application
 //		- les droits associés à un couple profil/fonctionnalité
 //
 // 2 - Ces informations sont stockées dans cet objet sous forme de
-//  trois tableaux, fidèles à 3 tables de la base de données :
+//  trois tableaux, fidèles à 4 tables de la base de données :
 //	table bd_profils ->
 //		$_profils : (id_profil, libelle, code)
-//	table bd_fonctionnalites ->
-//		$_fonctionnalites : (id_fonctionnalite, libelle, code)
+//	table bd_groupes_fonctionnalites et	table bd_fonctionnalites ->
+//		$_fonctionnalites : (id_fonctionnalite, id_groupe_fonctionnalite, libelle, code)
 //	table bd_droits ->
 //		$_droits: (id_fonctionnalite, id_profil, autorisation)
 //
@@ -29,6 +30,10 @@
 //------------------------------------------------------------------
 // 22.03.2018
 //		- Ajout de la méthode retreiveCodeFonctionnaliteFromId() qui renvoie le code de la fonctionnalité dont d'id est passé en paramètre
+// 24.05.2019
+//		- Ajout de la notion de groupes de fonctionnalités. Si l'appli choisi de prendre en charge cette notion de groupe, il faut passer "true" au constructeur
+// 28.05.2019
+//		- Ajout de la fonction accesAutoriseByIdFonc() qui renseigne du droit pour le fcouple (id_fonctionnalite, id_profil)
 //------------------------------------------------------------------
 
 //appel simplifié à la methode accesAutorise pour l'utilisateur logué
@@ -43,12 +48,14 @@ class Droits {
 	private $_fonctionnalites;			//tableau des fonctionnalites de l'application
 	private $_profils;					//tableau des profils utilisateur de l'application
 	private $_droits;					//tableau des droits
+	private $_notion_groupes;			//prise en charge de la notion de groupes ?
 
 	//=======================================
 	// Constructeur / Destructeur
 	//=======================================
 
-	public function __construct() {
+	public function __construct($notionGroupes=false) {
+		$this->_notion_groupes = (bool)$notionGroupes;
 		$this->_chargeFonctionnalites();
 		$this->_chargeProfils();
 		$this->_chargeDroits();
@@ -58,7 +65,7 @@ class Droits {
 	// Méthodes privées
 	//=======================================	
 
-	private function _chargeFonctionnalites()	{sqlDroits_loadFonctionnalites($this->_fonctionnalites);}	//chargement des fonctionnalites de l'application
+	private function _chargeFonctionnalites()	{sqlDroits_loadFonctionnalites($this->_fonctionnalites, $this->_notion_groupes);}	//chargement des fonctionnalites de l'application
 	private function _chargeProfils()			{sqlDroits_loadProfils($this->_profils);}					//chargement des profils de l'application
 	private function _chargeDroits()			{sqlDroits_loadDroits($this->_droits);}						//chargement des droits	(fonc./profil/autorisation)
 
@@ -70,6 +77,7 @@ class Droits {
 	public function countProfils()			{return count($this->_profils);}			//renvoie le nombre de profils
 	public function fonctionnalite()		{return $this->_fonctionnalites;}			//renvoie le tableau des fonctionnalités
 	public function profils()				{return $this->_profils;}					//renvoie le tableau des profils utilisateurs
+	public function getNotionGroupes()		{return $this->_notion_groupes;}			//renvoie la notion de groupe en cours
 
 	//--------------------------------------------------------------------
 	// Renvoie le code d'une fonctionnalité dont l'id_fonctionnalite est passé en paramètre
@@ -163,5 +171,14 @@ class Droits {
 		return false;
 	}
 
+	//--------------------------------------------------------------------
+	// Dit si un acces à une fontionnalité (id) pour un profil est autorisé
+	// Entree : $id_fonctionnalite (l'identifiant de la fonctionnalite)
+	//			$profil (l'id du profil)
+	// Retour : true / false
+	//--------------------------------------------------------------------
+	public function accesAutoriseByIdFonc($id_fonctionalite, $profil) {
+		return ($this->_droits[$id_fonctionalite.'-'.$profil] == 1);
+	}
 
 }

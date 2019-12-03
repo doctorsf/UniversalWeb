@@ -24,7 +24,7 @@ class Form_exemples_universalform extends UniversalForm {
 	protected function initDonnees() {
 		$this->_tab_donnees['titre'] = 'La guerre des étoiles';	//champ texte
 		$this->_tab_donnees['data0'] = '';						//champ texte
-		$this->_tab_donnees['etablissement'] = 'NASA';			//champ texte
+		$this->_tab_donnees['etablissement'] = 'Nasa';			//champ texte
 		$this->_tab_donnees['ville'] = '';						//champ texte
 		$this->_tab_donnees['nom'] = 'Labrousse';				//champ texte
 		$this->_tab_donnees['prenom'] = '';						//champ texte
@@ -39,6 +39,7 @@ class Form_exemples_universalform extends UniversalForm {
 		$this->_tab_donnees['data11'] = '';						//champ texte
 		$this->_tab_donnees['data12'] = '';						//champ texte
 		$this->_tab_donnees['data13'] = '';						//champ texte
+		$this->_tab_donnees['data14'] = 'non';					//champ switch
 		$this->_tab_donnees['genre1'] = 'horror';				//champ select
 		$this->_tab_donnees['genre2'] = array('comedy', 'horror');		//champ select multiple
 		$this->_tab_donnees['commentaires'] = '';				//champ area
@@ -558,7 +559,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'readonly' => false,					//lecture seule (defield renvoi value si readonly)
 				'invisible' => false					//rend invisible le champ
 			));
-		$label = '<a href="javascript:void()" role="button" onclick="alert(\'vous avez cliqué\')">';
+		$label = '<a href="javascript:void(0)" role="button" onclick="alert(\'vous avez cliqué\')">';
 		$label.= '<span class="fas fa-upload"></span>';
 		$label.= '</a>';
 		$this->createField('text', 'data13', array(
@@ -576,7 +577,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'labelPlus' => $label,					//addon au label
 				'labelPlusHelp' => 'Exemple avec une icone cliquable',	//aide sur le label
-				'labelPlusHelpPos' => 'left',				//position de la bulle d'aide sur le label de droite		
+				'labelPlusHelpPos' => 'left',			//position de la bulle d'aide sur le label de droite		
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
 				'maxlength' => 10,						//nb caractres max en saisie
@@ -743,6 +744,39 @@ class Form_exemples_universalform extends UniversalForm {
 				'invisible' => false					//rend invisible le champ
 			));
 
+		$label = 'label droite <a href="javascript:void(0)" role="button" onclick="alert(\'vous avez cliqué\')">';
+		$label.= '<span class="fas fa-upload"></span>';
+		$label.= '</a>';
+		$this->createField('area', 'commentaires-online', array(
+				'newLine' => true,						//nouvelle ligne ? false par défaut
+				'dbfield' => 'comments',				//retour de la saisie
+				'design' => 'online',					//inline (defaut) / online
+				'decalage' => 'col-2',					//décallage en colonnes boostrap
+				'label' => 'Commentaires',				//label
+//				'llong' => 'col-2',						//longueur de la zone de titre (inutile dans le cas d'un design online)
+				'lclass' => 'vert',						//classe du label
+				'lalign' => 'right',					//left (defaut) / right / center / jutify
+				'labelHelp' => 'Aide sur commentaires',	//aide sur le label
+				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
+				'labelPlus' => $label,					//aide sur le label
+				'labelPlusHelp' => 'label de droite',	//aide sur le label
+				'clong' => 'col-5',						//longueur de la zone de champ
+				'rows' => 7,							//hauteur du commentaire en nombre de lignes
+				'cclass' => '',							//classe de la zone de champ
+				'maxlength' => 128,						//nb caractres max en saisie
+				'spellcheck' => true,					//correction orthographique
+				'placeholder' => 'Commentaire online', //texte pré-affiché
+//				'testMatches' => array('REQUIRED'),		//test de la saisie
+				'value' => $this->_tab_donnees['commentaires'],//valeur de la saisie
+//				'erreur' => true,						//montée erreur
+//				'liberreur' => 'TEST ERREUR',			//libellé de l'erreur
+//				'liberreurHelp' => 'libelle erreur',	//Aide sur l'erreur
+				'javascript' => '',						//code javascript associé
+				'enable' => true,						//active, désactive le champ (dbfield renvoie NULL si false)
+				'readonly' => false,					//lecture seule (defield renvoi value si readonly)
+				'invisible' => false					//rend invisible le champ
+			));
+
 		//---------------------
 		//CHECKBOX
 		//---------------------
@@ -775,6 +809,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'label' => 'Compris',						//label
 				'lclass' => 'bleu',							//classe du label
 				'labelHelp' => 'Avec envoi d\'erreur',		//aide sur le label
+				'labelHelpPos' => 'left',					//aide sur le label
 				'lpos' => 'before',							//position du label par rapport à la checkbox : before (defaut) / after
 				'clong' => 'col-4',							//longueur du champ en colonnes boostrap
 				'cclass' => '',								//classe de la checkbox
@@ -1320,6 +1355,149 @@ class Form_exemples_universalform extends UniversalForm {
 			));
 
 		//---------------------
+		//SWITCH
+		//---------------------
+		$this->createField('separateur', 'sep13', array(
+				'newLine' => true,							//nouvelle ligne ? false par défaut
+				'dbfield' => 'separateur13',				//retour de la saisie
+//				'decalage' => 'col-2',						//décallage en colonnes boostrap
+				'label' => 'SWITCH',						//libellé du séparateur
+				'lclass' => 'font-weight-bold bleu souligne_epais',	//classe du sé&parateur
+				'labelHelp' => 'Aide sur séparateur SWITCH',//aide sur le séparateur
+				'border' => false,							//defaut : false. false / true(encadrement par défaut) ou bordure personnnalisée
+//				'border' => 'border-top:2px dotted silver;', //bordure personnalisée
+				'clong' => 'col-5',							//longueur du séparateur en colonnes bootstrap
+				'cclass' => '',								//classe sur le bloc de champ
+				'value' => 'Séparateur 13',					//valeur de la saisie
+				'invisible' => false						//rend invisible le champ
+			));
+
+		$checked = ($this->_tab_donnees['data14'] == 'oui');
+		$this->createField('switch', 'sw_permis', array(
+				'newLine' => true,							//nouvelle ligne ? false par défaut
+				'dbfield' => 'sw_permis',					//retour de la saisie
+//				'titre'	=> 'Titre',							//on veut un titre (premier élément seulement, sans effet sur les autres)
+//				'tlong'	=> 'col-2',							//on veut un titre sur 2 colonnes boostrap
+//				'tclass' => 'bleu',							//style du titre
+//				'titreHelp'	=> 'Aide sur titre',			//aide du titre
+				'decalage' => 'col-2',						//décallage en colonnes boostrap
+				'label' => 'Permis de conduire',			//label
+				'lclass' => 'bleu',							//classe du label
+				'labelHelp' => 'Allumer pour accepter',		//aide sur le label
+				'labelHelpPos' => 'right',					//aide sur le label
+				'clong' => 'col-4 mb-3',					//longueur du champ en colonnes boostrap
+				'value' => 'oui',							//valeur renvoyée dans dbfield si checkbox cliquée
+				'valueInverse' => 'non',					//valeur renvoyée dans dbfield si checkbox non cliquée
+				'checked' => $checked,						//allumé (cochée) / éteint (false)
+//				'erreur' => true,							//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreur' => 'Test erreur',				//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreurHelp' => 'libelle aide erreur',	//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+				'javascript' => '',							//code javascript associé
+				'enable' => true,							//disponible (dbfield renvoie NULL sinon)
+				'readonly' => false,						//lecture seule (defield renvoi value si readonly)
+				'invisible' => false						//rend invisible (true) le champ
+			));
+
+		$checked = ($this->_tab_donnees['data14'] == 'oui');
+		$this->createField('switch', 'sw_permis2', array(
+				'newLine' => true,							//nouvelle ligne ? false par défaut
+				'dbfield' => 'sw_permis2',					//retour de la saisie
+				'titre'	=> 'Permis de conduire',			//on veut un titre (premier élément seulement, sans effet sur les autres)
+				'tlong'	=> 'col-2',							//on veut un titre sur 2 colonnes boostrap
+				'tclass' => 'bleu',							//style du titre
+				'titreHelp'	=> 'Aide sur titre',			//aide du titre
+//				'decalage' => 'col-2',						//décallage en colonnes boostrap
+				'label' => '',								//label
+				'lclass' => 'bleu',							//classe du label
+				'labelHelp' => 'Allumer pour accepter',		//aide sur le label
+				'labelHelpPos' => 'right',					//aide sur le label
+				'clong' => 'col-4 mb-3',					//longueur du champ en colonnes boostrap
+				'value' => 'oui',							//valeur renvoyée dans dbfield si checkbox cliquée
+				'valueInverse' => 'non',					//valeur renvoyée dans dbfield si checkbox non cliquée
+				'checked' => $checked,						//allumé (cochée) / éteint (false)
+//				'erreur' => true,							//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreur' => 'Test erreur',				//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreurHelp' => 'libelle aide erreur',	//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+				'javascript' => '',							//code javascript associé
+				'enable' => true,							//disponible (dbfield renvoie NULL sinon)
+				'readonly' => false,						//lecture seule (defield renvoi value si readonly)
+				'invisible' => false						//rend invisible (true) le champ
+			));
+
+		$this->createField('switch', 'swenfant', array(
+				'newLine' => true,							//nouvelle ligne ? false par défaut
+				'dbfield' => 'sw_enfant',					//retour de la saisie
+				'titre'	=> 'Tranches d\'ages',				//on veut un titre (premier élément seulement, sans effet sur les autres)
+				'titreHelp'	=> 'Aide sur titre tranches d\'âges',				//on veut un titre (premier élément seulement, sans effet sur les autres)
+				'titreHelpPos' => 'bottom',					//aide sur le label
+				'tlong'	=> 'col-2',							//on veut un titre sur 2 colonnes boostrap
+				'tclass' => 'vert',							//style du titre
+//				'decalage' => 'col-2',						//décallage en colonnes boostrap
+				'label' => 'Enfant',						//label
+				'lclass' => 'bleu',							//classe du label
+				'labelHelp' => 'Aide sur le label Enfant',	//aide sur le label
+				'clong' => 'col-1 mb-3',					//longueur du champ en colonnes boostrap
+				'value' => 'oui',							//valeur renvoyée dans dbfield si checkbox cliquée
+				'valueInverse' => 'non',					//valeur renvoyée dans dbfield si checkbox non cliquée
+				'checked' => true,							//cochée (true) / décochée (false)
+//				'erreur' => true,							//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreur' => 'Test erreur',				//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreurHelp' => 'libelle aide erreur',	//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+				'javascript' => '',							//code javascript associé
+				'enable' => true,							//disponible (dbfield renvoie NULL sinon)
+				'readonly' => true,							//lecture seule (defield renvoi value si readonly)
+				'invisible' => false						//rend invisible (true) le champ
+			));
+
+		$this->createField('switch', 'swado', array(
+				'newLine' => false,							//nouvelle ligne ? false par défaut
+				'dbfield' => 'sw_ado',							//retour de la saisie
+//				'titre'	=> 'Tranches d\'ages',				//on veut un titre (premier élément seulement, sans effet sur les autres)
+//				'tlong'	=> 'col-2',							//on veut un titre sur 2 colonnes boostrap
+//				'tclass' => 'vert',							//style du titre
+//				'titreHelp'	=> 'Aide sur titre',			//aide du titre
+//				'decalage' => 'col-2',						//décallage en colonnes boostrap
+				'label' => 'Adolescent',					//label
+				'lclass' => 'bleu',							//classe du label
+				'labelHelp' => 'Aide sur le label Adolescent', //aide sur le label
+				'clong' => 'col-2',							//longueur du champ en colonnes boostrap
+				'value' => 'oui',							//valeur renvoyée dans dbfield si checkbox cliquée
+				'valueInverse' => 'non',					//valeur renvoyée dans dbfield si checkbox non cliquée
+				'checked' => false,							//cochée (true) / décochée (false)
+//				'erreur' => true,							//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreur' => 'Test erreur',				//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreurHelp' => 'libelle aide erreur',	//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+				'javascript' => '',							//code javascript associé
+				'enable' => true,							//disponible (dbfield renvoie NULL sinon)
+				'readonly' => false,						//lecture seule (defield renvoi value si readonly)
+				'invisible' => false						//rend invisible (true) le champ
+			));
+
+		$this->createField('switch', 'swadulte', array(
+				'newLine' => false,							//nouvelle ligne ? false par défaut
+				'dbfield' => 'sw_adulte',						//retour de la saisie
+//				'titre'	=> 'Tranches d\'ages',				//on veut un titre (premier élément seulement, sans effet sur les autres)
+//				'tlong'	=> 'col-2',							//on veut un titre sur 2 colonnes boostrap
+//				'tclass' => 'vert',							//style du titre
+//				'titreHelp'	=> 'Aide sur titre',			//aide du titre
+//				'decalage' => 'col-2',						//décallage en colonnes boostrap
+				'label' => 'Adulte',						//label
+				'lclass' => 'rouge',						//classe du label
+				'labelHelp' => 'Aide sur le label Adulte', //aide sur le label
+				'clong' => 'col-1',							//longueur du champ en colonnes boostrap
+				'value' => 'oui',							//valeur renvoyée dans dbfield si checkbox cliquée
+				'valueInverse' => 'non',					//valeur renvoyée dans dbfield si checkbox non cliquée
+				'checked' => false,							//cochée (true) / décochée (false)
+//				'erreur' => true,							//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreur' => 'Test erreur',				//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+//				'liberreurHelp' => 'libelle aide erreur',	//A définir une seule fois sur le premier élément. Ignoré sur les autres.
+				'javascript' => '',							//code javascript associé
+				'enable' => true,							//disponible (dbfield renvoie NULL sinon)
+				'readonly' => false,						//lecture seule (defield renvoi value si readonly)
+				'invisible' => false						//rend invisible (true) le champ
+			));
+
+		//---------------------
 		//RADIO
 		//---------------------
 		//plusieurs online
@@ -1695,7 +1873,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'llong' => 'col-2',							//longueur de la zone de titre (pour design inline seulement)
 				'lclass' => 'vert',							//classe du label
 				'lalign' => 'right',						//left (defaut) / right / center / jutify  (aligmenent du label)
-				'labelHelp' => 'Aide sur label commentaires 1',	//aide sur le label
+//				'labelHelp' => 'Aide sur label commentaires 1',	//aide sur le label
 				'clong' => 'col-5',							//longueur du champ en colonnes boostrap (a définir sur le premier du groupe (ou alone). Sans effet sur les autres)
 				'cclass' => '',								//classe du commentaire (div)
 //				'border' => true,							//defaut : false. false / true(encadrement par défaut) ou bordure personnnalisée
@@ -1926,7 +2104,7 @@ class Form_exemples_universalform extends UniversalForm {
 //				'decalage' => 'col-2',					//décallage en colonnes boostrap
 				'label' => 'FILTRE',					//libellé du séparateur
 				'lclass' => 'font-weight-bold bleu souligne_epais',	//classe du sé&parateur
-				'labelHelp' => 'Ceci est une aide sur le label',//aide sur le séparateur
+//				'labelHelp' => 'Ceci est une aide sur le label',//aide sur le séparateur
 				'border' => false,						//defaut : false. false / true(encadrement par défaut) ou bordure personnnalisée
 //				'border' => 'border-top:2px dotted silver;', //bordure personnalisée
 				'clong' => 'col-5',						//longueur du séparateur en colonnes bootstrap
@@ -1949,6 +2127,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'tclass' => 'vert',						//classe du titre
 				'talign' => 'right',					//cadrage du titre à droite
 				'titreHelp' => 'Aide sur le titre',		//Aide sur le titre
+				'titreHelpPos' => 'bottom',				//Aide sur le titre
 				'label' => 'Juste le label',			//label
 				'lclass' => 'btn btn-success',
 				'lalign' => 'right',
@@ -1957,6 +2136,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'dbfield' => 'filtre1',					//retour de la saisie
 				'inputType' => '',						//search(defaut), text, time, date, etc.
 				'labelHelp' => 'Aide sur le filtre',	//aide sur le champ
+				'labelHelpPos' => 'right',	//aide sur le champ
 				'clong' => 'col-4',						//longueur du bloc champ (ici cadré à droite)
 				'cclass' => '',							//classe de la zone de saisie
 				'maxlength' => 10,						//taille maximum de la saisie en nombre de caractèresz
@@ -2243,6 +2423,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'inputType' => 'button',				//submit (defaut), button, reset
 				'label' => 'Bouton 2',					//label
 				'labelHelp' => 'Boutons 2 cadré à a droite',//labelhelp
+				'labelHelpPos' => 'bottom',	
 				'llong' => 'col-12',					//col-12 dessine le bouton sur la totalité de sa largeur. Si vide, le bouton est dessiné à la largeur du libellé
 				'lclass' => 'btn btn-warning',			//classes graphique du bouton
 				'clong' => 'col-12 col-sm-4 col-xl-2',	//longueur de la zone de champ (du bouton)

@@ -20,7 +20,7 @@ echo '<header>';
 					echo '<h2 class="d-inline mb-0">'._APP_TITLE_.' '._APP_VERSION_._APP_RELEASE_;
 					if (strpos($_SERVER['SERVER_NAME'], 'localhost') !== false) echo ' <span class="text-warning">LOCALHOST</span>';
 					echo '</h2>';
-					echo '<p class="small mb-1">'.getLib('TODAY_IS').' '.MySQLToDateClair(date('Y-m-d'), _LG_).'</p>';
+					echo '<p class="small mb-1">'.getLib('TODAY_IS', MySQLToDateClair(date('Y-m-d'), _LG_)).'</p>';
 				echo '</div>';
 
 				//--------------------------------------
@@ -52,7 +52,7 @@ echo '<header>';
 			// Bloc MENU
 			// "row" est ici remplacé par "nav"
 			//--------------------------------------
-			echo '<nav class="navbar navbar-expand-md navbar-dark bg-info rounded">';
+			echo '<nav class="navbar navbar-expand-md navbar-dark bg-info rounded mb-1">';
 
 				//marque
 				echo '<a class="navbar-brand">'._APP_TITLE_.'</a>';
@@ -120,6 +120,8 @@ echo '<header>';
 								echo '<a class="dropdown-item" href="exemples_universalform.php">UniversalForm</a>';
 								echo '<div class="dropdown-divider"></div>';
 								echo '<a class="dropdown-item" href="exemple_import_csv.php">Import CSV</a>';
+								echo '<div class="dropdown-divider"></div>';
+								echo '<a class="dropdown-item" href="exemple_upload.php">Upload</a>';
 							echo '</div>';
 						echo '</li>';
 
@@ -131,21 +133,21 @@ echo '<header>';
 								echo '<span class="fas fa-cog"></span>&nbsp;Administration&nbsp;';
 							echo '</a>';
 							echo '<div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">';
-								echo '<a class="dropdown-item" href="'._URL_LISTING_DROITS_.'">'.getLib('GESTION_DES_DROITS').'</a>';
-								echo '<a class="dropdown-item" href="'._URL_LISTING_USERS_.'">'.getLib('LISTE_ADMINISTRATEURS').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_LISTING_DROITS_.'"><span class="fas fa-balance-scale-right mr-2"></span>'.getLib('GESTION_DES_DROITS').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_LISTING_USERS_.'"><span class="fas fa-users-cog mr-2"></span>'.getLib('LISTE_ADMINISTRATEURS').'</a>';
 								echo '<div class="dropdown-divider"></div>';
-								echo '<a class="dropdown-item" href="'._URL_INFOS_SYSTEME_.'">'.getLib('INFORMATIONS_SYSTEME').'</a>';
-								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=hash">'.getLib('SIGNATURE_CODE').'</a>';
-								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=hashfrontend">'.getLib('SIGNATURE_CODE').' (frontend)</a>';
+								echo '<a class="dropdown-item" href="'._URL_INFOS_SYSTEME_.'"><span class="fas fa-desktop mr-2"></span>'.getLib('INFORMATIONS_SYSTEME').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=hash"><span class="fas fa-signature mr-2"></span>'.getLib('SIGNATURE_CODE').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=hashfrontend"><span class="fas fa-signature mr-2"></span>'.getLib('SIGNATURE_CODE').' (frontend)</a>';
 								echo '<div class="dropdown-divider"></div>';
-								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=savedb">'.getLib('SAUVEGARDE_BD').'</a>';
-								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=loaddb">'.getLib('RESTORATION_BD').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=savedb"><span class="fas fa-database mr-2"></span>'.getLib('SAUVEGARDE_BD').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_MAINTENANCE_.'?operation=loaddb"><span class="fas fa-database mr-2"></span>'.getLib('RESTORATION_BD').'</a>';
 								echo '<div class="dropdown-divider"></div>';
-								echo '<a class="dropdown-item" href="'._URL_LISTING_LOGS_.'">'.getLib('LOGS').'</a>';
+								echo '<a class="dropdown-item" href="'._URL_LISTING_LOGS_.'"><span class="far fa-list-alt mr-2"></span>'.getLib('LOGS').'</a>';
 								if (_RUN_MODE_ == _DEVELOPPEMENT_) {
 									echo '<div class="dropdown-divider"></div>';
 									echo '<a class="dropdown-item d-flex" href="'._URL_VERSIONNING_.'">';
-										echo '<div class="mr-auto">Versionning&nbsp;</div>';
+										echo '<span class="fas fa-code mr-2"></span><div class="mr-auto">Versionning&nbsp;</div>';
 										echo '<div class="badge badge-success ml-auto h-25 mt-1">DEV</div>';
 									echo '</a>';
 								}

@@ -58,7 +58,9 @@ Il comporte :
 	- exemple_liste_complexe.php (code php d'exemple de mise en oeuvre de listes complexes)
 	- exemple_listes.sql (code sql pour générer la table mySql qui sert aux exemples de listes)
 	- exemple_import_csv.php (code php pour importer un fichier csv en bases de données)
+	- exemple_import_csv_modele.php (code php pour afficher le modèle d'import de fichiers csv)
 	- exemple_import.csv (fichier csv à importer)
+	- exemple_upload.csv (téléversement de fichiers)
 
 
 *************************************************
@@ -84,7 +86,7 @@ Il comporte :
 				_DEVELOPPEMENT_ (appli en Developpement, permet d'accéder au menus de gestion des couples "profils / fonctionnalités" à mettre en place pour votre application)
 				_PRODUCTION_ (appli en production : penser à mettre en mode _PRODUCTION_ lorsque l'appli est en production)
 	k) _ANNUAIRE_		: choix de l'annuaire utilisé pour la gestion des utilisateurs. UniversalWeb propose seulement l'annuaire interne à l'application. Vous pouvez ajouter votre propre annuaire.
-				_ANNUAIRE_INTERNE_	=> gestion des utilisateur entièrement géré par l'application (base de données)(option par défaut)
+				_ANNUAIRE_INTERNE_ => gestion des utilisateur entièrement géré par l'application (base de données)(option par défaut)
 				Vous pouvez ajouter votre propre annuaire si vous en possédez un.
 				Voir ci-après quelles classes sont à créer pour s'interfacer avec UniversalWeb.
 
@@ -107,12 +109,13 @@ Il comporte :
 	Celui-ci va créer les tables suivantes (préfixées du préfixe choisi en phase 3) dans la base de données :
 	1 - profils (table des profils d'utilisateurs)
 	2 - fonctionnalites (table des fonctionnalités de l'application)
-	3 - droits (table des droits pour un couple profil/fonctionnalite)
-	4 - users (ébauche de table utilisateur qui pourra être modifiée comme souhaité par le développeur)
-	5 - listings (sauvegarde des listings de l'application en relation avec la classe UniversalList.class.php)
-	6 - logs (table des journeaux de l'application)
-	7 - logs_types (table des types de journeaux de l'application. Un seul type de log défini par défaut 'Connexion')
-	8 - films (sans préfixe) (table utilisée dans les exemples de mise en oeuvre de listes et listings Extraweb)
+	3 - groupes_fonctionnalites (table des gorupes de fonctionnalités de l'application)
+	4 - droits (table des droits pour un couple profil/fonctionnalite)
+	5 - users (ébauche de table utilisateur qui pourra être modifiée comme souhaité par le développeur)
+	6 - listings (sauvegarde des listings de l'application en relation avec la classe UniversalList.class.php)
+	7 - logs (table des journeaux de l'application)
+	8 - logs_types (table des types de journeaux de l'application. Un seul type de log défini par défaut 'Connexion')
+	9 - films (sans préfixe) (table utilisée dans les exemples de mise en oeuvre de listes et listings Extraweb)
 
 5) Lancer le backend http://chemin_du_backend/ et connectez-vous.
 	a) l'administrateur (admin) est créé par défaut avec le mot de passe (admin). 
@@ -144,7 +147,7 @@ Il comporte :
 				_DEVELOPPEMENT_ (appli en Develloppement, permet d'accéder au menus de gestion des couples "profils / fonctionnalités" à mettre en place pour votre application)
 				_PRODUCTION_ (appli en production : penser à mettre en mode _PRODUCTION_ lorsque l'appli est en production)
 	k) _ANNUAIRE_		: choix de l'annuaire utilisé pour la connexion des utilisateurs. UniversalWeb propose seulement l'annuaire interne à l'application. Vous pouvez ajouter votre propre annuaire.
-				_ANNUAIRE_INTERNE_	=> gestion des utilisateur entièrement géré par l'application (base de données)(option par défaut)
+				_ANNUAIRE_INTERNE_ => gestion des utilisateur entièrement géré par l'application (base de données)(option par défaut)
 				Vous pouvez ajouter votre propre annuaire si vous en possédez un.
 				Voir ci-après quelles classes sont à créer pour s'interfacer avec UniversalWeb.
 				NB : Doit être le même que pour le Backend
@@ -163,7 +166,7 @@ Il comporte :
 *************************************************
 * Pour aller plus loin				*
 *************************************************
-Si vous devez vous connecter à partir d'un autra  annuaire (LDAP, KERBEROS, etc) voici les classes que vous aurez besoin d'écrire : 
+Si vous devez vous connecter à partir d'un autre annuaire (LDAP, KERBEROS, etc) voici les classes que vous aurez besoin d'écrire : 
 
 	1 - Surchargez la classe Ldap() avec une classe adaptées à votre annuaire
 			class Ldap_mon_annuaire extends Ldap {}

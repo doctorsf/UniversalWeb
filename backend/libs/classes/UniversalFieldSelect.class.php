@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'select'
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldSelect extends UniversalField {
@@ -78,8 +78,11 @@ class UniversalFieldSelect extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		($this->lclass() != '') ? $lclass = ' '.$this->lclass() : $lclass = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->llong().$lclass.$invisible.$erreur.'"'.$style.'>';
 			if ($labelHelp == '') {
@@ -166,8 +169,11 @@ class UniversalFieldSelect extends UniversalField {
 	private function _drawLabelOnline() {
 		//label online
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.htmlspecialchars($this->labelHelp()).'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->lclass().'"'.$style.'>';
 			if ($labelHelp == '') {

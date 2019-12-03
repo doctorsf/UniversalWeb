@@ -255,18 +255,20 @@ function sqlUsers_updateUserGlobal($id, $donnees)
 	$requete.= "email = '".$donnees['email']."', ";
 	//test si le mot de passe a été modifié. dans le cas contraire, il ne faut pas prendre en compte le champ
 	//car on risque de surcrypter SHA1 le cryptage SHA1 du mot de passe
-	if ($donnees['password'] != sqlUsers_getCryptedPassword($id)) {
-		//le mot de passe a été changé
-		$requete.= "password = SHA1('".$donnees['password']."'), ";
+	if (isset($donnees['password'])) {
+		if ($donnees['password'] != sqlUsers_getCryptedPassword($id)) {
+			//le mot de passe a été changé
+			$requete.= "password = SHA1('".$donnees['password']."'), ";
+		}
 	}
-	$requete.= "langue = '".$donnees['langue']."', ";
+	if (isset($donnees['langue'])) $requete.= "langue = '".$donnees['langue']."', ";
 	$requete.= "profil = '".$donnees['profil']."', ";
-	$requete.= "testeur = '".$donnees['testeur']."', ";
+	if (isset($donnees['testeur'])) $requete.= "testeur = '".$donnees['testeur']."', ";
 	$requete.= "date_creation = '".changeDateTimeFormat($donnees['date_creation'], _FORMAT_DATE_TIME_, _FORMAT_DATE_TIME_SQL_)."', ";
-	$requete.= "action_demandee = '".$donnees['action_demandee']."', ";
-	$requete.= "code_validation = '".$donnees['code_validation']."', ";
+	if (isset($donnees['action_demandee'])) $requete.= "action_demandee = '".$donnees['action_demandee']."', ";
+	if (isset($donnees['code_validation'])) $requete.= "code_validation = '".$donnees['code_validation']."', ";
 	$requete.= "active = '".$donnees['active']."', ";
-	$requete.= "autolog = '".$donnees['autolog']."', ";
+	if (isset($donnees['autolog'])) $requete.= "autolog = '".$donnees['autolog']."', ";
 	$requete.= "notes_privees = '".$donnees['notes_privees']."' ";
 	$requete.= "WHERE id_user = '".$id."'";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
@@ -286,18 +288,20 @@ function sqlUsers_updateUserGlobal($id, $donnees)
 function sqlUsers_updateUser($id, $donnees)
 {
 	$requete = "UPDATE "._PREFIXE_TABLES_."users SET ";
-	$requete.= "id_user = '".utf8_strtolower($donnees['id_user'])."', ";
 	$requete.= "nom = '".ucwords(utf8_strtolower($donnees['nom']))."', ";
 	$requete.= "prenom = '".ucwords(utf8_strtolower($donnees['prenom']))."', ";
 	$requete.= "email = '".$donnees['email']."', ";
 	//test si le mot de passe a été modifié. dans le cas contraire, il ne faut pas prendre en compte le champ
 	//car on risque de surcrypter SHA1 le cryptage SHA1 du mot de passe
-	if ($donnees['password'] != sqlUsers_getCryptedPassword($id)) {
-		//le mot de passe a été changé
-		$requete.= "password = SHA1('".$donnees['password']."'), ";
+	if (isset($donnees['password'])) {
+		if ($donnees['password'] != sqlUsers_getCryptedPassword($id)) {
+			//le mot de passe a été changé
+			$requete.= "password = SHA1('".$donnees['password']."'), ";
+		}
 	}
-	$requete.= "langue = '".$donnees['langue']."', ";
-	$requete.= "autolog = '".$donnees['autolog']."' ";
+	if (isset($donnees['langue'])) $requete.= "langue = '".$donnees['langue']."', ";
+	if (isset($donnees['autolog'])) $requete.= "autolog = '".$donnees['autolog']."', ";
+	$requete.= "id_user = '".utf8_strtolower($donnees['id_user'])."' ";
 	$requete.= "WHERE id_user = '".$id."'";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	return $res;

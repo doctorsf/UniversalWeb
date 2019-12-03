@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'area'
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldArea extends UniversalField {
@@ -56,8 +56,11 @@ class UniversalFieldArea extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		($this->lclass() != '') ? $lclass = ' '.$this->lclass() : $lclass = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.$this->labelHelp().'"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->llong().$lclass.$erreur.$invisible.'"'.$style.'>';
 			if ($labelHelp == '') {
@@ -93,21 +96,60 @@ class UniversalFieldArea extends UniversalField {
 	private function _drawLabelOnline() {
 		//label online
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.$this->labelHelp().'"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
+		$labelPlusHelp = '';
+		if ($this->labelPlusHelp() != '') {
+			$labelPlusHelp.= ' title="'.htmlspecialchars($this->labelPlusHelp()).'"';
+			($this->labelPlusHelpPos() != '') ? $labelPlusHelp.= ' data-placement="'.$this->labelPlusHelpPos().'"' : $labelPlusHelp.= ' data-placement="auto"';
+		}
 		$style = '';
-		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->lclass().'"'.$style.'>';
-			if ($labelHelp == '') {
-				//il n'y a pas d'aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
-			}
-			else {
-				//on ajoute une aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
-					$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
-				$html.= '</label>';
-			}
-		$html.= '</div>';
+		if (!empty($this->labelPlus())) {
+			$html = '<div id="'.$this->idztitre().'" class="d-flex justify-content-between '.$this->lclass().'"'.$style.'>';
+				if ($labelHelp == '') {
+					//il n'y a pas d'aide sur le label
+					$html.= '<div>';
+					$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
+					$html.= '</div>';
+				}
+				else {
+					$html.= '<div>';
+					$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
+						$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
+					$html.= '</label>';
+					$html.= '</div>';
+				}
+				if ($labelPlusHelp == '') {
+					//il n'y a pas d'aide sur le labelPlus
+					$html.= '<div>';
+					$html.= $this->labelPlus();
+					$html.= '</div>';
+				}
+				else {
+					//on ajoute une aide sur le label Plus
+					$html.= '<div>';
+					$html.= '<span data-toggle="tooltip"'.$labelPlusHelp.'>'.$this->labelPlus().'</span>';
+					$html.= '</div>';
+				}
+			$html.= '</div>';
+		}
+		else {
+			$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->lclass().'"'.$style.'>';
+				if ($labelHelp == '') {
+					//il n'y a pas d'aide sur le label
+					$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
+				}
+				else {
+					//on ajoute une aide sur le label
+					$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
+						$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
+					$html.= '</label>';
+				}
+			$html.= '</div>';
+		}
 		return $html;
 	}
 

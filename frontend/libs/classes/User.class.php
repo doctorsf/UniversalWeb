@@ -1,13 +1,13 @@
 <?php
-//**********************************************************************
+//-----------------------------------------------------------------------
 // Auteur : Fabrice Labrousse											
 // Classe User														
 // Date : 13.02.2017													
-//**********************************************************************
+//-----------------------------------------------------------------------
 // éè : UTF-8				
 // Cette classe permet de travailler sur des données utilisateurs issus de la base de données de l'application
 // Elle comprend les méthodes d'authentification et d'identification d'un utilisateur
-//**********************************************************************
+//-----------------------------------------------------------------------
 
 class User {
 	private $_id;						//ex : fun41

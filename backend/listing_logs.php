@@ -77,7 +77,7 @@ echo '<body>';
 				//titre du listing et bouton d'actions
 				//--------------------------------------
 				echo '<div class="d-flex flex-row align-items-center">';
-					echo '<h1 class="display-4">'.getLib('LOGS').'</h1>';
+					echo '<h1>'.getLib('LOGS').'</h1>';
 					echo '<span class="ml-auto align-items-center">';
 					//affichage d'un boutons d'opérations possibles
 					echo '<div class="dropdown">';

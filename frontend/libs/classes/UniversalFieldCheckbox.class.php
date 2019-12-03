@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'checkbox'
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldCheckbox extends UniversalField {
@@ -100,9 +100,11 @@ class UniversalFieldCheckbox extends UniversalField {
 	private function _drawZtitre($style) {
 		($this->lclass() != '') ? $lclass = $this->lclass() : $lclass = '';
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
-
-		($this->labelHelpPos() != '') ? $labelHelp = ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp = ' data-placement="auto"';
-		($this->labelHelp() != '') ? $labelHelp.= ' title="'.$this->labelHelp().'"' : $labelHelp.= '';
+		$labelHelp = '';
+		if ($this->labelHelp() != '') {
+			$labelHelp = ' title="'.$this->labelHelp().'"';
+			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+		}
 		$chaine = '<div id="'.$this->idztitre().'" style="'.$style.'">';
 			if ($labelHelp == '') {
 				//il n'y a pas d'aide sur le label
@@ -206,8 +208,11 @@ class UniversalFieldCheckbox extends UniversalField {
 			if ($this->titre() != '') {
 				($this->tlong() != '') ? $tlong = ' '.$this->tlong() : $tlong = '';
 				($this->tclass() != '') ? $tclass = ' '.$this->tclass() : $tclass = '';
-				($this->titreHelpPos() != '') ? $titreHelp = ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp = ' data-placement="auto"';
-				($this->titreHelp() != '') ? $titreHelp.= ' title="'.$this->titreHelp().'"' : $titreHelp.= '';
+				$titreHelp = '';
+				if ($this->titreHelp() != '') {
+					$titreHelp = ' title="'.htmlspecialchars($this->titreHelp()).'" data-toggle="tooltip"';
+					($this->titreHelpPos() != '') ? $titreHelp.= ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp.= ' data-placement="auto"';
+				}
 				$classeTitre = 'col-form-label'.$tlong.$tclass;
 				$style = '';
 				$html.= '<legend class="text-'.$this->talign().' '.$classeTitre.'"'.$style.'>';
@@ -221,10 +226,10 @@ class UniversalFieldCheckbox extends UniversalField {
 				}
 				else {
 					if ($titreHelp != '') {
-						$html.= '<span data-toggle="tooltip"'.$titreHelp.'>'.$this->titre().'</span>';
+						$html.= '<span '.$titreHelp.'>'.$this->titre().'</span>';
 					}
 					else {
-						$html.= $this->titre();
+						$html.= '<span>'.$this->titre().'</span>';
 					}
 				}
 				$html.= '</legend>';

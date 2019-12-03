@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'hidden'
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 class UniversalFieldHidden extends UniversalField {
@@ -24,6 +24,6 @@ class UniversalFieldHidden extends UniversalField {
 	}
 
 	public function draw($enabled) {
-		return '<input type="hidden" name="'.$this->postName().'" value="'.stripslashes($this->value()).'" />';
+		return '<input type="hidden" id="'.$this->id().'" name="'.$this->postName().'" value="'.stripslashes($this->value()).'" />';
 	}
 }

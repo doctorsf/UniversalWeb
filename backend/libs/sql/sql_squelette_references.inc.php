@@ -19,14 +19,16 @@
 //		être identique entre la méthode et sa surcharge -> rajout paramètre $debug )
 //		- Changement du nom du script en sql_squelette_references.inc.php
 //		- Ajout de la fonction sqlSqueletteReference_fillSelectTous()
+// 12.11.2019
+//		- Modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
 //-----------------------------------------------------------------------
 // éè : UTF-8
 //-----------------------------------------------------------------------
 
 class sqlSqueletteReference extends SqlSimple {
-	public $_table	= '';						//saisir le nom de la table de référence (ex : "db_reference")
-	public $_index	= '';						//Saisir ici le champ index unique de la table (ex : "id_tuple")
-	public $_champs	= '';						//Saisir ici la liste des champs de la table à lister (ex : "id_tuple, libelle, famille")
+	public $table	= '';						//saisir le nom de la table de référence (ex : "db_reference")
+	public $index	= '';						//Saisir ici le champ index unique de la table (ex : "id_tuple")
+	public $champs	= '';						//Saisir ici la liste des champs de la table à lister (ex : "id_tuple, libelle, famille")
 
 	public function add($donnees, $debug = false) {
 		$requete = "NULL, ";

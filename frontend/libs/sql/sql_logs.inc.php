@@ -5,14 +5,6 @@ Classe de gestion de la table des logs
 Elle étend la classe générique de table SqlSimple.
 éè : UTF-8
 -------------------------------------------------------------------------
-Methodes disponibles :
--------------------------------------------------------------------------
-getListeNombre()	: nombre de lignes du listing de la table
-getListe()			: obtenir listing de la table
-get()				: renvoie un tuple recherché
-add()				: //ajoute un tuple
-update()			: modifie un tuple
-delete()			: supprime un tuple
 19.01.2017
 	Premiere version
 28.03.2018
@@ -28,6 +20,8 @@ delete()			: supprime un tuple
 30.01.2019
 	- Correction creation table : remplacé 'datetime' par 'timestamp' dans la création du champ 'quand'
 	sinon sela ne marchait pas
+12.11.2019
+	- Modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
 ------------------------------------------------------------------------*/
 
 //- CREATION tables logs --------------------------------------
@@ -67,9 +61,9 @@ function sqlLogs_createTableLogsTypes()
 //-----------------------------------------------------------------------
 
 class sqlLogs extends SqlSimple {
-	public $_table	= _PREFIXE_TABLES_.'logs';							//saisir le nom de la table de référence (ex : "db_reference")
-	public $_index	= 'id_log';											//Saisir ici le champ index unique de la table (ex : "id_tuple")
-	public $_champs	= 'id_log, id_log_type, id_user, operation';		//Saisir ici la liste des champs de la table à lister (ex : "id_tuple, libelle, famille")
+	public $table	= _PREFIXE_TABLES_.'logs';							//saisir le nom de la table de référence (ex : "db_reference")
+	public $index	= 'id_log';											//Saisir ici le champ index unique de la table (ex : "id_tuple")
+	public $champs	= 'id_log, id_log_type, id_user, operation';		//Saisir ici la liste des champs de la table à lister (ex : "id_tuple, libelle, famille")
 
 	public function add($donnees, $debug = false) {
 		$requete = "NULL, ";
@@ -82,7 +76,7 @@ class sqlLogs extends SqlSimple {
 
 	//purge les logs de plus de 3 mois
 	public function epure() {
-		$requete.= "DELETE FROM ".$this->_table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+		$requete.= "DELETE FROM ".$this->table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $nombre;
@@ -92,7 +86,7 @@ class sqlLogs extends SqlSimple {
 
 	//purge entièrement les logs
 	public function purge() {
-		$requete.= "TRUNCATE TABLE ".$this->_table;
+		$requete.= "TRUNCATE TABLE ".$this->table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $nombre;

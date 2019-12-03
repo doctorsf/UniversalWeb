@@ -12,7 +12,9 @@ IMPORTANT : Ce script doit être obligatoirement supprimé après utilisation
 23.07.2018
 	- Remaniement pour UniverslWeb
 27.11.2018
-	-- Mise en conformité pour fonctionnemùent UniversalWeb 3.8.1.0
+	- Mise en conformité pour fonctionnemùent UniversalWeb 3.8.1
+28.05.2019
+	- Mise en conformité pour fonctionnemùent UniversalWeb 3.13.0
 -------------------------------------------------------------------------*/
 require_once('libs/defines.inc.php');
 defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_DEBUG);
@@ -60,6 +62,14 @@ if ($res) {
 	echo 'Création table Profils -> OK<br />';
 }
 else die('Erreur lors de la création de la table Profils');
+
+//création de la table groupes de fonctionnalités
+//--------------------------------
+$res = sqlDroits_createTableGroupesFonctionnalites();
+if ($res) {
+	echo 'Création table Groupes de fonctionnalités -> OK<br />';
+}
+else die('Erreur lors de la création de la table de Groupes de fonctionnalités');
 
 //création de la table fonctionnalités
 //--------------------------------

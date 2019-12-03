@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element parent
-// Version 3.12.0 du 17.04.2019
+// Version 3.16.0 du 26.11.2019
 //==============================================================
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -21,7 +21,8 @@ defined('CHECK_BOOLEAN')			|| define('CHECK_BOOLEAN',			'#^[01]{1}$#');					//0 
 defined('CHECK_DATETIME')			|| define('CHECK_DATETIME',			'#^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}(:[0-9]{2})?$#'); //datetime : 0000-00-00 00:00 (les secondes sont optionnelles)
 defined('CHECK_EMAIL')				|| define('CHECK_EMAIL',			'#^[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,4}$#');	//eMail
 defined('CHECK_EMAIL_APOSTROPHE')	|| define('CHECK_EMAIL_APOSTROPHE',	'#^[\'_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,4}$#');	//eMail
-defined('CHECK_ALPHA_SIMPLE')		|| define('CHECK_ALPHA_SIMPLE',		'#^[_\.0-9A-Za-z- ]+$#');		//alphanumérique simple (chifre + minuscules + _ . - [espace]
+defined('CHECK_ALPHA_CODE')			|| define('CHECK_ALPHA_CODE',		'#^[_\.A-Za-z-]+$#');			//alpha de codage (majuscules + minuscules + _ . -
+defined('CHECK_ALPHA_SIMPLE')		|| define('CHECK_ALPHA_SIMPLE',		'#^[_\.0-9A-Za-z- ]+$#');		//alphanumérique simple (chiffre + minuscules + _ . - [espace]
 defined('CHECK_ALPHA_NOMS')			|| define('CHECK_ALPHA_NOMS',		'/^[[:alpha:]|àéèêëïôöûüç\\\\\' -]+$/');	//majuscules/minuscules/accents/espace/apostrophe/tiret
 defined('CHECK_FILE_NAME')			|| define('CHECK_FILE_NAME',		'#^[_\.0-9A-Za-z-/]+$#');		//compatible nommage des fichiers
 defined('CHECK_URL')				|| define('CHECK_URL',				'@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS');	//une url (http://mathiasbynens.be/demo/url-regex)
@@ -91,7 +92,7 @@ class UniversalField {
 	private $_idztitre = '';		//id du DIV de la zone de titre
 	private $_idzchamp = '';		//id du DIV de la zone de champ
 
-	private $_MATCHES = array('REQUIRED', 'REQUIRED_SELECTION', 'NUMERIC', 'NOT_ZERO', 'CHECK_INTEGER_1OU2', 'CHECK_FLOAT', 'CHECK_FLOAT_2DEC', 'CHECK_INTEGER_8', 'CHECK_INTEGER', 'CHECK_DOLLARS', 'CHECK_MONNAIE', 'CHECK_INTEGER_SPACED', 'CHECK_UNSIGNED_INTEGER', 'CHECK_SIGNED_INTEGER', 'CHECK_BOOLEAN', 'CHECK_DATETIME', 'CHECK_INTEGER_4', 'CHECK_EMAIL', 'CHECK_EMAIL_APOSTROPHE', 'CHECK_ALPHA_SIMPLE', 'CHECK_ALPHA_NOMS', 'CHECK_FILE_NAME', 'CHECK_URL', 'CHECK_IPV4', 'CHECK_MAC', 'CHECK_SHA1', 
+	private $_MATCHES = array('REQUIRED', 'REQUIRED_SELECTION', 'NUMERIC', 'NOT_ZERO', 'CHECK_INTEGER_1OU2', 'CHECK_FLOAT', 'CHECK_FLOAT_2DEC', 'CHECK_INTEGER_8', 'CHECK_INTEGER', 'CHECK_DOLLARS', 'CHECK_MONNAIE', 'CHECK_INTEGER_SPACED', 'CHECK_UNSIGNED_INTEGER', 'CHECK_SIGNED_INTEGER', 'CHECK_BOOLEAN', 'CHECK_DATETIME', 'CHECK_INTEGER_4', 'CHECK_EMAIL', 'CHECK_EMAIL_APOSTROPHE', 'CHECK_ALPHA_CODE', 'CHECK_ALPHA_SIMPLE', 'CHECK_ALPHA_NOMS', 'CHECK_FILE_NAME', 'CHECK_URL', 'CHECK_IPV4', 'CHECK_MAC', 'CHECK_SHA1', 
 	'UPPERCASE', 'LOWERCASE', 'WORDSCASE', 'FIRST-LETTER', 'FIRST-LETTER-ONLY', 'TRIM', 'NOSPACE', 'NODOUBLESPACE', 'USD', 'EUR', 'GBP', 'MILLE_SPACED');
 
 	//--------------------------------------
@@ -300,6 +301,7 @@ class UniversalField {
 			'UFC_DATETIME'					=> 'Format date heure attendu : yyyy-mm-jj hh:mm:ss',
 			'UFC_EMAIL'						=> 'eMail attendue',
 			'UFC_EMAIL_APOSTROPHE'			=> 'eMail attendue (apostrophe autorisée)',
+			'UFC_ALPHA_CODE'				=> 'Caractères de codage attendus',
 			'UFC_ALPHA_SIMPLE'				=> 'Caractères alphanumériques attendus',
 			'UFC_ALPHA_NOMS'				=> 'Caractères alphanumériques accentués attendus',
 			'UFC_FILE_NAME'					=> 'Caractères compatibles avec nomage de fichiers attendus',
@@ -309,7 +311,7 @@ class UniversalField {
 			'UFC_SHA1'						=> '40 caractères hexadécimaux attendus',
 			'UFC_MAJ_VERROUILLEES'			=> 'Attention, les majuscules sont verrouilllées !',
 			'UFC_FICHIER_INEXISTANT'		=> 'Fichier inexistant&hellip;',
-			'UFC_TYPE_FICHIER_NON_AUTORISE'	=> 'Ce type de fichier n\'est pas autorisé. Sont autorisés : ',
+			'UFC_TYPE_FICHIER_NON_AUTORISE'	=> 'Type de fichier non autorisé. Sont autorisés : ',
 			'UFC_NOM_FICHIER_NON_VALIDE'	=> 'Nom de fichier non valide.',
 			'UFC_POIDS_FICHIER_MOINS_DE'	=> 'Votre fichier doit faire moins de ',
 			'UFC_UPLOAD_MAX_FILE_SIZE_INI'	=> 'Le poids du fichier dépasse celui précisé par la directive upload_max_filesize du fichier php.ini',
@@ -319,9 +321,11 @@ class UniversalField {
 			'UFC_DOSSIER_TEMP_MANQUANT'		=> 'Un dossier temporaire est manquant',
 			'UFC_ECHEC_ECRITURE_DISQUE'		=> 'Échec de l\'écriture du fichier sur le disque',
 			'UFC_ECHEC'						=> 'Échec&hellip;',
-			'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!'
+			'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
+			'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
+			'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)'
 		);
-		return sprintf($libelles[$mnemo], $param1);
+		return vsprintf($libelles[$mnemo], $params);
 	}
 
 	//hydratation des données : c'est à dire le remplissage des propriétés de l'objet
@@ -352,6 +356,110 @@ class UniversalField {
 		$this->_setIdzchamp($this->_idField);
 	}
 
+	//tests réalisés sur une entrée de fichier $_FILES
+	private function _testFile($file_error, $file_name, $file_tmp_name, $file_type) {
+		switch($file_error) {
+			//Valeur : 0; Aucune erreur, le fichier a bien été uploadé
+			case UPLOAD_ERR_OK:
+				// si pas d'erreur on fait des test supplementaires
+				// test fichier vide
+				if (!file_exists($file_tmp_name)) {
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_FICHIER_INEXISTANT');
+					return;
+				}
+				//construction de la liste des extensions autorisées
+				$extensions_autorisees = array_unique(array_column($this->complement(), 0));
+				//test si l'extension du fichier est autorisée
+				$extension = '.'.getExtension($file_name);
+				if (!in_array($extension, $extensions_autorisees)) {
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_TYPE_FICHIER_NON_AUTORISE').implode(', ', $extensions_autorisees);
+					return;
+				}
+				//test si le fichier est autorisé (test sur le type mime)
+				if (!isset($this->complement()[$file_type])) {
+					//construction de la liste des extensions autorisées
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_TYPE_FICHIER_NON_AUTORISE').implode(', ', $extensions_autorisees);
+					return;
+				}
+				//plus sécurisé, test maintenant sur le fichier lui-même (car le test précedent fonctionne si on change d'extention du fichier)
+				//ATTENTION : pour pouvoir utiliser la classe "finfo" il faut que l'extention "extension=php_fileinfo.dll" doit activée dans php.ini
+				$finfo = new finfo(FILEINFO_MIME);	
+				$mime = $finfo->file($file_tmp_name);
+				$dummy = explode(';', trim($mime));
+				if (!isset($this->complement()[$dummy[0]])) {
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_TYPE_FICHIER_NON_AUTORISE').implode(', ', $extensions_autorisees);
+					return;
+				}
+				//vérifie sur le nom du fichier ne comporte pas le caractère null ni, tant qu'à faire, aucun autre caractère de contrôle ou slashe et backslashe. 
+				if (preg_match('#[\x00-\x1F\x7F-\x9F/\\\\]#', $file_name)) {
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_NOM_FICHIER_NON_VALIDE');
+					return;
+				}
+				//on vérifie la taille du fichier
+				//comparaison par rapport à la taille choisie et positionnée dans complement() (et < à 2Mo)
+				$taille_max = $this->complement()[$file_type][1];
+				if (filesize($file_tmp_name) > $taille_max) {
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_POIDS_FICHIER_MOINS_DE').($taille_max / 1000).' Ko !';
+					return;
+				}
+				return;					
+			//Valeur : 1; Le fichier excède le poids autorisé par la directive upload_max_filesize de php.ini (2M par défaut)
+			//"The uploaded file exceeds the upload_max_filesize directive in php.ini";
+			case UPLOAD_ERR_INI_SIZE:  
+				$this->_erreur = true;
+				$this->_liberreur = $this->getLib('UFC_UPLOAD_MAX_FILE_SIZE_INI').' ('.ini_get('upload_max_filesize').')';
+				return;
+			//Valeur : 2; Le fichier excède le poids autorisé par le champ MAX_FILE_SIZE s'il a été donné (marche pas ici)
+			//"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+			case UPLOAD_ERR_FORM_SIZE:
+				$this->_erreur = true;
+				$this->_liberreur = $this->getLib('UFC_UPLOAD_MAX_FILE_SIZE_FORM').' ('.$file_error.' Ko)';
+				return;
+			//Valeur : 3; Le fichier n'a été uploadé que partiellement
+			//"The uploaded file was only partially uploaded"
+			case UPLOAD_ERR_PARTIAL:
+				$this->_erreur = true;
+				$this->_liberreur = $this->getLib('UFC_IMAGE_PARTIEL_CHARGEE');
+				return;
+			//Valeur : 4; Aucun fichier n'a été uploadé
+			//"No file was uploaded";
+			case UPLOAD_ERR_NO_FILE:
+				//on ne bloque pas si le champ n'a pas été saisi
+				if ((!empty($this->_testMatches)) && (in_array('REQUIRED', $this->_testMatches))) {
+					$this->_erreur = true;
+					$this->_liberreur = $this->getLib('UFC_AUCUN_FICHIER_TELECHARGE');
+				}
+				return; 
+			//Pas de 5, ne pas demander pourquoi ^^ (voir doc PHP - http://php.net/manual/fr/features.file-upload.errors.php)
+			//Valeur : 6. Un dossier temporaire est manquant. Introduit en PHP 5.0.3.
+			//"Missing a temporary folder"
+			case UPLOAD_ERR_NO_TMP_DIR:
+				$this->_erreur = true;
+				$this->_liberreur = $this->getLib('UFC_DOSSIER_TEMP_MANQUANT');
+				return;
+			//Valeur : 7. Échec de l'écriture du fichier sur le disque. Introduit en PHP 5.1.0.
+			//"Failed to write file to disk"
+			case UPLOAD_ERR_CANT_WRITE:
+				$this->_erreur = true;
+				$this->_liberreur = $this->getLib('UFC_ECHEC_ECRITURE_DISQUE');
+				return;
+			//Valeur : 8. Une extension PHP a arrêté l'envoi de fichier. PHP ne propose aucun moyen de déterminer quelle extension est en cause. 
+			//"File upload stopped by extension"
+			case UPLOAD_ERR_EXTENSION:
+				$this->_erreur = true;
+				$this->_liberreur = $this->getLib('UFC_ECHEC');
+				return;
+			default:
+				return;
+		}
+	}
+
 	//test du champ selon les criteres choisis
 	public function test() {
 		//on commence par faire un relevé du POST
@@ -360,107 +468,30 @@ class UniversalField {
 		//traitement des input de type 'file'
 		if ($this->inputType() == 'file') {
 			//on fait des vérifications non pas sur le $_POST mais sur $_FILES
-			// traitement des erreurs renvoyées par PHP (pas d'erreur = 0)
-			switch($_FILES[$this->postName()]['error']) {
-				//Valeur : 0; Aucune erreur, le fichier a bien été uploadé
-				case UPLOAD_ERR_OK:
-					// si pas d'erreur on fait des test supplementaires
-					// test fichier vide
-					if (!file_exists($_FILES[$this->postName()]['tmp_name'])) {
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_FICHIER_INEXISTANT');
-						return;
-					}
-					//construction de la liste des extensions autorisées
-					$extensions_autorisees = array_unique(array_column($this->complement(), 0));
-					//test si l'extension du fichier est autorisée
-					$extension = '.'.getExtension($_FILES[$this->postName()]['name']);
-					if (!in_array($extension, $extensions_autorisees)) {
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_TYPE_FICHIER_NON_AUTORISE').implode(', ', $extensions_autorisees);
-						return;
-					}
-					//test si le fichier est autorisé (test sur le type mime)
-					if (!isset($this->complement()[$_FILES[$this->postName()]['type']])) {
-						//construction de la liste des extensions autorisées
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_TYPE_FICHIER_NON_AUTORISE').implode(', ', $extensions_autorisees);
-						return;
-					}
-					//plus sécurisé, test maintenant sur le fichier lui-même (car le test précedent fonctionne si on change d'extention du fichier)
-					//ATTENTION : pour pouvoir utiliser la classe "finfo" il faut que l'extention "extension=php_fileinfo.dll" doit activée dans php.ini
-					$finfo = new finfo(FILEINFO_MIME);	
-					$mime = $finfo->file($_FILES[$this->postName()]['tmp_name']);
-					$dummy = explode(';', trim($mime));
-					if (!isset($this->complement()[$dummy[0]])) {
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_TYPE_FICHIER_NON_AUTORISE').implode(', ', $extensions_autorisees);
-						return;
-					}
-					//vérifie sur le nom du fichier ne comporte pas le caractère null ni, tant qu'à faire, aucun autre caractère de contrôle ou slashe et backslashe. 
-					if (preg_match('#[\x00-\x1F\x7F-\x9F/\\\\]#', $_FILES[$this->postName()]['name'])) {
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_NOM_FICHIER_NON_VALIDE');
-						return;
-					}
-				    //on vérifie la taille du fichier
-					//comparaison par rapport à la taille choisie et positionnée dans complement() (et < à 2Mo)
-					$taille_max = $this->complement()[$_FILES[$this->postName()]['type']][1];
-					if (filesize($_FILES[$this->postName()]['tmp_name']) > $taille_max) {
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_POIDS_FICHIER_MOINS_DE').($taille_max / 1000).' Ko !';
-						return;
-					}
-					return;					
-				//Valeur : 1; Le fichier excède le poids autorisé par la directive upload_max_filesize de php.ini (2M par défaut)
-				//"The uploaded file exceeds the upload_max_filesize directive in php.ini";
-				case UPLOAD_ERR_INI_SIZE:  
-					$this->_erreur = true;
-					$this->_liberreur = $this->getLib('UFC_UPLOAD_MAX_FILE_SIZE_INI').' ('.ini_get('upload_max_filesize').')';
-					return;
-				//Valeur : 2; Le fichier excède le poids autorisé par le champ MAX_FILE_SIZE s'il a été donné (marche pas ici)
-				//"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
-				case UPLOAD_ERR_FORM_SIZE:
-					$this->_erreur = true;
-					$this->_liberreur = $this->getLib('UFC_UPLOAD_MAX_FILE_SIZE_FORM').' ('.$_FILES[$this->postName()]['error'].' Ko)';
-			        return;
-				//Valeur : 3; Le fichier n'a été uploadé que partiellement
-				//"The uploaded file was only partially uploaded"
-				case UPLOAD_ERR_PARTIAL:
-					$this->_erreur = true;
-					$this->_liberreur = $this->getLib('UFC_IMAGE_PARTIEL_CHARGEE');
-					return;
-				//Valeur : 4; Aucun fichier n'a été uploadé
-				//"No file was uploaded";
-		        case UPLOAD_ERR_NO_FILE:
-					//on ne bloque pas si le champ n'a pas été saisi
-					if ((!empty($this->_testMatches)) && (in_array('REQUIRED', $this->_testMatches))) {
-						$this->_erreur = true;
-						$this->_liberreur = $this->getLib('UFC_AUCUN_FICHIER_TELECHARGE');
-					}
-				    return; 
-				//Pas de 5, ne pas demander pourquoi ^^ (voir doc PHP - http://php.net/manual/fr/features.file-upload.errors.php)
-				//Valeur : 6. Un dossier temporaire est manquant. Introduit en PHP 5.0.3.
-				//"Missing a temporary folder"
-				case UPLOAD_ERR_NO_TMP_DIR:
-					$this->_erreur = true;
-					$this->_liberreur = $this->getLib('UFC_DOSSIER_TEMP_MANQUANT');
-		            return;
-				//Valeur : 7. Échec de l'écriture du fichier sur le disque. Introduit en PHP 5.1.0.
-				//"Failed to write file to disk"
-			    case UPLOAD_ERR_CANT_WRITE:
-					$this->_erreur = true;
-					$this->_liberreur = $this->getLib('UFC_ECHEC_ECRITURE_DISQUE');
-					return;
-				//Valeur : 8. Une extension PHP a arrêté l'envoi de fichier. PHP ne propose aucun moyen de déterminer quelle extension est en cause. 
-				//"File upload stopped by extension"
-			    case UPLOAD_ERR_EXTENSION:
-					$this->_erreur = true;
-					$this->_liberreur = $this->getLib('UFC_ECHEC');
-					return;
-				default:
-					return;
+			//traitement des erreurs renvoyées par PHP (pas d'erreur = 0)
+			//DEBUG_('_FILES', $_FILES);
+			if ($this->postIsTab()) {
+				//cas d'une selection multiple
+				//calcul du nombre de fichiers choisis
+				$nb = count($_FILES[$this->postName()]['error']);
+				for ($i = 0;  $i < $nb;  $i++) {
+					$file_error = $_FILES[$this->postName()]['error'][$i];
+					$file_name = $_FILES[$this->postName()]['name'][$i];
+					$file_tmp_name = $_FILES[$this->postName()]['tmp_name'][$i];
+					$file_type = $_FILES[$this->postName()]['type'][$i];
+					$this->_testFile($file_error, $file_name, $file_tmp_name, $file_type);
+				}
 			}
+			else {
+				//cas d'une selection simple
+				$file_error = $_FILES[$this->postName()]['error'];
+				$file_name = $_FILES[$this->postName()]['name'];
+				$file_tmp_name = $_FILES[$this->postName()]['tmp_name'];
+				$file_type = $_FILES[$this->postName()]['type'];
+				$this->_testFile($file_error, $file_name, $file_tmp_name, $file_type);
+			}
+			//quoi qu'il en soit fin des tests pour un type 'file'
+			return;
 		}
 
 		//suite du traitement
@@ -539,6 +570,9 @@ class UniversalField {
 			}
 			elseif ($test == 'CHECK_EMAIL_APOSTROPHE') {			//email (@ et . et ')
 				if ($this->_value != '') $this->_regex(CHECK_EMAIL_APOSTROPHE, $this->getLib('UFC_EMAIL_APOSTROPHE'));
+			}
+			elseif ($test == 'CHECK_ALPHA_CODE') {	//Mmajuscules + minuscules + "-" + "_" + "."
+				if ($this->_value != '') $this->_regex(CHECK_ALPHA_CODE, $this->getLib('UFC_ALPHA_CODE'));
 			}
 			elseif ($test == 'CHECK_ALPHA_SIMPLE') {	//chiffres + minuscules + espace + "-"
 				if ($this->_value != '') $this->_regex(CHECK_ALPHA_SIMPLE, $this->getLib('UFC_ALPHA_SIMPLE'));

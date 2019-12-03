@@ -20,6 +20,8 @@
 //		- Amélioration "mySqlToDateClair" : renvoie une chaine vide si l'entrée est vide (évite les plantages)
 // 11.10.2017
 //		- Création de la fonction futureDate() qui calcule une date future
+// 10.09.2019
+//		- Création de la fonction checkDateTimeFormat() qui test la validité de saisie d'une date au regard d'un format
 //--------------------------------------------------------------------------
 
 defined('_FORMAT_DATE_SQL_')		|| define('_FORMAT_DATE_SQL_', 'Y-m-d');
@@ -220,6 +222,20 @@ function compareDateTime($date1, $date2, $formatDate)
 		return $arrayRetour;
 	}
 	else return false;
+}
+
+//----------------------------------------------------------------------
+// Test la validité d'une saisie de date au regard d'un format particulier
+// Entree : 
+//		$laDate : date à tester (format texte)
+//		$leFormat : format à tester
+// Retour : 
+//		true : la saisie respecte le format 
+//		false : la saisie ne respecte pas le format
+//----------------------------------------------------------------------
+function checkDateTimeFormat($laDate, $leFormat)
+{
+	return (DateTime::createFromFormat($leFormat, $laDate) !== false);
 }
 
 //----------------------------------------------------------------------

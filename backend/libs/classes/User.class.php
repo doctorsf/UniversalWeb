@@ -1,13 +1,13 @@
 <?php
-//**********************************************************************
+//------------------------------------------------------------------
 // Auteur : Fabrice Labrousse											
 // Classe User														
 // Date : 13.02.2017													
-//**********************************************************************
+//------------------------------------------------------------------
 // éè : UTF-8				
 // Cette classe permet de travailler sur des données utilisateurs issus de la base de données de l'application
 // Elle comprend les méthodes d'authentification et d'identification d'un utilisateur
-//**********************************************************************
+//------------------------------------------------------------------
 
 class User {
 	private $_id;						//ex : fun41
@@ -118,7 +118,7 @@ class User {
 	//---------------------------------------
 	// Modifie la date de dernier acces de l'utilisateur avec l'heure courante + ip courante
 	// Entree : rien
-	// Sortie : rien
+	// Sortie : true si tout s'est bien passé, false sinon
 	//---------------------------------------
 	public function majDernierAcces() {				
 		$res = sqlUsers_updateLastAccess($this->_id, $_SERVER['REMOTE_ADDR']);
@@ -133,7 +133,7 @@ class User {
 	//---------------------------------------
 	// Chargement dans l'objet des informations d'un utilisateur. 
 	// Entree : $uid (uid de l'utilisateur)
-	// Retour : true (annuaire connecté, user existe) / false sinon
+	// Retour : true (annuaire connecté, user existe) / ERREUR_USER_UNKNOWN sinon
 	//---------------------------------------
 	public function chargeUser($uid) {
 		$this->_init();

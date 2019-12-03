@@ -11,7 +11,7 @@ if (in_array($_SERVER['REMOTE_ADDR'], array_merge(array('127.0.0.1', '::1'), _IP
 		echo '<section>';
 			echo '<div class="row">';
 				echo '<div class="col bg-light">';
-					echo '<h1>>> FENETRE DE DEBUGGAGE <<</h1>';
+					echo '<h1>>> FENETRE DE DEBUGGE <<</h1>';
 						DEBUG_PRINT_();
 					echo '</div>';
 			echo '</div>';
