@@ -66,7 +66,7 @@ echo '<body>';
 	// CORPS
 	//-------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="mt-5">';
 
 		//--------------------------------------
 		// TABLEAU

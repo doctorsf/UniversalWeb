@@ -157,13 +157,15 @@ class Form_import_csv extends UniversalForm {
 		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
 		$chaine = '';
 
-		$chaine.= '<h1 class="mt-2">Import CSV</h1>';
-		$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
-			$chaine.= '<fieldset style="border:1px silver solid;padding:1.5rem">';
-				$chaine.= $this->draw($enable);
-			$chaine.= '</fieldset>';
-			$chaine.= '<p class="small">(*) Champ requis (1) Lecture seule</p>';
-		$chaine.= '</form>';
+		$chaine.= '<div class="container-lg px-0">';
+			$chaine.= '<h1 class="mt-2">Import CSV</h1>';
+			$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
+				$chaine.= '<fieldset class="border p-3">';
+					$chaine.= $this->draw($enable);
+				$chaine.= '</fieldset>';
+				$chaine.= '<p class="small">(*) Champ requis (1) Lecture seule</p>';
+			$chaine.= '</form>';
+		$chaine.= '</div>';
 		return $chaine;
 	}
 }

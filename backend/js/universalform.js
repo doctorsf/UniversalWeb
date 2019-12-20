@@ -163,6 +163,19 @@ function uf_justCheckOnUnchecked(field, declencheur) {
 }
 
 //---------------------------------------------------------
+// Décoche la case à cocher "field" si la case à cocher "déclencheur" est cochée
+// Entrée : 
+//		field : id UniversalForm de la case à cocher ciblé
+//		declencheur : id UniversalForm de la checkbox déclencheuse
+//---------------------------------------------------------
+function uf_justUncheckOnCheck(field, declencheur) {
+	var declencheur = 'id' + ucfirst(declencheur);
+	if (document.getElementById(declencheur).checked == true) {
+		uf_uncheck(field);
+	}
+}
+
+//---------------------------------------------------------
 // Coche la case à cocher "field"
 // Entrée : 
 //		field : id UniversalForm de la case à cocher cibléé

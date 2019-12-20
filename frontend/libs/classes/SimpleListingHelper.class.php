@@ -20,6 +20,9 @@
 // 17.05.2019
 //		- Correction manque </th> méthode drawHead
 //		- Ajout du paramètre 'css' aux colonnes
+// 04.12.2019
+//		- Appliqué le CSS aux tags <th> et <td> (drawBody)
+//		- Viré les propriétés HTML "width" et "align" depréciés en HTML 5 et remplacé par du CSS
 //--------------------------------------------------------------------------
 
 class SimpleListingHelper {
@@ -146,8 +149,8 @@ class SimpleListingHelper {
 		$tabUrl = parse_url($leLienColonne);
 		$possedeParams = (isset($tabUrl['query']));
 		foreach($cols as $colonne) {
-			$class = trim('text-'.$colonne['align'].' '.$colonne['css']);
-			echo '<th scope="col" class="'.$class.'" width="'.$colonne['size'].'%">';
+			$class = trim('text-'.$colonne['align'].' uw-w'.$colonne['size'].' '.$colonne['css']);
+			echo '<th scope="col" class="'.$class.'">';
 			if ($colonne['tri'] != '') {
 				if ($colonne['title'] != '') {
 					echo '<span data-toggle="tooltip" title="'.$colonne['title'].'">';
@@ -199,9 +202,7 @@ class SimpleListingHelper {
 			echo '<tr'.$couleur.'>';
 			foreach($cols as $indiceCol => $colonne) {
 				($colonne['header']) ? $tag = 'th scope="row"' : $tag = 'td';
-				//supprimé la taille de la colonne pour permettre à du code javascript de la modifier en drag & drop
-				//echo '<td width="'.$colonne['size'].'%" align="'.$colonne['align'].'">';
-				echo '<'.$tag.' align="'.$colonne['align'].'">';
+				echo '<'.$tag.' class="'.trim('text-'.$colonne['align'].' '.$colonne['css']).'">';
 					$fonction = 'Col_'.$indiceCol;
 					if (function_exists($fonction)) {call_user_func($fonction, $ligne, $page);}
 				echo '</td>';

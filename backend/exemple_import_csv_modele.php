@@ -55,13 +55,15 @@ $totalLignes = getListe($tri, $sens, $donnees) ;
 
 //affichage du nombre de lignes trouvés
 //--------------------------------------
+echo '<div class="container-lg px-0 mt-5">';
 echo '<p class="lead">Structure du fichier d\'import CSV attendue</p>';
 
 //affichage du tableau
 //--------------------------------------
-echo '<table class="table table-hover table-striped">';	//table-responsive table-striped table-sm 
+echo '<table class="table table-hover table-striped table-responsive">';	// table-striped table-sm 
 	//affichage de l'entete
 	SimpleListingHelper::drawHead($cols, $tri, $sens);
 	//affichage du corps du tableau : donnees
 	SimpleListingHelper::drawBody($cols, $donnees, $page);
-echo'</table>';
+echo '</table>';
+echo '</div>';

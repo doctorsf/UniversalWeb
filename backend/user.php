@@ -72,16 +72,16 @@ echo writeHTMLHeader($titrePage, $description, $motsCle, $canonical);
 echo '<body>';
 	echo '<div class="container-fluid">';
 
-	/*--------------------------------------*/
-	/* HEADER								*/
-	/*--------------------------------------*/
+	//--------------------------------------
+	// HEADER
+	//--------------------------------------
 	include_once(_BRIQUE_HEADER_);
 
-	/*--------------------------------------*/
-	/* CORPS								*/
-	/*--------------------------------------*/
+	//--------------------------------------
+	// CORPS
+	//--------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="mt-5">';
 
 		echo '<div class="row">';
 			echo '<div class="col">';

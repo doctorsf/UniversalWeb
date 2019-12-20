@@ -655,3 +655,30 @@ V3.17.0.0 (en cours)
 4. Correction bug script de démonstration exemple_import_csv.php ligne 170 => remplacé continue par break pour compatibilté avec PHP 7.3 (sinon plante)
 5. Amélioration de la page info_systeme.php pour utilisation portables
 6. Backend -> Ajouts icones sur menu administration
+
+-----------------
+V3.18.0.0 (en cours)
+-----------------
+1. Création et intrégration du fichier universalweb.css (+fonctions.inc.php)
+2. SimpleListingHelper
+	- Appliqué le CSS aux tags <th> et <td> (drawBody) (04.12.2019)
+	- Viré les propriétés HTML "width" et "align" depréciés en HTML 5 et remplacé par du CSS (04.12.2019)
+3. Ajout d'icones supplémentaires sur les message d'alerte founis par riseErrorMessage, riseWarningMessage et riseInfoMessage (fonctions.inc.php)
+4. Ajout de fonctions dans les fichiers de langue
+	- existeLib() test l'existence d'un libellé de langue
+ 	- getLLib() transforme tous les paramètres en minuscules avant de traduire
+	- getULib() transforme tous les paramètres en majuscules avant de traduire
+5. Ajout fonction javascript uf_justUncheckOnCheck() (fichiers universalform.js et universalform.min.js)
+6. Amélioration de la responsivité des exemples de formulaires et listings (valable seulement depuis Bootstrap 4.4.1)
+7. Classe SqlSimple : ajout du paramètre debug à la classe existValeur et existValeurAilleurs (13.12.2019)
+8. UniversalForm en version 3.17.0 (13.12.2019)
+	- Ajout de la propriété "custom" pour le composant "switch" (switch customisé en check et radio)
+	- Positionnement systématique du focus sur le premier champ en erreur (le focus par défaut est mémorisé puis repositioné lorsqu'il n'y a plus d'erreurs)
+9. Classe PageNavigator
+	- correction bug _drawStandard() en cas de path inexistant (15.12.2019) 
+	- donné numéro de version V2.2.2
+10. Classe Fpdf
+	- Méthode MultiCell améliorée le (06.11.2017). Elle renvoie maintenant le nombre de lignes écrites dans la cellule Par ajout de la variable $nbLines. Avant la méthode ne renvoyait rien.
+	- Ajout constantes Fpdf::VERSION et Fpdf::COPYRIGHT
+11. Ajout infos des classe Fpdf et PageNavigator dans backend/info_systeme.php
+12. Amélioration Input

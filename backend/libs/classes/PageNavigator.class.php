@@ -14,6 +14,7 @@
 // 15.11.2017 : Correction bug si $nb_lignes_par_page == 0 on avait une division par zéro
 // 22.11.2017 : Modification du constructeur. Il fait maintenant appel à des setters puis à la méthode privée _build()
 // 10.01.2018 : correction _drawStandard() pour compatibilité PHP 7.2.0 fonction count()
+// 15.12.2019 : correction _drawStandard() si $path n'existait pas (ex //index.php)
 //------------------------------------------------------------------
 // Affiche et gére une navigation par pages
 //   de la forme << Prec. | Page : 1 2 3 .. 9 | Suiv. >>
@@ -87,6 +88,8 @@ class PageNavigator {
 								'info' => '#2aabd2',
 								'link' => 'transparent',
 								'secondary' => '#ccc');
+
+	const VERSION = 'v2.2.2 (2019-12-15)';
 
 	const SCHEMA_STANDARD = 1;								//ex : /fr/photos.php?data=xxx&page=y (ici indicePage y = null)
 	const SCHEMA_REWRITTE = 2;								//ex : /fr/photos-xxx-y-blabla.htm	 (ici indicePage y = 3)
@@ -227,7 +230,7 @@ class PageNavigator {
 	//------------------------------------------------------------------
 	private function _drawStandard() {
 		$tabUrl = parse_url($this->_url);
-		$path = $tabUrl['path'];
+		$path = (isset($tabUrl['path'])) ? $tabUrl['path'] : '';
 		$query = (isset($tabUrl['query'])) ? $tabUrl['query'] : '';
 		$query = explode('&', $query);
 

@@ -345,7 +345,7 @@ $_CIVILITE = array('', 'Mr.', 'Ms.', 'Miss', 'Unknown');
 //------------------------------------------------------------------
 // Construction d'une chaine avec des paramètres passés en option
 // Entrée :
-//		$indice : indice du template de la chaine dans $_LIBELLE
+//		$indice : indice du template de la chaine dans $_LIBELLES
 //		$param1 : paramètre 1 de remplacement (facultatif)
 //		$param2 : paramètre 2 de remplacement (facultatif)
 //		$param3 : paramètre 3 de remplacement (facultatif)
@@ -356,13 +356,43 @@ $_CIVILITE = array('', 'Mr.', 'Ms.', 'Miss', 'Unknown');
 //		getLib('PREF_FILMS_ADD', 30)
 //		donne: Ajoutez ce titre à la liste de vos 30 films préférés
 //------------------------------------------------------------------
-function getLib($indice, $param1='', $param2='', $param3='', $param4='', $param5='')
-{
+function getLib($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
 	global $_LIBELLES;
 	$chaine = sprintf($_LIBELLES[$indice], $param1, $param2, $param3, $param4, $param5);
 	if ($chaine) return $chaine; else return 'MISSING TEXT';
 }
-function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $param5='')
-{
+
+function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
 	return '<span class="text-uppercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+}
+
+function getLLib($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
+	$param1 = utf8_strtolower($param1);
+	$param2 = utf8_strtolower($param2);
+	$param3 = utf8_strtolower($param3);
+	$param4 = utf8_strtolower($param4);
+	$param5 = utf8_strtolower($param5);
+	return getLib($indice, $param1, $param2, $param3, $param4, $param5);
+}
+
+function getULib($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
+	$param1 = utf8_strtoupper($param1);
+	$param2 = utf8_strtoupper($param2);
+	$param3 = utf8_strtoupper($param3);
+	$param4 = utf8_strtoupper($param4);
+	$param5 = utf8_strtoupper($param5);
+	return getLib($indice, $param1, $param2, $param3, $param4, $param5);
+}
+
+//------------------------------------------------------------------
+// Renseigne si un libellé existe
+//------------------------------------------------------------------
+// Entrée 
+//		$indice : indice du template de la chaine dans $_LIBELLES
+// Retour
+//		true / false
+//------------------------------------------------------------------
+function existeLib($indice) {
+	global $_LIBELLES;
+	return isset($_LIBELLES[$indice]);
 }

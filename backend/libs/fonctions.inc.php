@@ -82,6 +82,7 @@ function writeHtmlHeader($titre, $description, $motsCle, $canonical='')
 	$chaine.= '<link rel="stylesheet" href="'._FONT_AWSOME_CSS_.'" />';
 	$chaine.= '<link rel="stylesheet" href="'._BOOTSTRAP_CSS_.'" />';
 	//la CSS de l'appli a la priorité sur toutes les autres CSS
+	$chaine.= '<link rel="stylesheet" href="'._CSS_.'universalweb.css" />';
 	$chaine.= '<link rel="stylesheet" href="'._CSS_.'styles.css" />';
 
 	//Chemin canonique du script
@@ -119,7 +120,6 @@ function writeHtmlFooter($scriptSup='', $fonctionsJquery='')
 	//-----------------
 	$chaine.= '<script>';
 	$chaine.= '$(document).ready(function () {';
-	//activation tooltip bootstrap
 	//activation tooltip bootstrap (avec initialisation 800ms a l'affichage et 100 à la disparition)
 	$chaine.= '$("[data-toggle=\'tooltip\']").tooltip({ delay: { show: 800, hide: 100 } });';
 	//fonctions jQuery supplémentaires
@@ -172,19 +172,19 @@ function riseMessage($leMessage)
 //--------------------------------------------------------------------------
 function riseErrorMessage($leMessage)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = $leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = '<span class="fa fa-exclamation-circle mr-2"></span>'.$leMessage;
 	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-danger';
 }
 
 function riseWarningMessage($leMessage)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = $leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = '<span class="fa fa-exclamation-triangle mr-2"></span>'.$leMessage;
 	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-warning';
 }
 
 function riseInfoMessage($leMessage)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = $leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = '<span class="fa fa-info mr-2"></span>'.$leMessage;
 	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-info';
 }
 

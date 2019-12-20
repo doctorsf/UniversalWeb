@@ -204,6 +204,9 @@
 // Version 3.16.0 du 26.11.2019
 //		- Ajout du composant "switch"
 //		- Ajout des propiétés : min, max, step, pattern, autocomplete et autofocus pour les <input> de type text (UniversalFieldText)
+// Version 3.17.0 du 13.12.2019
+//		- Ajout de la propriété "custom" pour le composant "switch" (switch customisé en check et radio)
+//		- Positionnement systématique du focus sur le premier champ en erreur (le focus par défaut est mémorisé puis repositioné lorsqu'il n'y a plus d'erreurs)
 //==============================================================
 
 //-------------------------------------------------------------------------
@@ -249,9 +252,10 @@ class UniversalForm {
 	private $_idForm;					//id unique du formulaire
 	private $_message = '';				//éventuel message qu'il est possible de faire passer à l'objet
 	private $_ligneEncours = false;		//dessin d'une ligne de champs en cours ?
+	private $_memAutofocus = null;		//mémorise le premier objet du formulaire qui a le focus
 
-	const VERSION = 'v3.16.0 (2019-11-26)';
-	const COPYRIGHT = '&copy;2014-2019 Fabrice Labrousse';
+	const VERSION = 'v3.17.0 (2019-12-13)';
+	const COPYRIGHT = '&copy;2014-2020 Fabrice Labrousse';
 	const CONSULTER = 'consulter';
 	const AJOUTER = 'ajouter';
 	const MODIFIER = 'modifier';
@@ -628,10 +632,37 @@ class UniversalForm {
 	// Méthodes publiques
 	//--------------------------------------
 
+	private function _resetAutofocus() {
+		foreach($this->_lesChamps as $champ) {
+			if ($champ->fieldType() == 'text') $champ->setAutofocus(false);
+		}
+	}
 
 	//initialise le dessin du formulaire
 	public function initDraw() {
+		//reset flag ligne en cours
 		$this->setLigneEncours(false);
+		//recherche du premier champ en autofocus
+		$this->_memAutofocus = null;
+		foreach($this->fields() as $objet) {
+			if (($objet->fieldType() == 'text') && ($objet->autofocus())) {
+				$this->_memAutofocus = $objet;
+				break;
+			}
+		}
+		//et reset de tous les autofocus
+		$this->_resetAutofocus();
+		//recherche d'eventuelles erreurs
+		$uneErreur = false;
+		foreach($this->fields() as $objet) {
+			if (($objet->erreur()) && ($objet->fieldType() == 'text')) {
+				$objet->setAutofocus(true);
+				$uneErreur = true;
+				break;
+			}
+		}
+		if ((!$uneErreur) && ($this->_memAutofocus !== null)) $this->_memAutofocus->setAutofocus(true);
+		//DEBUG_('focus', $this->_memAutofocus->idField());
 	}
 
 	//finalize le dessin du formulaire

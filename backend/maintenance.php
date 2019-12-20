@@ -175,7 +175,7 @@ echo '<body>';
 								echo '<span class="fas fa-trash" data-toggle="tooltip" title="'.getLib('SUPPRIMER_LA_SAUVEGARDE').'"></span>';
 							echo '</a>';
 						}
-						echo '<div class="container">';
+						echo '<div class="container-lg px-0 mt-5">';
 							echo '<h1>'.getLib('RESTORATION_BD').'</h1>';
 							echo '<p class="lead">'.getLib('SAUVEGARDES_LISTE').'</p>';
 							$dirname = _SAUVEGARDE_BASE_; 
@@ -367,7 +367,8 @@ echo '<body>';
 							return $chaine;
 						}
 
-						echo '<div class="container no-horizontal-padding">';
+//						echo '<div class="container">';
+						echo '<div class="container-lg px-0 mt-5">';
 							echo '<div class="row">';
 								echo '<div class="col">';
 									echo '<div class="d-flex flex-row align-items-center">';
@@ -501,7 +502,7 @@ echo '<body>';
 							return $chaine;
 						}
 
-						echo '<div class="container no-horizontal-padding">';
+						echo '<div class="container-lg px-0 mt-5">';
 							echo '<div class="row">';
 								echo '<div class="col">';
 									echo '<div class="d-flex flex-row align-items-center">';

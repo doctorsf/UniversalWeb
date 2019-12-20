@@ -177,10 +177,10 @@ echo '<body>';
 	// CORPS
 	//--------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="mt-5">';
 
 		echo '<div class="row">';
-			echo '<div class="col-12">';
+			echo '<div class="col">';
 				echo '<p class="h1">Liste complexe</p>';
 
 				echo '<div class="row">';

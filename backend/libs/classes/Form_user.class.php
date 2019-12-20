@@ -476,12 +476,14 @@ class Form_user extends UniversalForm {
 		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
 		$chaine = '';
 
-		$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
-			$chaine.= '<fieldset class="border p-3">';
-				$chaine.= $this->draw($enable);
-			$chaine.= '</fieldset>';
-			$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').' (1) '.getLib('LECTURE_SEULE').'</p>';
-		$chaine.= '</form>';
+		$chaine.= '<div class="container-lg px-0">';
+			$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
+				$chaine.= '<fieldset class="border p-3">';
+					$chaine.= $this->draw($enable);
+				$chaine.= '</fieldset>';
+				$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').' (1) '.getLib('LECTURE_SEULE').'</p>';
+			$chaine.= '</form>';
+		$chaine.= '</div>';
 		return $chaine;
 	}
 }

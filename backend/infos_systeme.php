@@ -49,7 +49,7 @@ echo '<body>';
 	// CORPS
 	//--------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="mt-5">';
 
 		$tabUrl = parse_url(_URL_SERVEUR_);
 		$host = $tabUrl['host']; 
@@ -249,6 +249,7 @@ echo '<body>';
 										echo MyClassExists('UniversalCsvImport');
 										echo MyClassExists('UniversalDatabase');
 										echo MyClassExists('Fpdf');
+										echo MyClassExists('PageNavigator');
 										echo '<h3 class="mt-3 mb-0">UniversalWeb</h3>';
 										echo '<p class="lead">(frontend)</p>';
 										echo MyFrontendClassExists('UniversalForm');
@@ -257,6 +258,8 @@ echo '<body>';
 										echo MyFrontendClassExists('UniversalZip');
 										echo MyFrontendClassExists('UniversalCsvImport');
 										echo MyFrontendClassExists('UniversalDatabase');
+										echo MyFrontendClassExists('Fpdf');
+										echo MyFrontendClassExists('PageNavigator');
 									echo '</div>';
 								echo '</div>';
 							echo '</div>';

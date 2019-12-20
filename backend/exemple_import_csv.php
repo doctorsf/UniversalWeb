@@ -117,7 +117,6 @@ echo '<body>';
 	//--------------------------------------
 	echo '<section>';
 	echo '<article>';
-		echo '<div class="container px-0">';
 
 		echo '<div class="row">';
 			echo '<div class="col">';
@@ -207,7 +206,7 @@ echo '<body>';
 			echo '</div>';
 		echo '</div>';
 
-		echo '</div>';
+//		echo '</div>';
 
 	echo '</article>';
 	echo '</section>';

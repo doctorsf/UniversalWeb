@@ -18,7 +18,8 @@ $scriptSup = '';
 $fJquery = '';
 echo writeHTMLHeader($titrePage, '', '');
 
-echo '<body onload="document.getElementById(\'idSaisie\').focus()">';
+//echo '<body onload="document.getElementById(\'idSaisie\').focus()">';
+echo '<body>';
 	echo '<div class="container-fluid">';
 	//--------------------------------------
 	// HEADER								
@@ -30,9 +31,6 @@ echo '<body onload="document.getElementById(\'idSaisie\').focus()">';
 	//--------------------------------------
 	echo '<section>';
 	echo '<article>';
-		//exceptionnellement, on ajoute un nouveau container simple pour centtrer le petit tableau résultat
-		//on supprime les paddings supplémentaires ajouté par le container pour un meilleur rendu sur mobile
-		echo '<div class="container no-horizontal-padding">';
 
 		echo '<div class="row">';
 			echo '<div class="col">';
@@ -113,8 +111,6 @@ echo '<body onload="document.getElementById(\'idSaisie\').focus()">';
 
 			echo '</div>';
 		echo '</div>';
-
-	echo '</div>';
 
 	echo '</article>';
 	echo '</section>';

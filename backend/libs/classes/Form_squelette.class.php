@@ -58,6 +58,8 @@ class Form_squelette extends UniversalForm {
 		//-------------------
 
 		//construction bouton Submit
+		$couleurBouton = 'primary';
+
 		if ($this->getOperation() == self::CONSULTER) {
 			$valueBoutonValidation = getLib('RETOUR');
 			$labelBoutonValidation = '<span class="fas fa-reply mr-2"></span>'.$valueBoutonValidation;
@@ -77,39 +79,46 @@ class Form_squelette extends UniversalForm {
 		elseif ($this->getOperation() == self::SUPPRIMER) {
 			$valueBoutonValidation = getLib('SUPPRIMER');
 			$labelBoutonValidation = '<span class="fas fa-trash mr-3"></span>'.$valueBoutonValidation;
+			$couleurBouton = 'danger';
+		}
+		elseif ($this->getOperation() == self::RETIRER) {
+			$valueBoutonValidation = getLib('RETIRER');
+			$labelBoutonValidation = '<span class="fas fa-recycle mr-3"></span>'.$valueBoutonValidation;
 		}
 
 		$javascript = '';
 		if ($this->getOperation() == self::SUPPRIMER)
-			$javascript = 'onclick="return confirm(\''.addslashes('Etes-vous certain de vouloir supprimer cet article?').'\');"';
+			$javascript = 'onclick="return confirm(\''.getLib('EMBALLAGE_SUPPRIMER_CERTAIN').'\');"';
+		if ($this->getOperation() == self::RETIRER)
+			$javascript = 'onclick="return confirm(\''.getLib('EMBALLAGE_RETIRER_CERTAIN').'\');"';
 		$this->createField('bouton', 'submit', array(
 			'newLine' => true,
 			'dbfield' => 'bouton',
 			'inputType' => 'submit',
 			'decalage' => '',
 			'label' => $labelBoutonValidation,
-			'clong' => 'col-12 col-sm-6 col-md-4 offset-md-3 col-lg-3 offset-lg-6',
+			'clong' => 'mt-5 col-12 col-sm-6 col-md-4 col-lg-3 ml-auto',
 			'llong' => 'col-12',
-			'lclass' => 'btn btn-primary',			//classes graphique du bouton
+			'lclass' => 'btn btn-'.$couleurBouton,			//classes graphique du bouton
 			'javascript' => $javascript,
 			'value' => $valueBoutonValidation
 			));
-		//ajout d'un bouton d'annulation de suppression
-		if (($this->getOperation() == self::SUPPRIMER) || ($this->getOperation() == self::AJOUTER)) {
+		//ajout d'un bouton d'annulation
+		if (($this->getOperation() == self::SUPPRIMER) || ($this->getOperation() == self::RETIRER) || ($this->getOperation() == self::AJOUTER)) {
 			$libelle = '<span class="fas fa-reply mr-3"></span>'.getLib('RETOUR');
-			$javascript = 'onclick="window.history.back()"';
+			$javascript = 'onclick="location.href=\''.echoPageBack().'\'; return false;"';
 			$this->createField('bouton', 'retour', array(
 				'newLine' => false,
 				'inputType' => 'button',
 				'label' => $libelle,
-				'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3',
+				'clong' => 'mt-5 col-12 col-sm-6 col-md-4 col-lg-3',
 				'llong' => 'col-12',
 				'lclass' => 'btn btn-secondary',	//classes graphique du bouton
 				'javascript' => $javascript
 				)); 		
 		}
-		//ajout d'un bouton d'édition si on est en consultation
-		if ($this->getOperation() == self::CONSULTER) {
+		//ajout d'un bouton d'édition si on est en consultation (sauf pour id_emballage <= 0)
+		if (($this->getOperation() == self::CONSULTER) && ($this->_tab_donnees['id_emballage'] > _ID_SYSTEM_)) {
 			$libelle = '<span class="far fa-edit mr-3"></span>'.getLib('EDITER');
 			$adresse = str_replace('consulter', 'modifier', $_SERVER['REQUEST_URI']);
 			$javascript = 'onclick="location.href=\''.$adresse.'\'; return false;"';
@@ -117,7 +126,7 @@ class Form_squelette extends UniversalForm {
 				'newLine' => false,
 				'inputType' => 'button',
 				'label' => $libelle,
-				'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3',
+				'clong' => 'mt-5 col-12 col-sm-6 col-md-4 col-lg-3',
 				'llong' => 'col-12',
 				'lclass' => 'btn btn-secondary',	//classes graphique du bouton
 				'javascript' => $javascript
@@ -132,7 +141,7 @@ class Form_squelette extends UniversalForm {
 				'newLine' => false,
 				'inputType' => 'button',
 				'label' => $libelle,
-				'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3',
+				'clong' => 'mt-5 col-12 col-sm-6 col-md-4 col-lg-3',
 				'llong' => 'col-12',
 				'lclass' => 'btn btn-secondary',	//classes graphique du bouton
 				'javascript' => $javascript
@@ -210,13 +219,15 @@ class Form_squelette extends UniversalForm {
 		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
 		$chaine = '';
 
-		$chaine.= '<h1 class="display-4">Titre</h1>';
-		$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
-			$chaine.= '<fieldset class="border p-4">';
-				$chaine.= $this->draw($enable);
-			$chaine.= '</fieldset>';
-			$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').' (1) '.getLib('LECTURE_SEULE').'</p>';
-		$chaine.= '</form>';
+		$chaine.= '<div class="container-lg px-0 mt-5">';
+			$chaine.= '<h1>Titre</h1>';
+			$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
+				$chaine.= '<fieldset class="border p-4">';
+					$chaine.= $this->draw($enable);
+				$chaine.= '</fieldset>';
+				$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').' (1) '.getLib('LECTURE_SEULE').'</p>';
+			$chaine.= '</form>';
+		$chaine.= '</div>';
 		return $chaine;
 	}
 }

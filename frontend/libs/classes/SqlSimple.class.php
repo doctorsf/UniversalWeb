@@ -15,6 +15,10 @@
 //		correction bug importMany()
 // 12.11.2019
 //		modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
+// 06.12.2019
+//		ajout de la méthode statique updateChamp
+// 13.12.2019
+//		ajout du paramètre debug à la classe existValeur et existValeurAilleurs
 //-----------------------------------------------------------------------
 // Cette classe comporte des méthodes d'acces génériques à une table
 // -------------------------------------
@@ -80,11 +84,14 @@ class SqlSimple {
 	//		Nombre de fois valeur trouvée (0 .. x)
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	static function existValeur($table, $field, $valeur)
+	static function existValeur($table, $field, $valeur, $debug=false)
 	{
 		$requete = "SELECT COUNT(*) nombre FROM ".$table." ";
 		$requete.= "WHERE ".$field." = '".$valeur."'";
-		//DEBUG_('Requete existValeur', $requete);
+		if ($debug) {
+			DEBUG_('Requete', $requete); 
+			return true;
+		}
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $res[0]['nombre'];
@@ -105,12 +112,15 @@ class SqlSimple {
 	//		Nombre de fois valeur trouvée (0 .. x)
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	static function existValeurAilleurs($table, $field, $valeur, $id, $valeurId)
+	static function existValeurAilleurs($table, $field, $valeur, $id, $valeurId, $debug=false)
 	{
 		$requete = "SELECT COUNT(*) nombre FROM ".$table." ";
 		$requete.= "WHERE ".$field." = '".$valeur."' ";
 		$requete.= "AND ".$id." != '".$valeurId."' ";
-		//DEBUG_('Requete existValeurAilleurs', $requete);
+		if ($debug) {
+			DEBUG_('Requete', $requete); 
+			return true;
+		}
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $res[0]['nombre'];
@@ -163,6 +173,35 @@ class SqlSimple {
 	{
 		$requete = "UPDATE ".$table." ";
 		$requete.= "SET ".$champ." = IF(".$champ." = '1', '0', '1') ";
+		$requete.= "WHERE ".$idField." = '".$id."';";
+		if ($debug) {
+			DEBUG_('Requete', $requete); 
+			return true;
+		}
+		$res = executeQuery($requete, $nombre, _SQL_MODE_);
+		if ($res !== false) {
+			return $nombre;
+		}
+		return $res;
+	}
+
+	//----------------------------------------------------------------------
+	// Update d'un champ unique
+	//----------------------------------------------------------------------
+	// Entree :
+	//		$table : nom de la table
+	//		$champ : nom du champ à modifier
+	//		$valeur : valeur que doit recevoir $champ
+	//		$idField : champ de condition WHERE
+	//		$id : valeur de condition WHERE
+	// Retour : 
+	//		nombre de modification effectuées
+	//		false : erreur SQL
+	//----------------------------------------------------------------------
+	static function updateChamp($table, $champ, $valeur, $idField, $id, $debug=false)
+	{
+		$requete = "UPDATE ".$table." ";
+		$requete.= "SET ".$champ." = '".$valeur."' ";
 		$requete.= "WHERE ".$idField." = '".$id."';";
 		if ($debug) {
 			DEBUG_('Requete', $requete); 

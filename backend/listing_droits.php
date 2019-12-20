@@ -339,7 +339,7 @@ echo '<body>';
 	// CORPS								
 	//--------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="mt-5">';
 
 		echo '<div class="row">';
 			echo '<div class="col">';

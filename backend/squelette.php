@@ -29,10 +29,10 @@ echo '<body>';
 	// CORPS
 	//--------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="mt-5">';
 
 		echo '<div class="row">';
-			echo '<div class="col-12">';
+			echo '<div class="col">';
 				echo '<h1>'._APP_TITLE_.'</h1>';
 				echo '<p class="lead text-center">'._APP_TITLE_.'</p>';
 			echo '</div>';

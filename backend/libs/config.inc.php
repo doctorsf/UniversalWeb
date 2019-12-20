@@ -14,7 +14,7 @@ defined('_AUTEUR_')					|| define('_AUTEUR_',					'Auteur');
 defined('_COPYRIGHT_')				|| define('_COPYRIGHT_',				'&copy;');
 defined('_EMAIL_WEBMASTER_')		|| define('_EMAIL_WEBMASTER_',			'');
 defined('_IP_DEVELOPPEMENT_')		|| define('_IP_DEVELOPPEMENT_',			array('xxx.xxx.xxx.xxx', 'xxx.xxx.xxx.xxx'));	//ip développeurs
-defined('_APP_BLOWFISH_')			|| define('_APP_BLOWFISH_',				'uneautrechainedecaractereunique');
+defined('_APP_BLOWFISH_')			|| define('_APP_BLOWFISH_',				'unechainedecaractereunique');
 defined('_RUN_MODE_')				|| define('_RUN_MODE_',					_DEVELOPPEMENT_);		//_DEVELOPPEMENT_ / _PRODUCTION_
 
 //----------------------------------------------------------------------

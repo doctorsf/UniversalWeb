@@ -30,9 +30,6 @@ echo '<body>';
 	//--------------------------------------
 	echo '<section>';
 	echo '<article>';
-		//exceptionnellement, on ajoute un nouveau container simple pour centtrer le petit tableau résultat
-		//on supprime les paddings supplémentaires ajouté par le container pour un meilleur rendu sur mobile
-		echo '<div class="container no-horizontal-padding">';
 
 		echo '<div class="row">';
 			echo '<div class="col">';
@@ -145,8 +142,6 @@ echo '<body>';
 
 			echo '</div>';
 		echo '</div>';
-
-	echo '</div>';
 
 	echo '</article>';
 	echo '</section>';

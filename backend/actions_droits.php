@@ -220,11 +220,12 @@ switch($operation)
 		if ($do != 1) {
 			//création de l'adresse de callback, c'est à dire la page qui sera appelée après validation de la saisie
 			unset($_SESSION[_APP_INPUT_]);
-			$_SESSION[_APP_INPUT_]['form_title'] = 'Nouvelle saisie';
+			$_SESSION[_APP_INPUT_]['form_title'] = getLib('NOUVELLE_SAISIE');
 			$_SESSION[_APP_INPUT_]['callback'] = _URL_ACTIONS_DROITS_.'?operation=valid_'.$operation;
 			$_SESSION[_APP_INPUT_]['champs']['saisie'] = array('type' => 'text', 
 															'label' => 'Saisie', 
 															'testMatches' => array('REQUIRED'),
+															'autofocus' => true, 
 															'value' => '');
 			if (($operation == 'rennivid') || ($operation == 'renfoncid')) {
 				$_SESSION[_APP_INPUT_]['champs']['saisie']['testMatches'][] = 'CHECK_UNSIGNED_INTEGER';
