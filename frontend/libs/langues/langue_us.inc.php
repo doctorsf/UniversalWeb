@@ -63,9 +63,17 @@ $_LIBELLES = array(
 	'UFC_MAX_LENGTH'				=> 'length > %d chars (%d)',
 	'UFC_MIN_LENGTH'				=> 'length < %d chars (%d)',
 
-	/*------------------------------------------*/
-	/* ERREURS									*/
-	/*------------------------------------------*/
+	'PAS_EXPEDITEUR'				=> 'Sender unknown',
+	'EMAIL_EXPEDITEUR_KO'			=> 'Bad sender eMail',
+	'PAS_DESTINATAIRE'				=> 'No recipient',
+	'TROP_DESTINATAIRES'			=> 'Too much recipient! Maximum 3',
+	'PAS_OBJET'						=> 'No subject',
+	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'Bad email for a recipient',
+	'EMAIL_ENVOI_ERREUR'			=> 'Error sending email',
+
+	//------------------------------------------
+	// ERREURS
+	//------------------------------------------
 	'ERREUR'						=> 'Error',
 	'ERREUR_COMMANDE'				=> 'Choice error&hellip;',
 	'ERREUR_ANNUAIRE'				=> 'LDAP Connexion Error',
@@ -75,9 +83,9 @@ $_LIBELLES = array(
 	'ERREUR_SUPPR_USER_X'			=> 'Error while deleting user %s',
 	'ERREUR_SUICIDE'				=> 'It is impossible to delete your own account. Ask another administrator to do this for you...',
 
-	/*------------------------------------------*/
-	/* MOTS / VERBES							*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// MOTS / VERBES
+	//------------------------------------------
 	'BIENVENUE'						=> 'Welcome',
 	'LOGIN'							=> 'Login',
 	'LOGOUT'						=> 'Log out',
@@ -115,17 +123,17 @@ $_LIBELLES = array(
 	'LOG_USER_UNKNOWN'				=> 'Unknow user %s in database : access denied',
 	'LOG_USER_BAD_PASSWORD'			=> 'Bad password for %s',
 
-	/*------------------------------------------*/
-	/* DATES									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// DATES
+	//------------------------------------------
 	'TODAY_IS'						=> 'Today is %s',
 	'DATE_CREATION'					=> 'Creation Date',
 	'DERNIER_ACCES'					=> 'Last Access',
 	'DERNIERE_IP'					=> 'Last known IP',
 
-	/*------------------------------------------*/
-	/* COMPTE									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// COMPTE
+	//------------------------------------------
 	'ACCEDER_MON_COMPTE'			=> 'Access my account',
 	'COMPTE_ACTIF'					=> 'active account',
 	'COMPTE_DESACTIVE'				=> 'unactivated account',
@@ -133,15 +141,15 @@ $_LIBELLES = array(
 	'ACTION_DEMANDEE'				=> 'Action Request',
 	'CODE_VALIDATION'				=> 'Validation Code',
 
-	/*------------------------------------------*/
-	/* DIALOGUES								*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// DIALOGUES
+	//------------------------------------------
 	'CHAMP_REQUIS'					=> 'Required field',
 	'LECTURE_SEULE'					=> 'Read Only',
 
-	/*------------------------------------------*/
-	/* IDENTIFIANT / UTILISATEUR				*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// IDENTIFIANT / UTILISATEUR
+	//------------------------------------------
 	'IDENTIFIANT'					=> 'Id',
 	'IDENTIFIEZ-VOUS'				=> 'Identify yourself',
 	'IDENTIFIANT_UTILISATEUR'		=> 'User id',
@@ -160,9 +168,9 @@ $_LIBELLES = array(
 	'NOM_PRENOM'					=> 'Name Firstname',
 	'NOTES_PRIVEES'					=> 'Private memo',
 
-	/*------------------------------------------*/
-	/* DROITS									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// DROITS
+	//------------------------------------------
 	'ACCES_NON_AUTORISE'			=> 'Access not granted. Contact the administrator !',
 	'GESTION_DES_DROITS'			=> 'Rights Policies',
 	'DROITS_INSUFFISANTS'			=> 'You need to have specific rights to access this functionality.',
@@ -186,16 +194,16 @@ $_LIBELLES = array(
 	'AJOUTER_UN_PROFIL'				=> 'Add a profile',
 	'AJOUTER_UNE_FONC'				=> 'Add a functionality',
 
-	/*------------------------------------------*/
-	/* MOT DE PASSE								*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// MOT DE PASSE
+	//------------------------------------------
 	'MOT_DE_PASSE'					=> 'Password',
 	'MOT_DE_PASSE_RETAPER'			=> 'Re-enter the password',
 	'MOT_DE_PASSE_ERRONE'			=> 'Invalid password',
 
-	/*------------------------------------------*/
-	/* AUTRE									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// AUTRE
+	//------------------------------------------
 	'AUCUNE_REF_TROUVEE'			=> 'No result found',
 	'1_REF_TROUVEE'					=> '1 result found',
 	'X_REF_TROUVEE'					=> '%d results found',

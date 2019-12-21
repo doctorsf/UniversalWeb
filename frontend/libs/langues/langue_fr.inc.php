@@ -63,9 +63,17 @@ $_LIBELLES = array(
 	'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
 	'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)',
 
-	/*------------------------------------------*/
-	/* ERREURS									*/
-	/*------------------------------------------*/
+	'PAS_EXPEDITEUR'				=> 'Pas d\'expéditeur déclaré',
+	'EMAIL_EXPEDITEUR_KO'			=> 'eMail expéditeur non valide',
+	'PAS_DESTINATAIRE'				=> 'Pas de destinaitaire déclaré',
+	'TROP_DESTINATAIRES'			=> 'Trop de destinataires ! 3 maximum autorisés',
+	'PAS_OBJET'						=> 'Pas d\'objet déclaré',
+	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'eMail d\'un destinataire non valide',
+	'EMAIL_ENVOI_ERREUR'			=> 'Erreur lors de l\'envoi du mail',
+
+	//------------------------------------------
+	// ERREURS
+	//------------------------------------------
 	'ERREUR'						=> 'Erreur',
 	'ERREUR_COMMANDE'				=> 'Erreur commande&hellip;',
 	'ERREUR_ANNUAIRE'				=> 'Erreur de connexion à l\'annuaire',
@@ -75,9 +83,9 @@ $_LIBELLES = array(
 	'ERREUR_SUPPR_USER_X'			=> 'Erreur lors de la suppression de l\'utilisateur %s',
 	'ERREUR_SUICIDE'				=> 'Impossible de s\'auto-supprimer. Demandez à un autre administrateur d\'effectuer cette opération pour vous...',
 
-	/*------------------------------------------*/
-	/* MOTS / VERBES							*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// MOTS / VERBES
+	//------------------------------------------
 	'BIENVENUE'						=> 'Bienvenue',
 	'LOGIN'							=> 'Connexion',
 	'LOGOUT'						=> 'Déconnexion',
@@ -115,17 +123,17 @@ $_LIBELLES = array(
 	'LOG_USER_UNKNOWN'				=> 'Utilisateur %s inconnu dans la base de données : accès refusé',
 	'LOG_USER_BAD_PASSWORD'			=> 'Mot de passe érroné pour %s',
 
-	/*------------------------------------------*/
-	/* DATES									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// DATES
+	//------------------------------------------
 	'TODAY_IS'						=> 'Nous sommes le %s',
 	'DATE_CREATION'					=> 'Date création',
 	'DERNIER_ACCES'					=> 'Dernier accès',
 	'DERNIERE_IP'					=> 'Dernière IP connue',
 
-	/*------------------------------------------*/
-	/* COMPTE									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// COMPTE
+	//------------------------------------------
 	'ACCEDER_MON_COMPTE'			=> 'Accéder à son compte',
 	'COMPTE_ACTIF'					=> 'compte actif',
 	'COMPTE_DESACTIVE'				=> 'compte désactivé',
@@ -133,15 +141,15 @@ $_LIBELLES = array(
 	'ACTION_DEMANDEE'				=> 'Action demandée',
 	'CODE_VALIDATION'				=> 'Code de validation',
 
-	/*------------------------------------------*/
-	/* DIALOGUES								*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// DIALOGUES
+	//------------------------------------------
 	'CHAMP_REQUIS'					=> 'Champ requis',
 	'LECTURE_SEULE'					=> 'Lecture seule',
 
-	/*------------------------------------------*/
-	/* IDENTIFIANT / UTILISATEUR				*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// IDENTIFIANT / UTILISATEUR
+	//------------------------------------------
 	'IDENTIFIANT'					=> 'Identifiant',
 	'IDENTIFIEZ-VOUS'				=> 'Identifiez-vous',
 	'IDENTIFIANT_UTILISATEUR'		=> 'Identifiant utilisateur',
@@ -160,9 +168,9 @@ $_LIBELLES = array(
 	'NOM_PRENOM'					=> 'Nom Prénom',
 	'NOTES_PRIVEES'					=> 'Notes privées',
 
-	/*------------------------------------------*/
-	/* DROITS									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// DROITS
+	//------------------------------------------
 	'ACCES_NON_AUTORISE'			=> 'Vous n\'êtes pas autorisé à accéder à cette application. Contactez l\'administrateur !',
 	'GESTION_DES_DROITS'			=> 'Gestion des droits',
 	'DROITS_INSUFFISANTS'			=> 'Vous n\'avez pas les droits nécessaires pour accéder à cette fonctionnalité.',
@@ -186,16 +194,16 @@ $_LIBELLES = array(
 	'AJOUTER_UN_PROFIL'				=> 'Ajouter un profil',
 	'AJOUTER_UNE_FONC'				=> 'Ajouter une fonctionnalité',
 
-	/*------------------------------------------*/
-	/* MOT DE PASSE								*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// MOT DE PASSE
+	//------------------------------------------
 	'MOT_DE_PASSE'					=> 'Mot de passe',
 	'MOT_DE_PASSE_RETAPER'			=> 'Retaper le mot de passe',
 	'MOT_DE_PASSE_ERRONE'			=> 'Mot de passe erroné',
 
-	/*------------------------------------------*/
-	/* AUTRE									*/
-	/*------------------------------------------*/
+	//------------------------------------------
+	// AUTRE
+	//------------------------------------------
 	'AUCUNE_REF_TROUVEE'			=> 'Aucune référence trouvée',
 	'1_REF_TROUVEE'					=> '1 référence trouvée',
 	'X_REF_TROUVEE'					=> '%d références trouvées',

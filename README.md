@@ -657,7 +657,7 @@ V3.17.0.0 (en cours)
 6. Backend -> Ajouts icones sur menu administration
 
 -----------------
-V3.18.0.0 (en cours)
+V3.18.0.0 (20.12.2019)
 -----------------
 1. Création et intrégration du fichier universalweb.css (+fonctions.inc.php)
 2. SimpleListingHelper
@@ -682,3 +682,8 @@ V3.18.0.0 (en cours)
 	- Ajout constantes Fpdf::VERSION et Fpdf::COPYRIGHT
 11. Ajout infos des classe Fpdf et PageNavigator dans backend/info_systeme.php
 12. Amélioration Input
+
+-----------------
+V3.18.1.0 (21.12.2019)
+-----------------
+1. Ajout des traductions manquantes pour les nouveaux libellés de la classe SilentMail dans les fichiers dde langue du frontend
