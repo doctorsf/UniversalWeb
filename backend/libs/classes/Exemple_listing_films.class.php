@@ -17,11 +17,18 @@
 //----------------------------------------
 function fillGenres($defaut)
 {
-	$genres = array('TOUS', 'Western', 'Science-fiction', 'Drame', 'Comédie musicale', 'Horreur', 'Comédie');
+	$genres = array(
+			UniversalListColonne::CMP_ALL => 'Tous les genres' , 
+			'Western' => 'Western', 
+			'Science-fiction' => 'Science-fiction', 
+			'Drame' => 'Drame', 
+			'Comédie musicale' => 'Comédie musicale', 
+			'Horreur' => 'Horreur', 
+			'Comédie' => 'Comédie');
 	$texte = '';
-	foreach($genres as $genre) {
-		($defaut == $genre) ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="'.$genre.'"'.$selected.'>'.$genre.'</option>';
+	foreach($genres as $key => $genre) {
+		($defaut == $key) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.$key.'"'.$selected.'>'.$genre.'</option>';
 	}
 	return $texte;
 }
@@ -42,33 +49,35 @@ class Exemple_listing_films extends UniversalList {
 			'header' => true,
 			'libelle' => 'Titre',	
 			'size' => 35, 
+			'align' => 'left',
+			'title' => 'Titre du film',
+			'titlePos' => '',
 			'tri' => true, 
 			'triSql' => 'titre', 
 			'triSqlSecondaire' => '', 
 			'triLibelle' => 'sur le titre',
-			'sens' => 'ASC',
-			'align' => 'left',
-			'title' => 'Titre du film',
+			'triSens' => 'ASC',
 			'filtre' => true,
 			'filtreType' => 'text',
 			'filtreActif' => 'true',
 			'filtreScope' => UniversalListColonne::MENU,
-			'filtreRange' => UniversalListColonne::TOUT, 
+			'filtreRange' => UniversalListColonne::CMP_ALL, 
 			'filtreValue' => '',
 			'filtreSqlField' => 'titre',
 			'filtreColor' => 'success', 
-			'filtreHelp' => 'Filtre sur le titre'
+			'filtreHelp' => 'Filtre sur le titre',
+			'display' => true
 		));
 
 		$this->createCol('annee', array(
 			'order' => 2,
 			'libelle' => 'Année',
 			'size' => 10, 
+			'align' => 'center',
+			'title' => 'Année de production', 
 			'tri' => true, 
 			'triSql' => 'annee', 
 			'triLibelle' => 'sur l\'année de production',
-			'align' => 'center',
-			'title' => 'Année de production'
 		));
 
 		$this->createCol('real', array(
@@ -82,18 +91,18 @@ class Exemple_listing_films extends UniversalList {
 			'order' => 4,
 			'libelle' => '<span class="fas fa-tv"></span>',	
 			'size' => 5, 
+			'align' => 'center',
+			'title' => 'En couleur',
 			'tri' => true, 
 			'triSql' => 'visuel', 
 			'triSqlSecondaire' => '', 
 			'triLibelle' => 'sur le visuel couleur',
-			'sens' => 'ASC',
-			'align' => 'center',
-			'title' => 'En couleur',
+			'triSens' => 'ASC',
 			'filtre' => true,
 			'filtreType' => 'checkbox',
-			'filtreScope' => array(UniversalListColonne::TOUT, 1),				//scope de valeurs (TOUT est valeur renvoyée si non cochée, 1 est la valeur renvoyée si cochée)(valueInverse, valeur)
-			'filtreRange' => UniversalListColonne::EGAL,						//seul range possible pour un filtre de type checkbox
-			'filtreValue' => UniversalListColonne::TOUT,  						//valeur par défaut (on affiche tout)
+			'filtreScope' => array(UniversalListColonne::CMP_ALL, 1),			//scope de valeurs (CMP_ALL est valeur renvoyée si non cochée, 1 est la valeur renvoyée si cochée)(valueInverse, valeur)
+			'filtreRange' => UniversalListColonne::CMP_EQUAL,					//seul range possible pour un filtre de type checkbox
+			'filtreValue' => UniversalListColonne::CMP_ALL,  					//valeur par défaut (on affiche tout)
 			'filtreSqlField' => 'visuel',
 			'filtreCaption' => '<span class="fas fa-tv"></span>',
 			'filtreColor' => 'danger', 
@@ -105,17 +114,17 @@ class Exemple_listing_films extends UniversalList {
 			'order' => 5,
 			'libelle' => 'Genre',
 			'size' => 25, 
+			'align' => 'left',
+			'title' => 'Genre du film',
 			'tri' => true, 
 			'triSql' => 'genre', 
 			'triLibelle' => 'sur le genre de films',
-			'sens' => 'ASC',
-			'align' => 'left',
-			'title' => 'Genre du film',
+			'triSens' => 'ASC',
 			'filtre' => true,
 			'filtreType' => 'select',
 			'filtreScope' => 'fillGenres',
-			'filtreRange' => UniversalListColonne::EGAL, 
-			'filtreValue' => 'TOUS',
+			'filtreRange' => UniversalListColonne::CMP_EQUAL, 
+			'filtreValue' => UniversalListColonne::CMP_ALL,
 			'filtreSqlField' => 'genre',
 			'filtreCaption' => 'Genre',
 			'filtreColor' => 'primary', 
@@ -133,7 +142,7 @@ class Exemple_listing_films extends UniversalList {
 			'filtreScope' => array(
 							'titre' => 'Titre',
 							'genre' => 'Genre'),
-			'filtreRange' => UniversalListColonne::CONTIENT,
+			'filtreRange' => UniversalListColonne::CMP_CONTENDS,
 			'filtreValue' => array('titre', ''),
 			'filtreColor' => 'primary', 
 			'filtreHelp' => 'Filtre à sources multiples'
@@ -142,7 +151,7 @@ class Exemple_listing_films extends UniversalList {
 		$this->createFiltreExterne('simple', array(
 			'filtreType' => 'search',
 			'filtreScope' => 'titre',
-			'filtreRange' => UniversalListColonne::CONTIENT,
+			'filtreRange' => UniversalListColonne::CMP_CONTENDS,
 			'filtreValue' => '',
 			'filtreColor' => 'danger', 
 			'filtreHelp' => 'Filtre simple'
@@ -151,15 +160,15 @@ class Exemple_listing_films extends UniversalList {
 		$this->createFiltreExterne('alpha', array(
 			'filtreType' => 'none',
 			'filtreScope' => 'titre',
-			'filtreRange' => UniversalListColonne::TOUT,
-			'filtreValue' => 'tous',
+			'filtreRange' => UniversalListColonne::CMP_ALL,
+			'filtreValue' => 'all',
 		));
 
 		$this->createFiltreExterne('datation', array(
 			'filtreType' => 'checkbox',
 			'libelle' => 'Films à partir de 1977',
 			'filtreScope' => 'annee',
-			'filtreRange' => UniversalListColonne::SUPERIEURA,
+			'filtreRange' => UniversalListColonne::CMP_GREATER_THAN,
 			'filtreValue' => '1977',
 			'actif' => false,
 		));

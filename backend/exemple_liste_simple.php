@@ -86,7 +86,7 @@ echo '<body>';
 	// CORPS
 	//--------------------------------------
 	echo '<section>';
-	echo '<article class="mt-5">';
+	echo '<article>';
 
 		echo '<div class="row">';
 			echo '<div class="col">';

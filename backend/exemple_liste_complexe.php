@@ -71,7 +71,7 @@ defined('_ID_LISTING_') || define('_ID_LISTING_', 'lstFilms');
 
 //-------------------------------------
 // Construction du listing
-// unset($_SESSION[_ID_LISTING_]);
+//unset($_SESSION[_ID_LISTING_]);
 //-------------------------------------
 if  ((!isset($_SESSION[_ID_LISTING_])) || ($_SESSION[_ID_LISTING_] == null)) {
 	$_SESSION[_ID_LISTING_] = new Exemple_listing_films();
@@ -102,19 +102,19 @@ $_SESSION[_ID_LISTING_]->getParams();
 //-------------------------------------
 (isset($_GET['do'])) ? $do = MySQLDataProtect($_GET['do']) : $do = 'aucun';
 if ($do != 'aucun') {
-	if ($do == 'tous') {
-		//commence par un chiffre
-		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreRange(UniversalListColonne::TOUT);
+	if ($do == 'all') {
+		//tous les films
+		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreRange(UniversalListColonne::CMP_ALL);
 		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreValue($do);
 	}
 	elseif ($do == '0') {
 		//commence par un chiffre
-		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreRange(UniversalListColonne::COMMENCENUM);
+		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreRange(UniversalListColonne::CMP_BEGINS_BY_NUMBER);
 		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreValue($do);
 	}
 	else {
 		//commence par une lettre
-		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreRange(UniversalListColonne::COMMENCE);
+		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreRange(UniversalListColonne::CMP_BEGINS_BY);
 		$_SESSION[_ID_LISTING_]->getFiltreExterne('alpha')->setFiltreValue($do);
 	}
 }
@@ -177,10 +177,10 @@ echo '<body>';
 	// CORPS
 	//--------------------------------------
 	echo '<section>';
-	echo '<article class="mt-5">';
+	echo '<article>';
 
 		echo '<div class="row">';
-			echo '<div class="col">';
+			echo '<div class="col-12">';
 				echo '<p class="h1">Liste complexe</p>';
 
 				echo '<div class="row">';
@@ -201,8 +201,8 @@ echo '<body>';
 
 						//affichage
 						//TOUS
-						($lettre == 'tous') ? $chaine='<span class="font-weight-bold bg-primary text-white mr-1 px-1">TOUS</span>' : $chaine = '<span class="mr-1 px-1">TOUS</span>';
-						echo '<a class="d-inline-block" href="'.$_SERVER['PHP_SELF'].'?operation=filtreAlpha&do=tous">'.$chaine.'</a>';
+						($lettre == 'all') ? $chaine='<span class="font-weight-bold bg-primary text-white mr-1 px-1">TOUS</span>' : $chaine = '<span class="mr-1 px-1">TOUS</span>';
+						echo '<a class="d-inline-block" href="'.$_SERVER['PHP_SELF'].'?operation=filtreAlpha&do=all">'.$chaine.'</a>';
 						//LETTRES ALPHABET
 						for ($i='A'; $i!='AA'; $i++) {
 							($lettre == $i) ? $chaine='<span class="font-weight-bold bg-primary text-white mr-1 px-1">'.$i.'</span>' : $chaine = '<span class="mr-1 px-1">'.$i.'</span>';

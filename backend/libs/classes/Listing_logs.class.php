@@ -16,10 +16,12 @@ class Listing_logs extends UniversalList {
 	//-------------------------------------
 	protected function construitColonnes() {
 
+		global $_MENU_FILTRE_TEXT;
+
 		//colonne TYPE DE LOG
 		$this->createCol('typelog', array(
 			'order' => 1,
-			'libelle' => 'Type',	
+			'libelle' => getLib('TYPE'),	
 			'size' => 10, 
 			'tri' => true, 
 			'triSql' => 'libellelog', 
@@ -31,8 +33,8 @@ class Listing_logs extends UniversalList {
 			'filtre' => true,
 			'filtreType' => 'select',
 			'filtreScope' => 'sqlLogs_fillSelectTypesTous',
-			'filtreRange' => UniversalListColonne::EGAL, 
-			'filtreValue' => 'TOUS',
+			'filtreRange' => UniversalListColonne::CMP_EQUAL, 
+			'filtreValue' => UniversalListColonne::CMP_ALL,
 			'filtreSqlField' => 'T1.id_log_type',
 			'filtreCaption' => 'Type',
 			'filtreHelp' => getLib('LOG_FILTRE_TYPE')
@@ -41,7 +43,7 @@ class Listing_logs extends UniversalList {
 		//colonne LIBELLE OPERATION
 		$this->createCol('libelle', array(
 			'order' => 2,
-			'libelle' => 'Opération',
+			'libelle' => getLib('OPERATION'),
 			'size' => 70, 
 			'tri' => true, 
 			'triSql' => 'operation', 
@@ -50,8 +52,8 @@ class Listing_logs extends UniversalList {
 			'title' => 'Opération logguée',
 			'filtre' => true,
 			'filtreType' => 'text',
-			'filtreScope' => UniversalListColonne::MENU,
-			'filtreRange' => UniversalListColonne::TOUT, 
+			'filtreScope' => $_MENU_FILTRE_TEXT,					//UniversalListColonne::MENU
+			'filtreRange' => UniversalListColonne::CMP_ALL, 
 			'filtreValue' => '',
 			'filtreSqlField' => 'operation',
 			'filtreHelp' => getLib('LOG_FILTRE_LIBELLE')
@@ -60,7 +62,7 @@ class Listing_logs extends UniversalList {
 		//colonne QUI
 		$this->createCol('qui', array(
 			'order' => 3,
-			'libelle' => 'Utilisateur', 
+			'libelle' => getLib('UTILISATEUR'), 
 			'size' => 10,
 			'tri' => true,
 			'triSql' => 'CONCAT (nom, prenom)',
@@ -69,8 +71,8 @@ class Listing_logs extends UniversalList {
 			'filtre' => true,
 			'filtreType' => 'select',
 			'filtreScope' => 'sqlLogs_fillSelectUtilisateursTous',
-			'filtreRange' => UniversalListColonne::EGAL,
-			'filtreValue' => 'TOUS',
+			'filtreRange' => UniversalListColonne::CMP_EQUAL,
+			'filtreValue' => UniversalListColonne::CMP_ALL,
 			'filtreSqlField' => 'T1.id_user',
 			'filtreCaption' => getLib('UTILISATEUR'),
 			'filtreHelp' => getLib('LOG_FILTRE_USER')
@@ -79,7 +81,7 @@ class Listing_logs extends UniversalList {
 		//colonne QUAND
 		$this->createCol('quand', array(
 			'order' => 4,
-			'libelle' => 'Date', 
+			'libelle' => getLib('DATE'), 
 			'size' => 10, 
 			'title' => getLib('LOG_DATE'),
 			'tri' => true, 
@@ -117,7 +119,7 @@ class Listing_logs extends UniversalList {
 		$requete.= "FROM "._PREFIXE_TABLES_."logs T1 ";																							//T1  : table logs
 		//colonne SITE -> on ramène tous les sites disponibles
 		if ($this->isColonneActive('typelog'))	$requete.= "INNER JOIN "._PREFIXE_TABLES_."logs_types T2 ON T2.id_log_type = T1.id_log_type ";	//T2  : table logs_types
-		if ($this->isColonneActive('qui')) 		$requete.= "INNER JOIN "._PREFIXE_TABLES_."users T3 ON T3.id_user = T1.id_user ";						//T3  : table users
+		if ($this->isColonneActive('qui')) 		$requete.= "INNER JOIN "._PREFIXE_TABLES_."users T3 ON T3.id_user = T1.id_user ";				//T3  : table users
 
 		//----- WHERE -------------
 		$requete.= "WHERE 1 ";

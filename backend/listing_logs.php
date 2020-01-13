@@ -43,6 +43,7 @@ $totalLignes = $_SESSION[_ID_LISTING_]->getData($listing);
 
 //construction de la barre de navigation
 $pn = new PageNavigator($totalLignes, $_SESSION[_ID_LISTING_]->getNbLinesParPage(), 10, $_SESSION[_ID_LISTING_]->getPageEncours());
+$pn->setLangue(_LG_);
 $pn->setPageOff();
 $navigation = $pn->draw();
 
@@ -66,7 +67,7 @@ echo '<body>';
 	// CORPS
 	//-------------------------------------
 	echo '<section>';
-	echo '<article class="mt-5">';
+	echo '<article>';
 
 		//--------------------------------------
 		// TABLEAU

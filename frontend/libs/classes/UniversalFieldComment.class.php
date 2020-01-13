@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'comment' (commentaire)
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldComment extends UniversalField {
@@ -76,11 +76,12 @@ class UniversalFieldComment extends UniversalField {
 			$border = 'border:none;padding:0;';
 		}
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.'">';
 			$valeur = htmlentities(stripslashes($this->value()));
-			$html.= '<div class="form-control h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="text-align:justify;'.$border.'">'.$valeur.'</div>';
+			$html.= '<div class="form-control'.$cheight.' h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="text-align:justify;'.$border.'">'.$valeur.'</div>';
 			$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$valeur.'" />';
 			if ($this->erreur()) $html.= '<p class="form_error" title="'.$this->libErreurHelp().'">'.$this->libErreur().'</p>';
 		$html.= '</div>';
@@ -127,10 +128,11 @@ class UniversalFieldComment extends UniversalField {
 			$border = 'border:none;padding:0;';
 		}
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		$html = '<div id="'.$this->idzchamp().'">';
 			$valeur = htmlentities(stripslashes($this->value()));
-			$html.= '<div class="form-control h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="text-align:justify;'.$border.'">'.$valeur.'</div>';
+			$html.= '<div class="form-control'.$cheight.' h-auto'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" style="text-align:justify;'.$border.'">'.$valeur.'</div>';
 			$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$valeur.'" />';
 			if ($this->erreur()) $html.= '<p class="form_error" title="'.$this->libErreurHelp().'">'.$this->libErreur().'</p>';
 		$html.= '</div>';
@@ -145,6 +147,12 @@ class UniversalFieldComment extends UniversalField {
 			$this->setLiberreur('Paramètre \'lpos\' => \''.$this->lpos().'\' inaproprié pour le champ \''.$this->idField().'\'');
 			$this->setLiberreurHelp('Paramètre \'lpos\' obligatoire. Choisir parmi \'before\' ou \'after\'');
 			$this->setLpos('before');
+		}
+		//test si le paramètre cheight est cohérent
+		if (!in_array($this->cheight(), array('', 'lg', 'sm'))) {
+			$this->setErreur(true);
+			$this->setLiberreur('Paramètre \'cheight\' => \''.$this->cheight().'\' inaproprié pour le champ \''.$this->idField().'\'');
+			$this->setLiberreurHelp('Paramètre \'cheight\' optionnel. Choisir parmi \'sm\' ou \'lg\'');
 		}
 		return $this->erreur();
 	}

@@ -206,8 +206,6 @@ echo '<body>';
 			echo '</div>';
 		echo '</div>';
 
-//		echo '</div>';
-
 	echo '</article>';
 	echo '</section>';
 

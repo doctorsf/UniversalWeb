@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'text'
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldText extends UniversalField {
@@ -183,6 +183,7 @@ class UniversalFieldText extends UniversalField {
 	private function _drawChampInline($enable) {
 		//champ inline
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		($this->autofocus() == true) ? $autofocus = ' autofocus' : $autofocus = '';
 		($this->_multiple) ? $multiple = ' multiple' : $multiple = '';
@@ -219,11 +220,11 @@ class UniversalFieldText extends UniversalField {
 		$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.'">';
 			if ($this->inputType() == 'file') {
 				($this->accept() != '') ? $accept = ' accept="'.$this->accept().'"' : $accept = '';
-				$html.= '<input'.$enable.' type="file" class="form-control-file'.$erreur.$cclass.'" name="'.$postNameTableau.'" id="'.$this->id().'"'.$multiple.$accept.$autofocus.$javascript.'/>';
+				$html.= '<input'.$enable.' type="file" class="form-control-file'.$cheight.$erreur.$cclass.'" name="'.$postNameTableau.'" id="'.$this->id().'"'.$multiple.$accept.$autofocus.$javascript.'/>';
 			}
 			else {
 				$value = 'value="'.htmlspecialchars(stripslashes($this->value()), ENT_COMPAT, 'UTF-8').'"';
-				$html.= '<input'.$maxlength.$spellcheck.$enable.$autocomplete.' type="'.$this->inputType().'" class="form-control'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$value.$autofocus.$javascript.$minMaxStep.$pattern.'/>';
+				$html.= '<input'.$maxlength.$spellcheck.$enable.$autocomplete.' type="'.$this->inputType().'" class="form-control'.$cheight.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$value.$autofocus.$javascript.$minMaxStep.$pattern.'/>';
 			}
 			$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
 		$html.= '</div>';
@@ -299,6 +300,7 @@ class UniversalFieldText extends UniversalField {
 		//champ online
 		($this->autofocus() == true) ? $autofocus = ' autofocus' : $autofocus = '';
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->maxlength() > 0) ? $maxlength = ' maxlength="'.$this->maxlength().'"' : $maxlength = '';
 		($this->_multiple) ? $multiple = ' multiple' : $multiple = '';
 		($this->postIsTab()) ? $postNameTableau = $this->postName().'[]' : $postNameTableau = $this->postName();
@@ -332,11 +334,11 @@ class UniversalFieldText extends UniversalField {
 		$html = '<div id="'.$this->idzchamp().'">';
 			if ($this->inputType() == 'file') {
 				($this->accept() != '') ? $accept = ' accept="'.$this->accept().'"' : $accept = '';
-				$html.= '<input'.$enable.' type="file" class="form-control-file'.$erreur.$cclass.'" name="'.$postNameTableau.'" id="'.$this->id().'"'.$multiple.$accept.$autofocus.$javascript.'/>';
+				$html.= '<input'.$enable.' type="file" class="form-control-file'.$cheight.$erreur.$cclass.'" name="'.$postNameTableau.'" id="'.$this->id().'"'.$multiple.$accept.$autofocus.$javascript.'/>';
 			} 
 			else {
 				$value = 'value="'.htmlspecialchars(stripslashes($this->value()), ENT_COMPAT, 'UTF-8').'"';
-				$html.= '<input'.$maxlength.$spellcheck.$enable.$autocomplete.' type="'.$this->inputType().'" class="form-control'.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$value.$autofocus.$javascript.$minMaxStep.$pattern.'/>';
+				$html.= '<input'.$maxlength.$spellcheck.$enable.$autocomplete.' type="'.$this->inputType().'" class="form-control'.$cheight.$erreur.$cclass.'" name="'.$this->postName().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$value.$autofocus.$javascript.$minMaxStep.$pattern.'/>';
 			}
 			$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
 		$html.= '</div>';
@@ -351,6 +353,12 @@ class UniversalFieldText extends UniversalField {
 			$this->setLiberreur('Paramètre \'lpos\' => \''.$this->lpos().'\' inaproprié pour le champ texte \''.$this->idField().'\'');
 			$this->setLiberreurHelp('Paramètre \'lpos\' obligatoire. Choisir parmi \'before\' ou \'after\'');
 			$this->setLpos('before');
+		}
+		//test si le paramètre cheight est cohérent
+		if (!in_array($this->cheight(), array('', 'lg', 'sm'))) {
+			$this->setErreur(true);
+			$this->setLiberreur('Paramètre \'cheight\' => \''.$this->cheight().'\' inaproprié pour le champ texte \''.$this->idField().'\'');
+			$this->setLiberreurHelp('Paramètre \'cheight\' optionnel. Choisir parmi \'sm\' ou \'lg\'');
 		}
 		//test si le paramètre 'complement' a bien été défini (car obligatoire) dans le cas d'un champ de type 'file'
 		elseif (($this->inputType() == 'file') && (empty($this->complement()))) {

@@ -367,7 +367,6 @@ echo '<body>';
 							return $chaine;
 						}
 
-//						echo '<div class="container">';
 						echo '<div class="container-lg px-0 mt-5">';
 							echo '<div class="row">';
 								echo '<div class="col">';

@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'filtreselect' (select avec label en forme de bouton)
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldFiltreselect extends UniversalField {
@@ -97,6 +97,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 		($this->postIsTab()) ? $postNameTableau = $this->postName().'[]' : $postNameTableau = $this->postName();
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
 		if ($enable != '') $cclass = '';		//annule la personnalisation de la classe du select si champ disabled ou readonly
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		$arrondi = '';
 		if ($this->lpos() == 'before') {
@@ -131,7 +132,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 			//afficher champs "fake"
 			if ($this->_multiple == true) {
 				//afficher champs "fake" <textarea> et <select multiple hidden> à la place du select multiple
-				$html = '<textarea id="'.$this->idzchamp().'"'.$enable.' class="form-control'.$arrondi.$erreur.'" rows="'.$this->size().'" style="'.$style.'">';
+				$html = '<textarea id="'.$this->idzchamp().'"'.$enable.' class="form-control'.$cheight.$arrondi.$erreur.'" rows="'.$this->size().'" style="'.$style.'">';
 				foreach($texte as $option) {
 					$html.= $option.chr(13);
 				}
@@ -142,13 +143,13 @@ class UniversalFieldFiltreselect extends UniversalField {
 			}
 			else {
 				//afficher champs "fake" <text> et <hidden> à la place du select
-				$html = '<input id="'.$this->idzchamp().'" type="text"'.$enable.' class="form-control'.$arrondi.$erreur.'" value="'.$texte[0].'" style="'.$style.'">';
+				$html = '<input id="'.$this->idzchamp().'" type="text"'.$enable.' class="form-control'.$cheight.$arrondi.$erreur.'" value="'.$texte[0].'" style="'.$style.'">';
 				$html.= '<input type="hidden" name="'.$postNameTableau.'" value="'.$valeur[0].'" />';
 			}
 		}
 		else {
 			//affichage du select
-			$html = '<select id="'.$this->idzchamp().'"'.$enable.$size.$multiple.' class="form-control'.$erreur.$cclass.$arrondi.'" name="'.$postNameTableau.'" '.$this->javascript().' style="'.$style.'">';
+			$html = '<select id="'.$this->idzchamp().'"'.$enable.$size.$multiple.' class="form-control'.$cheight.$erreur.$cclass.$arrondi.'" name="'.$postNameTableau.'" '.$this->javascript().' style="'.$style.'">';
 				$html.= call_user_func($this->complement(), $this->value());
 			$html.= '</select>';
 		}
@@ -184,6 +185,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 		($this->postIsTab()) ? $postNameTableau = $this->postName().'[]' : $postNameTableau = $this->postName();
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
 		if ($enable != '') $cclass = '';		//annule la personnalisation de la classe du select si champ disabled ou readonly
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		$arrondi = '';
 		if ($this->lpos() == 'before') {
@@ -219,7 +221,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 			$html = '<div id="'.$this->idzchamp().'">';
 				if ($this->_multiple == true) {
 					//afficher champs "fake" <textarea> et <select multiple hidden> à la place du select multiple
-					$html.= '<textarea id="'.$this->idzchamp().'"'.$enable.' class="form-control'.$arrondi.$erreur.'" rows="'.$this->size().'" style="'.$style.'">';
+					$html.= '<textarea id="'.$this->idzchamp().'"'.$enable.' class="form-control'.$cheight.$arrondi.$erreur.'" rows="'.$this->size().'" style="'.$style.'">';
 					foreach($texte as $option) {
 						$html.= $option.chr(13);
 					}
@@ -230,7 +232,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 				}
 				else {
 					//afficher champs "fake" <text> et <hidden> à la place du select
-					$html.= '<input id="'.$this->idzchamp().'" type="text"'.$enable.' class="form-control'.$arrondi.$erreur.'" value="'.$texte[0].'" style="'.$style.'">';
+					$html.= '<input id="'.$this->idzchamp().'" type="text"'.$enable.' class="form-control'.$cheight.$arrondi.$erreur.'" value="'.$texte[0].'" style="'.$style.'">';
 					$html.= '<input type="hidden" name="'.$postNameTableau.'" value="'.$valeur[0].'" />';
 				}
 			$html.= '</div>';
@@ -238,7 +240,7 @@ class UniversalFieldFiltreselect extends UniversalField {
 		else {
 			//affichage du <select>
 			$html = '<div id="'.$this->idzchamp().'">';
-				$html.= '<select'.$enable.$size.$multiple.' class="form-control'.$erreur.$cclass.$arrondi.'" id="'.$this->id().'" name="'.$postNameTableau.'" '.$this->javascript().' style="'.$style.'">';
+				$html.= '<select'.$enable.$size.$multiple.' class="form-control'.$cheight.$erreur.$cclass.$arrondi.'" id="'.$this->id().'" name="'.$postNameTableau.'" '.$this->javascript().' style="'.$style.'">';
 					$html.= call_user_func($this->complement(), $this->value());
 				$html.= '</select>';
 			$html.= '</div>';
@@ -254,6 +256,12 @@ class UniversalFieldFiltreselect extends UniversalField {
 			$this->setLiberreur('Paramètre \'lpos\' => \''.$this->lpos().'\' inaproprié pour le champ texte \''.$this->idField().'\'');
 			$this->setLiberreurHelp('Paramètre \'lpos\' obligatoire. Choisir parmi \'before\' ou \'after\'');
 			$this->setLpos('before');
+		}
+		//test si le paramètre cheight est cohérent
+		if (!in_array($this->cheight(), array('', 'lg', 'sm'))) {
+			$this->setErreur(true);
+			$this->setLiberreur('Paramètre \'cheight\' => \''.$this->cheight().'\' inaproprié pour le champ select \''.$this->idField().'\'');
+			$this->setLiberreurHelp('Paramètre \'cheight\' optionnel. Choisir parmi \'sm\' ou \'lg\'');
 		}
 		//test si la fonction callback de remplissage du select existe
 		if (!function_exists($this->complement())) {

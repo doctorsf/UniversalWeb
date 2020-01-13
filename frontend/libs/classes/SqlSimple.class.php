@@ -19,6 +19,10 @@
 //		ajout de la méthode statique updateChamp
 // 13.12.2019
 //		ajout du paramètre debug à la classe existValeur et existValeurAilleurs
+// 23.12.2019
+//		ajout des méthodes statiques getMin, getMax, getGap
+// 13.01.2020
+//		ajout de la méthode statique catalog
 //-----------------------------------------------------------------------
 // Cette classe comporte des méthodes d'acces génériques à une table
 // -------------------------------------
@@ -49,6 +53,24 @@ class SqlSimple {
 	//************************ METHODES STATIQUES ****************************
 
 	//----------------------------------------------------------------------
+	// Obtenir une liste index / champ de toute la table
+	// Entree :
+	//		$table : nom de la table concernée
+	//		$index : index a prendre en compte
+	//		$champ : champ à afficher
+	// Retour : 
+	//		tableau si ok / false si erreur SQL
+	//----------------------------------------------------------------------
+	static function catalog($table, $index, $champ) {
+		$laListe = array();
+		$requete = "SELECT ".$index.", ".$champ." ";
+		$requete.= "FROM ".$table." ";
+		$requete.= "ORDER BY ".$index;
+		$laListe = executeQuery($requete, $nombre, _SQL_MODE_);
+		return $laListe;
+	}
+
+	//----------------------------------------------------------------------
 	// Remplissage d'une liste
 	// Entree :
 	//		$default : id de l'item sélectionné par défaut
@@ -72,6 +94,78 @@ class SqlSimple {
 			}
 		}
 		return $texte;
+	}
+
+	//----------------------------------------------------------------------
+	// Renvoie la plus grande valeur du champ numérique $champ de la $table,
+	// puis on y ajoute la valeur numérique $offset
+	// Entree :
+	//		$table : nom de la table concernée
+	//		$champ : nom du champ à explorer
+	//		$offset : valeur à ajouter sur la valeur retournée (défaut 0)
+	// Retour : 
+	//		La valeur maximum augmentée de $offset
+	//----------------------------------------------------------------------
+	static function getMax($table, $champ, $offset=0)
+	{
+		$requete = "SELECT MAX(".$champ.") max ";
+		$requete.= "FROM ".$table;
+		$res = executeQuery($requete, $nombre, _SQL_MODE_);
+		if ($res !== false) {
+			if ($nombre == 1) return $res[0]['max'] + $offset;
+		}
+		return 0;
+	}
+
+	//----------------------------------------------------------------------
+	// Renvoie la plus petite valeur du champ numérique $champ de la $table,
+	// puis on y ajoute la valeur numérique $offset
+	// Entree :
+	//		$table : nom de la table concernée
+	//		$champ : nom du champ à explorer
+	//		$offset : valeur à ajouter sur la valeur retournée (défaut 0)
+	// Retour : 
+	//		La valeur minimum augmentée de $offset
+	//----------------------------------------------------------------------
+	static function getMin($table, $champ, $offset=0)
+	{
+		$requete = "SELECT MIN(".$champ.") min ";
+		$requete.= "FROM ".$table;
+		$res = executeQuery($requete, $nombre, _SQL_MODE_);
+		if ($res !== false) {
+			if ($nombre == 1) return $res[0]['min'] + $offset;
+		}
+		return 0;
+	}
+
+	//----------------------------------------------------------------------
+	// Renvoie un trou numérique dans le $champ de la $table.
+	// Entree :
+	//		$table : nom de la table concernée
+	//		$champ : nom du champ à explorer
+	//		$sauf : valeur à ne pas proposer (souvent le 0)
+	// Retour : 
+	//		Le trou proposé
+	//----------------------------------------------------------------------
+	// - En réalité renvoie la valeur directement inférieure au mini (champ -1)
+	// - Limite de la valeur renvoyée [0 .. MAX + 1] (pas de chiffre négatif)
+	//----------------------------------------------------------------------
+	static function getGap($table, $champ, $sauf=999999)
+	{
+		if ((self::getMin($table, $champ)) > 0) {
+			$requete = "SELECT (".$champ." - 1) numero FROM ".$table." ";
+			$requete.= "WHERE (".$champ." - 1) NOT IN ";
+			$requete.= "(SELECT ".$champ." FROM ".$table.") ";
+			if ($sauf != 999999) {
+				$requete.= "AND (".$champ." - 1) <> ".(int)$sauf." ";
+			}
+			$requete.= "LIMIT 0, 1";
+			$res = executeQuery($requete, $nombre, _SQL_MODE_);
+			if ($res !== false) {
+				if ($nombre == 1) return $res[0]['numero'];
+			}
+		}
+		return self::getMax($table, $champ, 1);
 	}
 
 	//----------------------------------------------------------------------

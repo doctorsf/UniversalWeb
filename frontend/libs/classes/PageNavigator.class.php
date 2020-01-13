@@ -15,6 +15,8 @@
 // 22.11.2017 : Modification du constructeur. Il fait maintenant appel à des setters puis à la méthode privée _build()
 // 10.01.2018 : correction _drawStandard() pour compatibilité PHP 7.2.0 fonction count()
 // 15.12.2019 : correction _drawStandard() si $path n'existait pas (ex //index.php)
+// Version 2.2.3 (13.01.2020)
+//		- Correction bug usage setLangue() qui ne fonctionnait pas
 //------------------------------------------------------------------
 // Affiche et gére une navigation par pages
 //   de la forme << Prec. | Page : 1 2 3 .. 9 | Suiv. >>
@@ -89,7 +91,7 @@ class PageNavigator {
 								'link' => 'transparent',
 								'secondary' => '#ccc');
 
-	const VERSION = 'v2.2.2 (2019-12-15)';
+	const VERSION = 'v2.2.3 (2020-01-13)';
 
 	const SCHEMA_STANDARD = 1;								//ex : /fr/photos.php?data=xxx&page=y (ici indicePage y = null)
 	const SCHEMA_REWRITTE = 2;								//ex : /fr/photos-xxx-y-blabla.htm	 (ici indicePage y = 3)
@@ -105,7 +107,7 @@ class PageNavigator {
 	public function setPageEncours($valeur) {$this->_page_encours = $valeur; 		$this->_build();}			//numéro de la page encours affichée
 	public function setSchema($valeur) {$this->_schema = $valeur;}						//type d'url utilisée par le site
 	public function setIndicePage($valeur) {$this->_indicePage = $valeur;}				//indice de la particule dans l'uri ou se trouve l'information de page
-	public function setLangue($valeur) {$this->_lg = $valeur;}							//langue dans laquelle il faut afficher le navigateur
+	public function setLangue($valeur) {$this->_lg = $valeur; $this->_build();}			//langue dans laquelle il faut afficher le navigateur
 
 	public function __construct(
 						$total_data, 

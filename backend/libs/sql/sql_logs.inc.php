@@ -134,8 +134,8 @@ function sqlLogs_fillSelectTypesTous($defaut)
 	$requete.= "ORDER BY libelle";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
-		($defaut == 'TOUS') ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="TOUS"'.$selected.'>TOUS</option>';
+		($defaut == UniversalListColonne::CMP_ALL) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.UniversalListColonne::CMP_ALL.'"'.$selected.'>'.getLib('LOGS_ALL_TYPES').'</option>';
 		foreach($res as $ligne) {
 			($defaut == $ligne['id_log_type']) ? $selected = ' selected' : $selected = '';
 			$texte.= '<option value="'.$ligne['id_log_type'].'"'.$selected.'>'.$ligne['libelle'].'</option>';
@@ -159,10 +159,10 @@ function sqlLogs_fillSelectUtilisateursTous($defaut)
 	$requete.= "WHERE "._PREFIXE_TABLES_."logs.id_user = "._PREFIXE_TABLES_."users.id_user";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
-		($defaut == 'TOUTES') ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="TOUS"'.$selected.'>TOUS</option>';
-		($defaut == 'IGNORE') ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="IGNORE"'.$selected.'>IGNORE</option>';
+		($defaut == UniversalListColonne::CMP_ALL) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.UniversalListColonne::CMP_ALL.'"'.$selected.'>'.getLib('LOGS_ALL_USERS').'</option>';
+		($defaut == UniversalListColonne::CMP_IGNORE) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.UniversalListColonne::CMP_IGNORE.'"'.$selected.'>'.getLib('IGNORER_LE_CHAMP').'</option>';
 		foreach($res as $ligne) {
 			($defaut == $ligne['id_user']) ? $selected = ' selected' : $selected = '';
 			$texte.= '<option value="'.$ligne['id_user'].'"'.$selected.'>'.$ligne['nom'].' '.$ligne['prenom'].'</option>';

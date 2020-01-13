@@ -153,6 +153,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-5',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'sm',						//hauteur zone de texte (sm ou lg)
 				'maxlength' => 10,						//nb caractres max en saisie
 				'spellcheck' => true,					//correction orthographique
 				'placeholder' => 'Saisie établissement',//texte pré-affiché
@@ -182,6 +183,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'after',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-10',					//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'lg',						//hauteur zone de texte (sm ou lg)
 				'maxlength' => 10,						//nb caractres max en saisie
 				'spellcheck' => true,					//correction orthographique
 				'placeholder' => 'Saisie ville',		//texte pré-affiché
@@ -211,6 +213,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-4',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => '',						//hauteur zone de texte (sm ou lg)
 				'maxlength' => 10,						//nb caractres max en saisie
 				'spellcheck' => true,					//correction orthographique
 				'placeholder' => 'Saisie nom',			//texte pré-affiché
@@ -628,6 +631,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'after',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'lg',						//hauteur de la zone de champ (lg, sm ou vide)
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['genre1'],//valeur de la saisie
 				'complement' => 'fillSelect',			//fonction de callback qui doit remplir le select
@@ -635,7 +639,7 @@ class Form_exemples_universalform extends UniversalForm {
 //				'liberreur' => 'TEST ERREUR',			//libellé de l'erreur
 //				'liberreurHelp' => 'libelle erreur',	//Aide sur l'erreur
 				'javascript' => '',						//code javascript associé
-				'enable' => false,						//active, désactive le champ (dbfield renvoie NULL si false)
+				'enable' => true,						//active, désactive le champ (dbfield renvoie NULL si false)
 				'readonly' => true,						//lecture seule (defield renvoi value si readonly)
 				'invisible' => false					//rend invisible le champ
 			));
@@ -658,6 +662,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => '',						//hauteur de la zone de champ (lg, sm ou vide)
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['genre2'],//valeur de la saisie (ici un tableau)
 				'complement' => 'fillSelect2',			//fonction de callback qui doit remplir le select
@@ -697,14 +702,15 @@ class Form_exemples_universalform extends UniversalForm {
 				'llong' => 'col-2',						//longueur de la zone de titre (inutile dans le cas d'un design online)
 				'lclass' => 'bleu',						//classe du label
 				'lalign' => 'right',					//left (defaut) / right / center / jutify
-				'labelHelp' => 'Aide sur commentaires',	//aide sur le label
+				'labelHelp' => 'Area large inline',		//aide sur le label
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-5',						//longueur de la zone de champ
 				'rows' => 7,							//hauteur du commentaire en nombre de lignes
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'lg',						//hauteur de la zone de champ (lg, sm ou vide)
 				'maxlength' => 128,						//nb caractres max en saisie
 				'spellcheck' => true,					//correction orthographique
-				'placeholder' => 'Commentaire inline', //texte pré-affiché
+				'placeholder' => 'inline lg',			//texte pré-affiché
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['commentaires'],//valeur de la saisie
 //				'erreur' => true,						//montée erreur
@@ -725,14 +731,14 @@ class Form_exemples_universalform extends UniversalForm {
 //				'llong' => 'col-2',						//longueur de la zone de titre (inutile dans le cas d'un design online)
 				'lclass' => 'bleu',						//classe du label
 				'lalign' => 'right',					//left (defaut) / right / center / jutify
-				'labelHelp' => 'Aide sur commentaires',	//aide sur le label
+				'labelHelp' => 'Area normale online',	//aide sur le label
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-5',						//longueur de la zone de champ
 				'rows' => 7,							//hauteur du commentaire en nombre de lignes
 				'cclass' => '',							//classe de la zone de champ
 				'maxlength' => 128,						//nb caractres max en saisie
 				'spellcheck' => true,					//correction orthographique
-				'placeholder' => 'Commentaire online', //texte pré-affiché
+				'placeholder' => 'online',				//texte pré-affiché
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['commentaires'],//valeur de la saisie
 //				'erreur' => true,						//montée erreur
@@ -756,16 +762,17 @@ class Form_exemples_universalform extends UniversalForm {
 //				'llong' => 'col-2',						//longueur de la zone de titre (inutile dans le cas d'un design online)
 				'lclass' => 'vert',						//classe du label
 				'lalign' => 'right',					//left (defaut) / right / center / jutify
-				'labelHelp' => 'Aide sur commentaires',	//aide sur le label
+				'labelHelp' => 'Area small online',		//aide sur le label
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'labelPlus' => $label,					//aide sur le label
 				'labelPlusHelp' => 'label de droite',	//aide sur le label
 				'clong' => 'col-5',						//longueur de la zone de champ
 				'rows' => 7,							//hauteur du commentaire en nombre de lignes
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'sm',						//hauteur de la zone de champ (lg, sm ou vide)
 				'maxlength' => 128,						//nb caractres max en saisie
 				'spellcheck' => true,					//correction orthographique
-				'placeholder' => 'Commentaire online', //texte pré-affiché
+				'placeholder' => 'online sm',			//texte pré-affiché
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['commentaires'],//valeur de la saisie
 //				'erreur' => true,						//montée erreur
@@ -1876,6 +1883,7 @@ class Form_exemples_universalform extends UniversalForm {
 //				'labelHelp' => 'Aide sur label commentaires 1',	//aide sur le label
 				'clong' => 'col-5',							//longueur du champ en colonnes boostrap (a définir sur le premier du groupe (ou alone). Sans effet sur les autres)
 				'cclass' => '',								//classe du commentaire (div)
+				'cheight' => 'sm',							//taille du champ (lg ou sm)
 //				'border' => true,							//defaut : false. false / true(encadrement par défaut) ou bordure personnnalisée
 				'border' => 'border-bottom:2px dotted silver;', //bordure personnalisée
 				'value' => $this->_tab_donnees['infosinline'],	//valeur renvoyée dans dbfield
@@ -2139,6 +2147,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'labelHelpPos' => 'right',	//aide sur le champ
 				'clong' => 'col-4',						//longueur du bloc champ (ici cadré à droite)
 				'cclass' => '',							//classe de la zone de saisie
+				'cheight' => '',						//hauteur du texte de saisie (lg ou sm)
 				'maxlength' => 10,						//taille maximum de la saisie en nombre de caractèresz
 				'placeholder' => 'filtre',				//placeholder de la saisie
 				'spellcheck' => false,					//correction orthographique ?
@@ -2166,6 +2175,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'sm',						//hauteur du select (lg ou sm)
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['filtre2'],//valeur de la saisie
 				'complement' => 'fillSelect2',			//fonction de callback qui doit remplir le select
@@ -2193,6 +2203,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'after',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => 'lg',						//hauteur du select (lg ou sm)
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['filtre3'],//valeur de la saisie
 				'complement' => 'fillSelect2',			//fonction de callback qui doit remplir le select
@@ -2220,6 +2231,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => '',						//hauteur du select (lg ou sm)
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['filtre4'],//valeur de la saisie
 				'complement' => 'fillSelect',			//fonction de callback qui doit remplir le select
@@ -2247,6 +2259,7 @@ class Form_exemples_universalform extends UniversalForm {
 				'lpos' => 'before',						//position du label par rapport au champ : before (defaut) / after
 				'clong' => 'col-3',						//longueur de la zone de champ
 				'cclass' => '',							//classe de la zone de champ
+				'cheight' => '',						//hauteur du select (lg ou sm)
 //				'testMatches' => array('REQUIRED'),		//test de la saisie
 				'value' => $this->_tab_donnees['filtre5'],//valeur de la saisie
 				'complement' => 'fillSelect',			//fonction de callback qui doit remplir le select

@@ -22,9 +22,11 @@ function MyClassExists($nomClasse) {
 	else 
 		return $nomClasse.' : '.getLib('MANQUANT').'<br />';
 }
+
 function MyFrontendClassExists($nomClasse) {
 	if (file_exists(_FRONTEND_CLASSES_.$nomClasse.'.class.php')) 
-		return $nomClasse.' : '.$nomClasse::VERSION.'<br />'; 
+//		return $nomClasse.' : '.$nomClasse::VERSION.'<br />'; 
+		return $nomClasse.' : Version à vérifier<br />'; 
 	else 
 		return $nomClasse.' : '.getLib('MANQUANT').'<br />';
 }
@@ -49,7 +51,7 @@ echo '<body>';
 	// CORPS
 	//--------------------------------------
 	echo '<section>';
-	echo '<article class="mt-5">';
+	echo '<article>';
 
 		$tabUrl = parse_url(_URL_SERVEUR_);
 		$host = $tabUrl['host']; 
@@ -235,6 +237,9 @@ echo '<body>';
 										echo '_APP_VERSION_: '._APP_VERSION_.'<br />';
 										echo '_APP_RELEASE_ : '._APP_RELEASE_.'<br />';
 										echo '_HOST_SYSTEM_ : '._HOST_SYSTEM_.'<br />';
+										echo 'display_startup_errors : '.ini_get('display_startup_errors').'<br />';
+										echo 'display_errors : '.ini_get('display_errors').'<br />';
+										echo 'error_reporting : '.ini_get('error_reporting').'<br />';
 									echo '</div>';
 								echo '</div>';
 							echo '</div>';

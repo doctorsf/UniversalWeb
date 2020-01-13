@@ -18,7 +18,6 @@ $scriptSup = '';
 $fJquery = '';
 echo writeHTMLHeader($titrePage, '', '');
 
-//echo '<body onload="document.getElementById(\'idSaisie\').focus()">';
 echo '<body>';
 	echo '<div class="container-fluid">';
 	//--------------------------------------

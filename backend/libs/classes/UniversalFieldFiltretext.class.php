@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'filtretexte (combiné txt + menu)
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldFiltretext extends UniversalField {
@@ -148,10 +148,11 @@ class UniversalFieldFiltretext extends UniversalField {
 		($this->postIsTab()) ? $postNameTableau = $this->postName().'[1]' : $postNameTableau = $this->postName();
 		if ($this->inputType() == '') $this->setInputType('search');
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->maxlength() > 0) ? $maxlength = ' maxlength="'.$this->maxlength().'"' : $maxlength = '';
 		($this->spellcheck() == false) ? $spellcheck = ' spellcheck="false"' : $spellcheck = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
-		$classes = 'form-control'.$cclass.$erreur.$arrondi;
+		$classes = 'form-control'.$cheight.$cclass.$erreur.$arrondi;
 		if (is_array($this->value())) {
 			$value = 'value="'.htmlspecialchars(stripslashes($this->value()[1]), ENT_COMPAT, 'UTF-8').'"';
 		}
@@ -172,6 +173,12 @@ class UniversalFieldFiltretext extends UniversalField {
 			$this->setLiberreur('Paramètre \'apos\' => \''.$this->apos().'\' inaproprié pour le addon du champ search \''.$this->idField().'\'');
 			$this->setLiberreurHelp('Paramètre \'apos\' obligatoire. Choisir parmi \'before\' ou \'after\'');
 			$this->setApos('before');
+		}
+		//test si le paramètre cheight est cohérent
+		if (!in_array($this->cheight(), array('', 'lg', 'sm'))) {
+			$this->setErreur(true);
+			$this->setLiberreur('Paramètre \'cheight\' => \''.$this->cheight().'\' inaproprié pour le champ texte \''.$this->idField().'\'');
+			$this->setLiberreurHelp('Paramètre \'cheight\' optionnel. Choisir parmi \'sm\' ou \'lg\'');
 		}
 		//si addon, vérification que apos soit 'before' ou 'after' seulement
 		if ($this->addon() == true) {

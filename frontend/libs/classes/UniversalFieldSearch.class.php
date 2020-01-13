@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'search' (combiné txt + bouton)
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldSearch extends UniversalField {

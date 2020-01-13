@@ -207,6 +207,8 @@
 // Version 3.17.0 du 13.12.2019
 //		- Ajout de la propriété "custom" pour le composant "switch" (switch customisé en check et radio)
 //		- Positionnement systématique du focus sur le premier champ en erreur (le focus par défaut est mémorisé puis repositioné lorsqu'il n'y a plus d'erreurs)
+// Version 3.18.0 du 07.01.2020
+//		- Ajout de la propriété "cheight" pour les composants Area, Select, Comment, filtreSelect, FiltreText et Text qui permet de modifier la taille des zones de texte (lg ou sm)
 //==============================================================
 
 //-------------------------------------------------------------------------
@@ -254,7 +256,7 @@ class UniversalForm {
 	private $_ligneEncours = false;		//dessin d'une ligne de champs en cours ?
 	private $_memAutofocus = null;		//mémorise le premier objet du formulaire qui a le focus
 
-	const VERSION = 'v3.17.0 (2019-12-13)';
+	const VERSION = 'v3.18.0 (2020-01-07)';
 	const COPYRIGHT = '&copy;2014-2020 Fabrice Labrousse';
 	const CONSULTER = 'consulter';
 	const AJOUTER = 'ajouter';

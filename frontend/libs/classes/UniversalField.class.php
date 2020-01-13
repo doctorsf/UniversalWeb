@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element parent
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -71,6 +71,7 @@ class UniversalField {
 	private $_inputType = 'text';	//type de champ input (par defaut 'text') choix parmi button/checkbox/color/date/datetime/datetime-local/email/file/hidden/image/month/number/password/radio/range/reset/search/submit/tel/text/time/url/week
 	private $_clong = '';			//longueur (1..12) du bloc zone champ
 	private $_cclass = '';			//classe css du champ input
+	private $_cheight = '';			//hauteur de la zone de champ (lg, sm ou vide (normal par défaut))
 	private $_value = 0;
 	private $_maxlength = 0;		//nombre maxi des caractères saisis dans un champ input	
 	private $_testMatches = null;
@@ -138,6 +139,7 @@ class UniversalField {
 
 	public function border()			{return $this->_border;}
 	public function cclass()			{return $this->_cclass;}
+	public function cheight()			{return $this->_cheight;}
 	public function clong()				{return $this->_clong;}
 	public function complement()		{return $this->_complement;}
 	public function dbfield()			{return $this->_dbfield;}
@@ -203,6 +205,7 @@ class UniversalField {
 	public function setDecalage($decalage)		{$this->_decalage = $decalage;}
 	public function setClong($clong)			{$this->_clong = $clong;}
 	public function setCclass($cclass)			{$this->_cclass = $cclass;}
+	public function setCheight($cheight)		{$this->_cheight = $cheight;}
 	public function setLlong($llong)			{$this->_llong = $llong;}
 	public function setLclass($lclass)			{$this->_lclass = $lclass;}
 	public function setLabel($label)			{$this->_label = $label;}

@@ -1,6 +1,6 @@
 <?php
 //-----------------------------------------------------------
-// SQUELETTE FORMULAIRE
+// SQUELETTE FORMULAIRE																	
 //-----------------------------------------------------------
 // ééàç : pour sauvegarde du fichier en utf-8								
 //-----------------------------------------------------------
@@ -34,6 +34,10 @@ echo '<body>';
 		echo '<div class="row">';
 			echo '<div class="col">';
 
+				//on interdit toute modification ou suppression de l'id système (ou inférieur d'ailleurs)
+				(isset($_GET['id'])) ? $id = mySqlDataProtect($_GET['id']) : $id = -1;
+				if ((($operation == 'modifier') || ($operation == 'supprimer') || ($operation == 'retirer')) && ($id <= _ID_SYSTEM_)) $operation = 'erreur';
+
 				$frm = new Form_squelette($operation, 1);
 				$action = $frm->getAction();
 
@@ -58,7 +62,10 @@ echo '<body>';
 							$donnees = $frm->getData();
 							//DEBUG_('donnees', $donnees);
 							if (!$table->add($donnees)) {
-								riseErrorMessage(getLib('ERREUR'));
+								riseErrorMessage(getLib('XXX_AJOUTE_ECHEC'));
+							}
+							else {
+								riseMessage(getLib('XXX_AJOUTE_SUCCES'));
 							}
 							//branchement vers la page d'appel
 							goPageBack();
@@ -69,14 +76,20 @@ echo '<body>';
 					// consulter / modifier / supprimer
 					//--------------------------------------
 					case 'consulter':
+					case 'retirer': 
 					case 'modifier':
 					case 'supprimer': {
 						//recuperation de l'id de l'item à charger
-						(isset($_GET['id'])) ? $id = mySqlDataProtect($_GET['id']) : $id = 0;
+						(isset($_GET['id'])) ? $id = mySqlDataProtect($_GET['id']) : $id = -1;
 						$res = $table->get($id, $tuple);
 						if ($res !== false) {
 							$frm->charger($id, $tuple);
 							echo $frm->afficher();
+						}
+						else {
+							riseErrorMessage(getLib('ERREUR_COMMANDE'));
+							//branchement vers la page d'appel
+							goPageBack();
 						}
 						break;
 					}
@@ -84,6 +97,21 @@ echo '<body>';
 					// Valide consulter
 					//--------------------------------------
 					case 'valid_consulter': {
+						//branchement vers la page d'appel
+						goPageBack();
+						break;
+					}
+					//--------------------------------------
+					// Valide retirer
+					//--------------------------------------
+					case 'valid_retirer': {
+						$res = $tabgle->retire($frm->getIdTravail());
+						if ($res === false) {
+							riseErrorMessage(getLib('XXX_RETIRE_ECHEC'));
+						}
+						else {
+							riseMessage(getLib('XXX_RETIRE_SUCCES'));
+						}
 						//branchement vers la page d'appel
 						goPageBack();
 						break;
@@ -98,11 +126,19 @@ echo '<body>';
 						else {
 							$donnees = $frm->getData();
 							//DEBUG_('donnees', $donnees);
-							//modification effective des données : la clé unique du tuple à modifier*
+							//modification effective des données : la clé unique du tuple à modifier
 							//est disponible dans $frm->getIdTravail()
 							$res = $table->update($frm->getIdTravail(), $donnees);
 							if ($res === false) {
-								riseErrorMessage(getLib('ERREUR'));
+								riseErrorMessage(getLib('XXX_MODIFIE_ECHEC'));
+							}
+							else {
+								//test si id à changé
+								if ($donnees['cle'] != $frm->getIdTravail()) {
+									//modifier id sur les tables maitres
+									$dummy = SqlSimple::updateChamp('tableReferente', 'cle_tableReferente', $donnees['cle'], 'cle_tableReferente', $frm->getIdTravail());
+								}
+								riseMessage(getLib('XXX_MODIFIE_SUCCES'));
 							}
 							//branchement vers la page d'appel
 							goPageBack();
@@ -114,17 +150,17 @@ echo '<body>';
 					//--------------------------------------
 					case 'valid_supprimer': {
 						//test si la suppression n'impacte pas une autre table
-						if (!$nb = autreTable_existValeur(indexAutreTable, $frm->getIdTravail())) {
+						if (!$nb = SqlSimple::existValeur('tableReferente', 'cle_tableReferente', $frm->getIdTravail())) {
 							//suppression effective des donnees
 							if (!$table->delete($frm->getIdTravail())) {
-								riseErrorMessage(getLib('ERREUR'));
+								riseErrorMessage(getLib('XXX_SUPPRIMER_ECHEC'));
 							}
 							else {
-								riseMessage('Donnée supprimé');
+								riseMessage(getLib('XXX_SUPPRIMER_SUCCES'));
 							}
 						}
 						else {
-							riseErrorMessage('Il est impossible de supprimer cette donnée. Celle-ci est utilisée par '.$nb. ' données(s)');
+							riseErrorMessage(getLib('XXX_SUPPRIMER_IMPOSSIBLE', 'quoi', nbRefsTrouvees($nb)));
 						}
 						//branchement vers la page d'appel
 						goPageBack();
@@ -137,6 +173,7 @@ echo '<body>';
 						riseErrorMessage(getLib('ERREUR_COMMANDE'));
 						goPageBack();
 						break;
+						die();
 					}
 				}
 

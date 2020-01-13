@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'area'
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldArea extends UniversalField {
@@ -82,12 +82,13 @@ class UniversalFieldArea extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->maxlength() > 0) ? $maxlength = ' maxlength="'.$this->maxlength().'"' : $maxlength = '';
 		($this->spellcheck() == false) ? $spellcheck = ' spellcheck="false"' : $spellcheck = '';
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 
 		$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.'">';
-			$html.= '<textarea'.$maxlength.$spellcheck.$enable.' class="form-control'.$erreur.$cclass.'" name="'.$this->postName().'" rows="'.$this->rows().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$this->javascript().'>'.stripslashes($this->value()).'</textarea>';
+			$html.= '<textarea'.$maxlength.$spellcheck.$enable.' class="form-control'.$cheight.$erreur.$cclass.'" name="'.$this->postName().'" rows="'.$this->rows().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$this->javascript().'>'.stripslashes($this->value()).'</textarea>';
 			$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
 		$html.= '</div>';
 		return $html;
@@ -157,12 +158,13 @@ class UniversalFieldArea extends UniversalField {
 		//champ online
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->maxlength() > 0) ? $maxlength = ' maxlength="'.$this->maxlength().'"' : $maxlength = '';
 		($this->spellcheck() == false) ? $spellcheck = ' spellcheck="false"' : $spellcheck = '';
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 
 		$html = '<div id="'.$this->idzchamp().'">';
-			$html.= '<textarea'.$maxlength.$spellcheck.$enable.' class="form-control'.$erreur.$cclass.'" name="'.$this->postName().'" rows="'.$this->rows().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$this->javascript().'>'.stripslashes($this->value()).'</textarea>';
+			$html.= '<textarea'.$maxlength.$spellcheck.$enable.' class="form-control'.$cheight.$erreur.$cclass.'" name="'.$this->postName().'" rows="'.$this->rows().'" id="'.$this->id().'" placeholder="'.$this->placeholder().'" '.$this->javascript().'>'.stripslashes($this->value()).'</textarea>';
 			$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
 		$html.= '</div>';
 		return $html;
@@ -176,6 +178,12 @@ class UniversalFieldArea extends UniversalField {
 			$this->setLiberreur('Paramètre \'lpos\' => \''.$this->lpos().'\' inaproprié pour le champ area \''.$this->idField().'\'');
 			$this->setLiberreurHelp('Paramètre \'lpos\' obligatoire. Choisir parmi \'before\' ou \'after\'');
 			$this->setLpos('before');
+		}
+		//test si le paramètre cheight est cohérent
+		if (!in_array($this->cheight(), array('', 'lg', 'sm'))) {
+			$this->setErreur(true);
+			$this->setLiberreur('Paramètre \'cheight\' => \''.$this->cheight().'\' inaproprié pour le champ area \''.$this->idField().'\'');
+			$this->setLiberreurHelp('Paramètre \'cheight\' optionnel. Choisir parmi \'sm\' ou \'lg\'');
 		}
 		return $this->erreur();
 	}

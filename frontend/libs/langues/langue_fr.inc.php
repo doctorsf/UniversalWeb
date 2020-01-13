@@ -238,6 +238,10 @@ function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $p
 	return '<span class="text-uppercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
 }
 
+function getLibLower($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
+	return '<span class="text-lowercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+}
+
 function getLLib($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
 	$param1 = utf8_strtolower($param1);
 	$param2 = utf8_strtolower($param2);

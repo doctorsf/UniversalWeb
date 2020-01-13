@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'select'
-// Version 3.17.0 du 13.12.2019
+// Version 3.18.0 du 07.01.2020
 //==============================================================
 
 class UniversalFieldSelect extends UniversalField {
@@ -109,6 +109,7 @@ class UniversalFieldSelect extends UniversalField {
 		($this->postIsTab()) ? $postNameTableau = $this->postName().'[]' : $postNameTableau = $this->postName();
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
 		if ($enable != '') $cclass = '';		//annule la personnalisation de la classe du select si champ disabled ou readonly
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 
 		//ATTENTION : le mode "readonly" sur un INPUT SELECT ne fonctionne pas et reste disponible pour l'utilisateur.
@@ -136,7 +137,7 @@ class UniversalFieldSelect extends UniversalField {
 			$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.$erreur.'">';
 				if ($this->_multiple == true) {
 					//afficher champs "fake" <textarea> et <select multiple hidden> à la place du select multiple
-					$html.= '<textarea'.$enable.' class="form-control'.$erreur.'" rows="'.$this->size().'" id="'.$this->id().'">';
+					$html.= '<textarea'.$enable.' class="form-control'.$cheight.$erreur.'" rows="'.$this->size().'" id="'.$this->id().'">';
 					foreach($texte as $option) {
 						$html.= $option.chr(13);
 					}
@@ -147,7 +148,7 @@ class UniversalFieldSelect extends UniversalField {
 				}
 				else {
 					//afficher champs "fake" <text> et <hidden> à la place du select
-					$html.= '<input type="text"'.$enable.' class="form-control'.$erreur.'" id="'.$this->id().'" value="'.$texte[0].'" />';
+					$html.= '<input type="text"'.$enable.' class="form-control'.$cheight.$cclass.$erreur.'" id="'.$this->id().'" value="'.$texte[0].'" />';
 					$html.= '<input type="hidden" name="'.$postNameTableau.'" value="'.$valeur[0].'" />';
 				}
 				$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
@@ -156,7 +157,7 @@ class UniversalFieldSelect extends UniversalField {
 		else {
 			//affichage du select
 			$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.$erreur.'">';
-				$html.= '<select'.$enable.$size.$multiple.' class="form-control'.$erreur.$cclass.'" id="'.$this->id().'" name="'.$postNameTableau.'" '.$this->javascript().'>';
+				$html.= '<select'.$enable.$size.$multiple.' class="form-control'.$cheight.$cclass.$erreur.'" id="'.$this->id().'" name="'.$postNameTableau.'" '.$this->javascript().'>';
 					$html.= call_user_func($this->complement(), $this->value());
 				$html.= '</select>';
 				$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
@@ -198,6 +199,7 @@ class UniversalFieldSelect extends UniversalField {
 		($this->postIsTab()) ? $postNameTableau = $this->postName().'[]' : $postNameTableau = $this->postName();
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
 		if ($enable != '') $cclass = '';		//annule la personnalisation de la classe du select si champ disabled ou readonly
+		($this->cheight() != '') ? $cheight = ' form-control-'.$this->cheight() : $cheight = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 
@@ -226,7 +228,7 @@ class UniversalFieldSelect extends UniversalField {
 			$html = '<div id="'.$this->idzchamp().'">';
 				if ($this->_multiple == true) {
 					//afficher champs "fake" <textarea> et <select multiple hidden> à la place du select multiple
-					$html.= '<textarea'.$enable.' class="form-control'.$erreur.'" rows="'.$this->size().'" id="'.$this->id().'">';
+					$html.= '<textarea'.$enable.' class="form-control'.$cheight.$erreur.'" rows="'.$this->size().'" id="'.$this->id().'">';
 					foreach($texte as $option) {
 						$html.= $option.chr(13);
 					}
@@ -237,7 +239,7 @@ class UniversalFieldSelect extends UniversalField {
 				}
 				else {
 					//afficher champs "fake" <text> et <hidden> à la place du select
-					$html.= '<input type="text"'.$enable.' class="form-control'.$erreur.'" id="'.$this->id().'" value="'.$texte[0].'" />';
+					$html.= '<input type="text"'.$enable.' class="form-control'.$cheight.$cclass.$erreur.'" id="'.$this->id().'" value="'.$texte[0].'" />';
 					$html.= '<input type="hidden" name="'.$postNameTableau.'" value="'.$valeur[0].'" />';
 				}
 				$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
@@ -246,7 +248,7 @@ class UniversalFieldSelect extends UniversalField {
 		else {
 			//affichage du <select>
 			$html = '<div id="'.$this->idzchamp().'">';
-				$html.= '<select'.$enable.$size.$multiple.' class="form-control'.$erreur.$cclass.'" id="'.$this->id().'" name="'.$postNameTableau.'" '.$this->javascript().'>';
+				$html.= '<select'.$enable.$size.$multiple.' class="form-control'.$cheight.$cclass.$erreur.'" id="'.$this->id().'" name="'.$postNameTableau.'" '.$this->javascript().'>';
 					$html.= call_user_func($this->complement(), $this->value());
 				$html.= '</select>';
 				$html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
@@ -260,9 +262,15 @@ class UniversalFieldSelect extends UniversalField {
 		//test si le paramatre 'lpos' est valide
 		if (!in_array($this->lpos(), array('before', 'after'))) {
 			$this->setErreur(true);
-			$this->setLiberreur('Paramètre \'lpos\' => \''.$this->lpos().'\' inaproprié pour le champ texte \''.$this->idField().'\'');
+			$this->setLiberreur('Paramètre \'lpos\' => \''.$this->lpos().'\' inaproprié pour le champ select \''.$this->idField().'\'');
 			$this->setLiberreurHelp('Paramètre \'lpos\' obligatoire. Choisir parmi \'before\' ou \'after\'');
 			$this->setLpos('before');
+		}
+		//test si le paramètre cheight est cohérent
+		if (!in_array($this->cheight(), array('', 'lg', 'sm'))) {
+			$this->setErreur(true);
+			$this->setLiberreur('Paramètre \'cheight\' => \''.$this->cheight().'\' inaproprié pour le champ select \''.$this->idField().'\'');
+			$this->setLiberreurHelp('Paramètre \'cheight\' optionnel. Choisir parmi \'sm\' ou \'lg\'');
 		}
 		//test si la fonction callback de remplissage du select existe
 		if (!function_exists($this->complement())) {

@@ -657,7 +657,7 @@ V3.17.0.0 (en cours)
 6. Backend -> Ajouts icones sur menu administration
 
 -----------------
-V3.18.0.0 (20.12.2019)
+V3.18.0.0 (en cours)
 -----------------
 1. Création et intrégration du fichier universalweb.css (+fonctions.inc.php)
 2. SimpleListingHelper
@@ -684,6 +684,40 @@ V3.18.0.0 (20.12.2019)
 12. Amélioration Input
 
 -----------------
-V3.18.1.0 (21.12.2019)
+V3.18.1.0 (en cours)
 -----------------
-1. Ajout des traductions manquantes pour les nouveaux libellés de la classe SilentMail dans les fichiers dde langue du frontend
+function getLibLower($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
+	return '<span class="text-lowercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+}
+
+-----------------
+V3.19.0.0 (en cours)
+-----------------
+1. Ajout fonction getLibLower() aux fichiers de langues
+2. SqlSimple 
+	- Ajout des méthodes statiques getMin, getMax, getGap (23.12.2019)
+	- Ajout de la méthode catalog (13.01.2020)
+3. UniversalForm en Version 3.18.0 du 07.01.2020
+	- Ajout de la propriété "cheight" pour les composants Area, Select, Comment, filtreSelect, FiltreText et Text qui permet de modifier la taille des zones de texte (lg ou sm)
+4. Classe PageNavigator - Version 2.2.3 (13.01.2020) 
+	- Correction bug usage setLangue() qui ne fonctionnait pas
+5. Correction backend/info_systeme.php (ne peut pas afficher les versions de classe UniversalWeb)
+6. UniversalList en Version VERSION 3.0.0 (09.01.2020)
+	- Changement de tous les mots clés de test (constantes de la classe UniversalListColonne)en version anglaise pour une meilleurs compréhension du fonctionnement
+		TOUT => CMP_ALL	(valeur : ALL)
+		EGAL => CMP_EQUAL (valeur : EQL)
+		DIFFERENT => CMP_DIFFERENT (valeur : DIF)
+		COMMENCE => CMP_BEGINS_BY (valeur : BEG)
+		CONTIENT => CMP_CONTENDS (valeur : CON)
+		CONTIENTPAS => CMP_DO_NOT_CONTENDS (valeur : DNC)
+		FINIT => CMP_ENDS_BY (valeur : END)
+		IGNORE => CMP_IGNORE (valeur : IGN)
+		COMMENCENUM => CMP_BEGINS_BY_NUMBER (valeur : BBN)
+		SUPERIEURA => CMP_GREATER_THAN (valeur : GRT)
+		SUPERIEUROUEGALA => CMP_GREATER_OR_EQUAL_TO (valeur : GET)
+		INFERIEURA => CMP_LOWER_THAN (valeur : LOT)
+		INFERIEUROUEGALA => CMP_LOWER_OR_EQUAL_TO (valeur : LET)
+		EGALA => EQUAL_TO (valeur : ETO)
+	- Remplacement des mots clés 'TOUT' et 'TOUTES' et par la constante UniversalListColonne::CMP_ALL pour désigner la sélection de toutes les valeurs d'un filtre select (méthode _buildFiltreSelect)
+7. UniversalList en Version VERSION 3.0.1 (13.01.2020)
+	- Correction bugs avec usage IGN qui ne fonctionnait plus suites à modifs v3.0.0

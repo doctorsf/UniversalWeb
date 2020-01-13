@@ -90,6 +90,7 @@ $_LIBELLES = array(
 	//------------------------------------------
 	// MOTS / VERBES
 	//------------------------------------------
+	'FILTRE'						=> 'filtre',
 	'FICHIER'						=> 'Fichier',
 	'VERSION'						=> 'Version',
 	'ACCUEIL'						=> 'Accueil',
@@ -143,6 +144,9 @@ $_LIBELLES = array(
 	'MANQUANT'						=> 'Manquant',
 	'COMPOSANTS'					=> 'Composants',
 	'CONFIGURATION'					=> 'Configuration',
+	'TYPE'							=> 'Type',
+	'OPERATION'						=> 'Opération',
+	'DATE'							=> 'Date',
 
 	//------------------------------------------
 	// LOGS
@@ -168,6 +172,8 @@ $_LIBELLES = array(
 	'LOG_FILTRE_LIBELLE'			=> 'Filtre sur le libellé du log',
 	'LOG_FILTRE_USER'				=> 'Filtre sur les utilisateurs concernés',
 	'LOG_DATE'						=> 'Date de l\'opération loguée',
+	'LOGS_ALL_TYPES'				=> 'Tous les types',
+	'LOGS_ALL_USERS'				=> 'Tous les utilisateurs',
 
 	//------------------------------------------
 	// DATES
@@ -330,6 +336,7 @@ $_LIBELLES = array(
 	//------------------------------------------
 	// AUTRE
 	//------------------------------------------
+	'IGNORER_LE_CHAMP'				=> 'Ignorer le champ',
 	'CLASSEMENT_ASCENDANT'			=> 'Classement ascendant',
 	'CLASSEMENT_DESCENDANT'			=> 'Classement descendant',
 	'AUCUNE_REF_TROUVEE'			=> 'Aucune référence trouvée',
@@ -341,6 +348,16 @@ $_LIBELLES = array(
 
 $_MOIS_EN_CLAIR	= array('', 'janvier', 'février', 'mars','avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'); 
 $_CIVILITE = array('', 'M.', 'Mme', 'Melle', 'Inconnue');
+
+//Exceptionnellement on utilise les valeurs de comparaison des constantes de la classe UniversalListColonne et non pas les constantes elle-même (UniversalListColonne::CMP_ALL)
+//car la classe UniversalListColonne est chargée après les fichiers de langue.
+$_MENU_FILTRE_TEXT = array('ALL' => 'Tous', 
+						   'EQL' => 'Egal à', 
+						   'DIF' => 'Différent de', 
+						   'BEG' => 'Commence par', 
+						   'CON' => 'Contient', 
+						   'DNC' => 'Ne contient pas', 
+						   'END' => 'Se termine par');
 
 //------------------------------------------------------------------
 // Construction d'une chaine avec des paramètres passés en option
@@ -364,6 +381,10 @@ function getLib($indice, $param1='', $param2='', $param3='', $param4='', $param5
 
 function getLibUpper($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
 	return '<span class="text-uppercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
+}
+
+function getLibLower($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
+	return '<span class="text-lowercase">'.getLib($indice, $param1, $param2, $param3, $param4, $param5).'</span>';
 }
 
 function getLLib($indice, $param1='', $param2='', $param3='', $param4='', $param5='') {
