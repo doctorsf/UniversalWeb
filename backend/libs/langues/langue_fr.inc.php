@@ -65,11 +65,29 @@ $_LIBELLES = array(
 	'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
 	'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
 	'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)',
+	'UFC_SAISIE_NON_CONFORME'		=> 'Saisie non conforme',
+	'UFC_REGEX_MANQUANTE'			=> 'REGEX manquante',
+	'UFC_SAISIE_ATTENDUE_PARMI'		=> 'Saisie attentue parmi : ',
+
+	//------------------------------------------
+	// Libellés des classes UniversalWeb SilentMail (UWSM)
+	//------------------------------------------
+	'UWSM_TEST'						=> 'Test',
+	'UWSM_SUCCESS'					=> 'Message envoyé avec succès&hellip;',
+	'UWSM_NO_SENDER'				=> 'Pas d\'expéditeur déclaré',
+	'UWSM_BAD_SENDER'				=> 'eMail expéditeur non valide',
+	'UWSM_NO_OBJECT'				=> 'Pas d\'objet déclaré',
+	'UWSM_NO_RECIPIENT'				=> 'Pas de destinaitaire déclaré',
+	'UWSM_TOO_MANY_RECIPIENTS'		=> 'Trop de destinataires ! 3 maximum autorisés',
+	'UWSM_BAD_RECIPIENT'			=> 'eMail d\'un destinataire non valide',
+	'UWSM_SEND_ERROR'				=> 'Erreur lors de l\'envoi',
+	'UWSM_ERROR_UNKNOWN'			=> 'Erreur inconnue',
 
 	//------------------------------------------
 	// ERREURS
 	//------------------------------------------
 	'ERREUR'						=> 'Erreur',
+	'ERREURS'						=> 'Erreurs',
 	'ERREUR_AUCUNE'					=> 'Aucune erreur',
 	'ERREUR_SQL'					=> 'Erreur SQL&hellip;',
 	'ERREUR_COMMANDE'				=> 'Erreur commande&hellip;',
@@ -86,6 +104,27 @@ $_LIBELLES = array(
 	'PHP_ERROR_FILE_ERROR'			=> 'Erreur lors de la suppression du fichier d\'erreurs PHP!',
 	'ERREURS_BACKEND'				=> 'Erreurs Backend',
 	'ERREURS_FRONTEND'				=> 'Erreurs Frontend',
+	'MODIFICATION_PRISE_EN_COMPTE'	=> 'Modification prise en compte',
+
+	//------------------------------------------
+	// IMPORT CSV
+	//------------------------------------------
+	'IMPORT_CSV'					=> 'Import CSV',
+	'STRUCTURE_CSV_IMP_ATTENDUE'	=> 'Structure du fichier d\'import CSV attendue',
+	'IMPORT_REGLES'					=> 'Chaque fichier d\'importation doit être limité à 1000 lignes. Son format doit être conforme au modèle spécifié ci-dessous. Reportez-vous à ce modèle pour forger le fichier d\'importation CSV attendu (séparateur par point-virgule)',
+	'SELECTION_FICHIER_UPLOADER'	=> 'Sélection du fichier à Uploader',
+	'IMPORT_FICHIER_CSV_X'			=> 'Import fichier CSV',
+	'NO_COLONNE'					=> 'N° Colonne',
+	'SAISIE_ATTENDUE'				=> 'Saisie attendue',
+	'X_VIDE_SINON'					=> 'X pour importer la ligne, vide sinon',
+	'OBLIGATOIRE_PARMI'				=> 'Obligatoire parmi : ',
+	'LIGNE_ERREURS'					=> '1 ligne comporte une ou plusieurs erreurs&hellip;',
+	'LIGNES_ERREURS'				=> '%d ligne comporte une ou plusieurs erreurs&hellip;',
+	'CORRIGEZ_RELANCEZ'				=> 'Corrigez les erreurs puis relancez le processus',
+	'IMPORT_EN_COURS'				=> 'Import en cours&hellip;',
+	'FICHIER_IMPORT_X_INEXISTANT'	=> 'Fichier d\'importation CSV "%s" inexistant !',
+	'FICHIER_IMPORT_X_ERROR'		=> 'Impossible d\'uploader le fichier "%s" !',
+	'LIGNE_CSV_X'					=> 'ligne CSV n°%d',
 
 	//------------------------------------------
 	// MOTS / VERBES
@@ -109,6 +148,8 @@ $_LIBELLES = array(
 	'SUPPRIMER'						=> 'Supprimer',
 	'ANNULER'						=> 'Annuler',
 	'RETOUR'						=> 'Retour',
+	'FERMER'						=> 'Fermer',
+	'UPLOADER'						=> 'Uploader',
 	'LEGENDE'						=> 'Légende',
 	'PROFIL'						=> 'Profil',
 	'ID'							=> 'Id',
@@ -147,6 +188,14 @@ $_LIBELLES = array(
 	'TYPE'							=> 'Type',
 	'OPERATION'						=> 'Opération',
 	'DATE'							=> 'Date',
+	'COMMENTAIRE'					=> 'Commentaire',
+	'VALEUR'						=> 'Valeur',
+	'GALERIE'						=> 'Galerie',
+	'COMMENTAIRES'					=> 'Commentaires',
+	'INFORMATION'					=> 'Information',
+	'SANS_OBJET'					=> 'Sans objet',
+	'OBLIGATOIRE'					=> 'Obligatoire',
+	'EMPLACEMENT'					=> 'Emplacement',
 
 	//------------------------------------------
 	// LOGS
@@ -274,6 +323,48 @@ $_LIBELLES = array(
 	'PROFIL_REN_CODE_EXISTE_DEJA'	=> 'Le code de ce profil existe déjà&hellip;',
 
 	//------------------------------------------
+	// PARAMETRAGE
+	//------------------------------------------
+	'REGLAGES'						=> 'Réglages',
+	'REGLAGES_APPLICATION'			=> 'Réglages application',
+	'PARAMETRE'						=> 'Paramétre',
+	'PARAMETRES'					=> 'Paramétres',
+	'AJOUTER_PARAMETRE'				=> 'Ajouter un paramètre',
+	'MODIFIER_PARAMETRE'			=> 'Modifier ce paramètre',
+	'REGLAGES_OK'					=> 'Réglages pris en compte',
+	'SUPPRIMER_PARAMETRE'			=> 'Supprimer ce paramètre',
+	'SUPPRIMER_PARAMETRE_CERTAIN'	=> 'Etes-vous certain de vouloir supprimer définitivement ce paramètre ?',
+	'PARAMETRE_REGLAGE'				=> 'Paramètre de réglage',
+	'PARAMETRE_REGLAGE_HELP'		=> 'Si ce paramètre permet le réglage de l\'application par le webmaster, basculer pour lui en donner l\'accès',
+	'PARAMETRE_LIBELLE_HELP'		=> 'Libellé à afficher pour le webmaster. Peut être un mnémonique',
+	'PARAMETRE_TYPE'				=> 'Type de paramètre',
+	'PARAMETRE_TYPE_HELP'			=> 'Choisir parmi : text*, boolean, number, date',
+	'PARAMETRE_MIN'					=> 'Valeur minimum',
+	'PARAMETRE_MIN_HELP'			=> 'Selon le type de paramètre, si<br/>"<b><em>text</em></b>" : ignoré<br/>"<b><em>number</em></b>" : valeur minimum que peut recevoir ce réglage<br/>"<b><em>boolean</em></b>" : valeur retournée par le switch si allumé',
+	'PARAMETRE_MAX'					=> 'Valeur maximum',
+	'PARAMETRE_MAX_HELP'			=> 'Selon le type de paramètre, si<br/>"<b><em>text</em></b>" : longeur maximum de la zone de saisie<br/>"<b><em>number</em></b>" : valeur maximum que peut recevoir ce réglage<br/>"<b><em>boolean</em></b>" : valeur retournée par le switch si éteind',
+	'PARAMETRE_STEP'				=> 'Pas de réglage',
+	'PARAMETRE_STEP_HELP'			=> '"<b><em>number</em></b>" (uniquement) : pas de modification du réglage entre les valeurs min et max',
+	'MINI_INF_MAXI'					=> 'La valeur mini doit être inférieure ou égale à la valeur maxi',
+	'MAXI_SUP_MINI'					=> 'La valeur maxi doit être supérieure ou égale à la valeur mini',
+	'PARAM_COMMENTS_HELP'			=> 'Aide sur le libellé du réglage. Peut être un mnémonique.',
+
+	'MODE_DEBUG'					=> 'Mode Debug',
+	'MODE_DEBUG_HELP'				=> 'Mode réservé au développement. Décocher lorsque le site est en production',
+	'SUPP_DEFINITIVE_ENREG'			=> 'Suppression définitive des enregistrements ?',
+	'SUPP_DEFINITIVE_ENREG_HELP'	=> 'Si coché, les enregistrements supprimés seront définitivement supprimés et non marqués',
+	'COMMENTAIRES_FACEBOOK'			=> 'Commentaires facebook',
+	'COMMENTAIRES_FACEBOOK_HELP'	=> 'Afficher et autoriser les commentaires Facebook ?',
+	'LIKE_FACEBOOK'					=> 'Boite LIKE facebook',
+	'LIKE_FACEBOOK_HELP'			=> 'Afficher et autorise la boite Facebook Like ?',
+	'FACEBOOK_URL'					=> 'Url facebook',
+	'FACEBOOK_URL_HELP'				=> 'Url de la page facebook associée à la boutique',
+	'AUTORISER_PUBLICITE'			=> 'Autoriser la publicité',
+	'AUTORISER_PUBLICITE_HELP'		=> 'Activer les zones de publicité ?',
+	'WEBMASTER_EMAIL'				=> 'eMail Webmaster',
+	'WEBMASTER_EMAIL_HELP'			=> 'Cette email est sensée recevoir des messages d\'ordres techniques en provenance des clients',
+
+	//------------------------------------------
 	// BASE DE DONNEES
 	//------------------------------------------
 	'SAUVEGARDE_BD'					=> 'Sauvegarde de la base de données',
@@ -309,7 +400,9 @@ $_LIBELLES = array(
 	// SYSTEME
 	//------------------------------------------
 	'SYSTEME'						=> 'Système',
+	'TABLE'							=> 'Table',
 	'INFORMATIONS_SYSTEME'			=> 'Informations système',
+	'SIGNATURE_BASE'				=> 'Signature de la base de données',
 	'SIGNATURE_CODE'				=> 'Signature du code',
 	'SIGNATURE_FINALE'				=> 'Signature finale',
 	'VERSION_PHP'					=> 'Version PHP',
@@ -322,16 +415,26 @@ $_LIBELLES = array(
 	'VERSION_PROTOCOLE'				=> 'Version de protocole',
 	'VERSION_APACHE'				=> 'Version Apache',
 	'MODULE_AUTHENTIFICATION'		=> 'Module Authentification',
-	'PAS_EXPEDITEUR'				=> 'Pas d\'expéditeur déclaré',
-	'EMAIL_EXPEDITEUR_KO'			=> 'eMail expéditeur non valide',
-	'PAS_DESTINATAIRE'				=> 'Pas de destinaitaire déclaré',
-	'TROP_DESTINATAIRES'			=> 'Trop de destinataires ! 3 maximum autorisés',
-	'PAS_OBJET'						=> 'Pas d\'objet déclaré',
-	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'eMail d\'un destinataire non valide',
-	'EMAIL_ENVOI_ERREUR'			=> 'Erreur lors de l\'envoi du mail',
 	'ERREURS_BACKEND'				=> 'Erreurs Backend',
 	'ERREURS_FRONTEND'				=> 'Erreurs Frontend',
 	'VOTRE_IP'						=> 'Votre IP',
+	'ZONE_DE_TELEVERSEMENT'			=> 'Zone de versement',
+
+	//------------------------------------------
+	// MEDIA
+	//------------------------------------------
+	'MEDIA'							=> 'Media',
+	'MEDIA_DU_SITE'					=> 'Media du site',
+	'MEDIA_DISPONIBLE'				=> 'Media disponible',
+	'SELECTION_MEDIA_UPLOAD'		=> 'Selection des media à uploader',
+	'UPLOAD_MEDIA'					=> 'Upload de media',
+	'MEDIA_PATH'					=> 'Chemin des media',
+	'MEDIA_PATH_HELP'				=> 'Selectionnez le chemin des media à gérer',
+	'MEDIA_SUPPRIMER'				=> 'Supprimer ce media',
+	'MEDIA_SUPPRIMER_CERTAIN'		=> 'Êtes-vous certain de vouloir supprimer ce média ?',
+	'MEDIA_UPLOAD_SUCCES'			=> 'Media "%s" uploadé avec succès!',
+	'MEDIA_UPLOAD_ERREUR'			=> 'Impossible d\'uploader le fichier "%s"',
+	'ZONE_DE_TELEVERSEMENT'			=> 'Zone de téléversement',
 
 	//------------------------------------------
 	// AUTRE
@@ -339,9 +442,6 @@ $_LIBELLES = array(
 	'IGNORER_LE_CHAMP'				=> 'Ignorer le champ',
 	'CLASSEMENT_ASCENDANT'			=> 'Classement ascendant',
 	'CLASSEMENT_DESCENDANT'			=> 'Classement descendant',
-	'AUCUNE_REF_TROUVEE'			=> 'Aucune référence trouvée',
-	'1_REF_TROUVEE'					=> '1 référence trouvée',
-	'X_REF_TROUVEE'					=> '%d références trouvées',
 	'NOM_COLONNE'					=> 'Nom Colonne ?',
 	'ACTIONS'						=> '<span class="fas fa-child fa-lg"></span>'
 );
@@ -358,6 +458,17 @@ $_MENU_FILTRE_TEXT = array('ALL' => 'Tous',
 						   'CON' => 'Contient', 
 						   'DNC' => 'Ne contient pas', 
 						   'END' => 'Se termine par');
+
+//--------------------------------------
+// Affiche un texte "nombre de références " + verbe ou participe passé
+// Entrée : $nb : nombre à transcrire
+// Retour : la chaine de catactère résultante
+//--------------------------------------
+function getLibNbRefsTrouvees($nb) {
+	if ($nb == 0)		return 'Aucune référence trouvée';
+	elseif ($nb == 1)	return '1 référence trouvée';
+	else				return $nb.' références trouvées';
+}
 
 //------------------------------------------------------------------
 // Construction d'une chaine avec des paramètres passés en option
@@ -416,4 +527,16 @@ function getULib($indice, $param1='', $param2='', $param3='', $param4='', $param
 function existeLib($indice) {
 	global $_LIBELLES;
 	return isset($_LIBELLES[$indice]);
+}
+
+//------------------------------------------------------------------
+// Renvoie le libellé ci-celui-ci existe, l'indice sinon
+//------------------------------------------------------------------
+// Entrée 
+//		$indice : indice du template de la chaine dans $_LIBELLES
+// Retour
+//		la traduction si existe / $indice sinon
+//------------------------------------------------------------------
+function getLibIfExists($indice) {
+	if (existeLib($indice)) return getLib($indice); else return $indice;
 }

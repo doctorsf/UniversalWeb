@@ -48,257 +48,287 @@ class Form_user extends UniversalForm {
 		//en mode modification certain champs ne sont pas affichables (car sensibles ou parce qu'il ne faut pas les montrer aux utilisateurs)
 		//par exemple, certains champs 'sensibles' comme le niveau d'accès ne sont affichable que dans les conditions suivantes : on est 
 		//administrateur et on ne cherche pas à modifier son propre compte (pour éviter de s'auto enlever des droits admin)
-		$affichable = (accesAutorise('FONC_ADM_APP') && 
+		$affichable = (accesAutorise('FONC_ADM_GERER_USERS') && 
 						(($this->getOperation() != self::MODIFIER) || ($this->getIdTravail() != $_SESSION[_APP_LOGIN_]->getId()))
 					  );
 
 		if ($affichable)
-		$this->createField('checkbox', 'active', array(
-				'newLine' => true,							//nouvelle ligne ? false par défaut
-				'groupName' => 'active',					//le groupName est facultatif si dpos = alone
-				'dbfield' => 'active',						//retour de la saisie
-				'design' => 'inline',						//inline (defaut) / online (inline par défaut si dpos = alone)
-				'dpos' => 'alone',							//first / last / inter / alone
-				'decalage' => '',							//décallage en colonnes boostrap
-				'label' => ucfirst(getLib('COMPTE_ACTIF')),	//label
-				'lpos' => 'after',							//position du label par rapport à la checkbox : before (defaut) / after (ici utiliser after pour un meilleur alignement de la checkbox)
-				'clong' => 'col-12 col-xl-10 offset-xl-2',	//longueur du champ en colonnes boostrap (a définir sur le premier du groupe (ou alone). Sans effet sur les autres)
-				'border' => false,							//defaut : false. A définir une seule fois sur le premier éléments checkbox (false/true(encadrement par défaut) ou bordure personnnalisée)
-				'checked' => ($this->_tab_donnees['active'] == 1)	//cochée (true) / décochée (false)
-			));
-/*		if ($affichable)
+		$this->createField('switch', 'active', array(
+			'newLine' => true,							//nouvelle ligne ? false par défaut
+			'groupName' => 'active',					//le groupName est facultatif si dpos = alone
+			'dbfield' => 'active',						//retour de la saisie
+			'design' => 'inline',						//inline (defaut) / online (inline par défaut si dpos = alone)
+			'dpos' => 'alone',							//first / last / inter / alone
+			'flexLine' => 'mb-4',						//contourne propr. flexLine pour mettre petit margin bottom
+			'label' => ucfirst(getLib('COMPTE_ACTIF')),	//label
+			'lpos' => 'after',							//position du label par rapport à la checkbox : before (defaut) / after
+			'clong' => 'col-12',						//longueur du champ en colonnes boostrap (a définir sur le premier du groupe (ou alone). Sans effet sur les autres)
+			'border' => false,							//defaut : false. A définir une seule fois sur le premier éléments checkbox
+			'checked' => ($this->_tab_donnees['active'] == 1)	//cochée (true) / décochée (false)
+		));
+/*
+		if ($affichable)
 		$this->createField('checkbox', 'testeur', array(
-				'groupName' => 'testeur',
-				'dbfield' => 'testeur',
-				'label' => ucfirst(getLib('TESTEUR')),
-				'lpos' => 'after',
-				'clong' => 'col-1',
-				'checked' => ($this->_tab_donnees['testeur'] == 1)
-				));
-*/		$this->createField('separateur', 'separateur', array(
-				'newLine' => true,
-				'label' => 'Informations utilisateur',
-				'lclass' => 'font-weight-bold text-underline text-uppercase',
-				'clong' => 'col-12 col-xl-10 offset-xl-2'
-				));
+			'groupName' => 'testeur',
+			'dbfield' => 'testeur',
+			'label' => ucfirst(getLib('TESTEUR')),
+			'lpos' => 'after',
+			'clong' => 'col-1',
+			'checked' => ($this->_tab_donnees['testeur'] == 1)
+		));
+*/		
+		$this->createField('separateur', 'separateur', array(
+			'newLine' => true,
+			'label' => 'Informations utilisateur',
+			'lclass' => 'font-weight-bold text-underline text-uppercase',
+			'clong' => 'col-12'
+		));
+
 		if (_ANNUAIRE_ != _ANNUAIRE_INTERNE_) {
 			//ajout d'un champ de recherche d'utilisateur sur le serveur LDAP
 			if (($this->getOperation() == self::AJOUTER) || ($this->getOperation() == self::MODIFIER)) {
 				$javascript = '';
 				$this->createField('search', 'recherche', array(
-						'newLine' => true,						//nouvelle ligne ? false par défaut
-						'dbfield' => 'recherche',				//retour de la saisie
-						'design' => 'online',
-						'inputType' => '',						//search(defaut), text, time, date, etc.
-						'decalage' => '',						//décallage en colonnes boostrap
-						'label' => '',							//libellé du bouton (par défaut "champ") ou une icone loupe si vide ou glyph icon font-awesome "<span class="fas fa-search"></span>"
-						'lpos' => 'before',						//position du champ de saisie par rapport au bouton
-						'labelHelp' => 'Entrez nom.prenom du personnel recherché',	//aide sur le champ
-						'lclass' => 'btn btn-success',			//classe du bouton
-						'clong' => 'col-12 col-md-6 col-xl-4 offset-xl-2',	//longueur du bloc champ
-						'placeholder' => 'nom.prenom',			//placeholder de la saisie
-						'spellcheck' => false,					//correction orthographique ?
-						'javascript' => $javascript
-					));
+					'newLine' => true,						//nouvelle ligne ? false par défaut
+					'dbfield' => 'recherche',				//retour de la saisie
+					'design' => 'online',
+					'inputType' => '',						//search(defaut), text, time, date, etc.
+					'decalage' => '',						//décallage en colonnes boostrap
+					'label' => '',							//libellé du bouton (par défaut "champ") ou une icone loupe si vide ou glyph icon font-awesome
+					'lpos' => 'before',						//position du champ de saisie par rapport au bouton
+					'labelHelp' => 'Entrez nom.prenom du personnel recherché',	//aide sur le champ
+					'lclass' => 'btn btn-success',			//classe du bouton
+					'clong' => 'col-12',					//longueur du bloc champ
+					'placeholder' => 'nom.prenom',			//placeholder de la saisie
+					'spellcheck' => false,					//correction orthographique ?
+					'javascript' => $javascript
+				));
 			}
 		}
+
 		$readonly = ($this->getOperation() != self::AJOUTER);
 		$this->createField('text', 'uid', array(
-				'newLine' => true,
-				'dbfield' => 'id_user',
-				'design' => 'online',
-				'decalage' => '',
-				'label' => getLib('IDENTIFIANT'),
-				'clong' => 'col-12 col-md-6 col-xl-4 offset-xl-2',
-				'cclass' => 'tominuscules',
-				'maxlength' => 100,
-				'spellcheck' => false,
-				'testMatches' => array('REQUIRED', 'CHECK_ALPHA_SIMPLE'),
-				'value' => $this->_tab_donnees['id_user'],
-				'readonly' => $readonly
-				));
+			'newLine' => true,
+			'dbfield' => 'id_user',
+			'design' => 'online',
+			'decalage' => '',
+			'label' => getLib('IDENTIFIANT'),
+			'clong' => 'col-12 col-md-6',
+			'cclass' => 'tominuscules',
+			'maxlength' => 100,
+			'spellcheck' => false,
+			'testMatches' => array('REQUIRED', 'CHECK_ALPHA_SIMPLE'),
+			'value' => $this->_tab_donnees['id_user'],
+			'readonly' => $readonly
+		));
+
 		$this->createField('text', 'email', array(
-				'newLine' => false,
-				'dbfield' => 'email',
-				'inputType' => 'email',
-				'design' => 'online',
-				'label' => getLib('EMAIL'),
-				'clong' => 'col-12 col-md-6 col-xl-4',
-				'maxlength' => 255,
-				'testMatches' => array('REQUIRED'),
-				'value' => $this->_tab_donnees['email']
-				));
+			'newLine' => false,
+			'dbfield' => 'email',
+			'inputType' => 'email',
+			'design' => 'online',
+			'label' => getLib('EMAIL'),
+			'clong' => 'col-12 col-md-6',
+			'maxlength' => 255,
+			'testMatches' => array('REQUIRED'),
+			'value' => $this->_tab_donnees['email']
+		));
+
 		$this->createField('text', 'nom', array(
-				'newLine' => true,
-				'dbfield' => 'nom',
-				'design' => 'online',
-				'decalage' => '',
-				'label' => getLib('NOM'),
-				'clong' => 'col-12 col-md-6 col-xl-4 offset-xl-2',
-				'maxlength' => 100,
-				'spellcheck' => false,
-				'testMatches' => array('REQUIRED', 'CHECK_ALPHA_NOMS'),
-				'value' => $this->_tab_donnees['nom']
-				));
+			'newLine' => true,
+			'dbfield' => 'nom',
+			'design' => 'online',
+			'decalage' => '',
+			'label' => getLib('NOM'),
+			'clong' => 'col-12 col-md-6',
+			'maxlength' => 100,
+			'spellcheck' => false,
+			'testMatches' => array('REQUIRED', 'CHECK_ALPHA_NOMS'),
+			'value' => $this->_tab_donnees['nom']
+		));
+
 		$this->createField('text', 'prenom', array(
-				'newLine' => false,
-				'dbfield' => 'prenom',
-				'design' => 'online',
-				'label' => getLib('PRENOM'),
-				'clong' => 'col-12 col-md-6 col-xl-4',
-				'maxlength' => 100,
-				'spellcheck' => false,
-				'testMatches' => array('REQUIRED', 'CHECK_ALPHA_NOMS'),
-				'value' => $this->_tab_donnees['prenom']
-				));
+			'newLine' => false,
+			'dbfield' => 'prenom',
+			'design' => 'online',
+			'label' => getLib('PRENOM'),
+			'clong' => 'col-12 col-md-6',
+			'maxlength' => 100,
+			'spellcheck' => false,
+			'testMatches' => array('REQUIRED', 'CHECK_ALPHA_NOMS'),
+			'value' => $this->_tab_donnees['prenom']
+		));
+
 		//le formulaire propose la gestion du mot de passe seulement pour une application qui
 		//prend en compte les login via la base de données (pas par annuaire LDAP)
 		if (get_class($_SESSION[_APP_LOGIN_]) == 'Login') {
 			$this->createField('text', 'password', array(
-					'newLine' => true,
-					'dbfield' => 'password',
-					'inputType' => 'password',
-					'design' => 'online',
-					'decalage' => '',
-					'label' => getLib('MOT_DE_PASSE'),
-					'clong' => 'col-12 col-md-6 col-xl-4 offset-xl-2',
-					'maxlength' => 40,
-					'testMatches' => array('REQUIRED'),
-					'value' => $this->_tab_donnees['password'],
-					'javascript' => 'onkeypress="capLock(event, \'idPassword\')"'
-					));
-			$this->createField('text', 'password2', array(
-					'newLine' => false,
-					'dbfield' => 'password2',
-					'inputType' => 'password',
-					'design' => 'online',
-					'label' => getLib('MOT_DE_PASSE_RETAPER'),
-					'clong' => 'col-12 col-md-6 col-xl-4',
-					'maxlength' => 40,
-					'testMatches' => array('REQUIRED'),
-					'value' => $this->_tab_donnees['password2'],
-					'javascript' => 'onkeypress="capLock(event, \'idPassword2\')"'
-					));
-		}
-		if ($affichable)
-		$this->createField('select', 'profil', array(
 				'newLine' => true,
-				'dbfield' => 'profil',
+				'dbfield' => 'password',
+				'inputType' => 'password',
 				'design' => 'online',
 				'decalage' => '',
-				'complement' => 'sqlDroits_buildProfilesList',
-				'label' => getLib('PROFIL'),
-				'clong' => 'col-12 col-md-6 col-xl-4 offset-xl-2',
+				'label' => getLib('MOT_DE_PASSE'),
+				'clong' => 'col-12 col-md-6',
+				'maxlength' => 40,
 				'testMatches' => array('REQUIRED'),
-				'value' => $this->_tab_donnees['profil']
-				));
-/*		($affichable) ? $newLine = false : $newLine = true;
+				'value' => $this->_tab_donnees['password'],
+				'javascript' => 'onkeypress="capLock(event, \'idPassword\')"'
+			));
+			$this->createField('text', 'password2', array(
+				'newLine' => false,
+				'dbfield' => 'password2',
+				'inputType' => 'password',
+				'design' => 'online',
+				'label' => getLib('MOT_DE_PASSE_RETAPER'),
+				'clong' => 'col-12 col-md-6',
+				'maxlength' => 40,
+				'testMatches' => array('REQUIRED'),
+				'value' => $this->_tab_donnees['password2'],
+				'javascript' => 'onkeypress="capLock(event, \'idPassword2\')"'
+			));
+		}
+
+		if ($affichable)
+		$this->createField('select', 'profil', array(
+			'newLine' => true,
+			'dbfield' => 'profil',
+			'design' => 'online',
+			'decalage' => '',
+			'complement' => 'sqlDroits_buildProfilesList',
+			'label' => getLib('PROFIL'),
+			'clong' => 'col-12 col-md-6',
+			'testMatches' => array('REQUIRED'),
+			'value' => $this->_tab_donnees['profil']
+		));
+/*		
+		($affichable) ? $newLine = false : $newLine = true;
 		($affichable) ? $decalage = '' : $decalage = 'col-2';
 		$this->createField('select', 'langue', array(
-				'newLine' => false,
-				'dbfield' => 'langue',
-				'design' => 'online',
-				'complement' => 'sqlDivers_buildLanguesDispo',
-				'label' => getLib('LANGUE'),
-				'clong' => 'col-12 col-md-6 col-xl-4',
-				'testMatches' => array('REQUIRED'),
-				'value' => $this->_tab_donnees['langue'],
-				));
+			'newLine' => false,
+			'dbfield' => 'langue',
+			'design' => 'online',
+			'complement' => 'sqlDivers_buildLanguesDispo',
+			'label' => getLib('LANGUE'),
+			'clong' => 'col-12 col-md-6 col-xl-4',
+			'testMatches' => array('REQUIRED'),
+			'value' => $this->_tab_donnees['langue'],
+		));
 */
 		if ($this->getOperation() != self::AJOUTER) {
 			if ($affichable)
 			$this->createField('text', 'dateCreation', array(
-					'newLine' => true,
-					'dbfield' => 'date_creation',
-					'design' => 'online',
-					'decalage' => '',
-					'label' => getLib('DATE_CREATION'),
-					'clong' => 'col-12 col-md-4 col-xl-3 offset-xl-2',
-					'testMatches' => array('REQUIRED'),
-					'value' => date(_FORMAT_DATE_TIME_, strtotime($this->_tab_donnees['date_creation']))
-					));
-			if ($affichable)
-			$this->createField('text', 'dernierAcces', array(
-					'newLine' => false,
-					'dbfield' => 'dernier_acces',
-					'inputType' => 'datetime',
-					'design' => 'online',
-					'label' => getLib('DERNIER_ACCES'),
-					'clong' => 'col-12 col-md-4 col-xl-3',
-					'value' => $this->_tab_donnees['dernier_acces'],
-					'readonly' => true
-					));
-			if ($affichable)
-			$this->createField('text', 'ip', array(
-					'newLine' => false,
-					'dbfield' => 'ip',
-					'design' => 'online',
-					'label' => getLib('DERNIERE_IP'),
-					'clong' => 'col-12 col-md-4 col-xl-2',
-					'value' => $this->_tab_donnees['ip'],
-					'readonly' => true
-					));
-/*			if ($affichable)
-			$this->createField('text', 'actionDemandee', array(
-					'newLine' => true,
-					'dbfield' => 'action_demandee',
-					'design' => 'online',
-					'decalage' => '',
-					'label' => getLib('ACTION_DEMANDEE'),
-					'clong' => 'col-12 col-md-6 col-xl-4 offset-xl-2',
-					'value' => $this->_tab_donnees['action_demandee']
-					));
-			if ($affichable)
-			$this->createField('text', 'codeValidation', array(
-					'newLine' => false,
-					'dbfield' => 'code_validation',
-					'design' => 'online',
-					'label' => getLib('CODE_VALIDATION'),
-					'clong' => 'col-12 col-md-6 col-xl-4',
-					'value' => $this->_tab_donnees['code_validation']
-					));
-*/		}
-
-/*		$this->createField('checkbox', 'autolog', array(
 				'newLine' => true,
-				'groupName' => 'autolog',
-				'dbfield' => 'autolog',
-				'decalage' => 'col-xl-2',
-				'label' => getLib('AUTOLOG'),
-				'lalign' => 'left',
-				'lpos' => 'after',
-				'border' => false,
-				'clong' => 'col-12 col-xl-3',
-				'checked' => ($this->_tab_donnees['autolog'] == 1)
-				));
-*/		if ($affichable)
-		$this->createField('area', 'notesPrivees', array(
-				'newLine' => true,
-				'dbfield' => 'notes_privees',
+				'dbfield' => 'date_creation',
 				'design' => 'online',
 				'decalage' => '',
-				'label' => getLib('NOTES_PRIVEES'),
-				'clong' => 'col-12 col-xl-8 offset-xl-2',
-				'spellcheck' => true,
-				'rows' => 5,
-				'value' => $this->_tab_donnees['notes_privees']
-				));
+				'label' => getLib('DATE_CREATION'),
+				'clong' => 'col-12 col-md-4',
+				'testMatches' => array('REQUIRED'),
+				'value' => $this->_tab_donnees['date_creation']
+			));
+			if ($affichable)
+			$this->createField('text', 'dernierAcces', array(
+				'newLine' => false,
+				'dbfield' => 'dernier_acces',
+				'inputType' => 'datetime',
+				'design' => 'online',
+				'label' => getLib('DERNIER_ACCES'),
+				'clong' => 'col-12 col-md-4',
+				'value' => $this->_tab_donnees['dernier_acces'],
+				'readonly' => true
+			));
+			if ($affichable)
+			$this->createField('text', 'ip', array(
+				'newLine' => false,
+				'dbfield' => 'ip',
+				'design' => 'online',
+				'label' => getLib('DERNIERE_IP'),
+				'clong' => 'col-12 col-md-4',
+				'value' => $this->_tab_donnees['ip'],
+				'readonly' => true
+			));
+/*			
+			if ($affichable)
+			$this->createField('text', 'actionDemandee', array(
+				'newLine' => true,
+				'dbfield' => 'action_demandee',
+				'design' => 'online',
+				'decalage' => '',
+				'label' => getLib('ACTION_DEMANDEE'),
+				'clong' => 'col-12 col-md-4',
+				'value' => $this->_tab_donnees['action_demandee']
+			));
+			if ($affichable)
+			$this->createField('text', 'codeValidation', array(
+				'newLine' => false,
+				'dbfield' => 'code_validation',
+				'design' => 'online',
+				'label' => getLib('CODE_VALIDATION'),
+				'clong' => 'col-12 col-md-4',
+				'value' => $this->_tab_donnees['code_validation']
+			));
+*/		
+		}
+/*		
+		$this->createField('checkbox', 'autolog', array(
+			'newLine' => true,
+			'groupName' => 'autolog',
+			'dbfield' => 'autolog',
+			'decalage' => 'col-xl-2',
+			'label' => getLib('AUTOLOG'),
+			'lalign' => 'left',
+			'lpos' => 'after',
+			'border' => false,
+			'clong' => 'col-12 col-xl-3',
+			'checked' => ($this->_tab_donnees['autolog'] == 1)
+		));
+*/		
+		if ($affichable)
+		$this->createField('area', 'notesPrivees', array(
+			'newLine' => true,
+			'dbfield' => 'notes_privees',
+			'design' => 'online',
+			'decalage' => '',
+			'label' => getLib('NOTES_PRIVEES'),
+			'clong' => 'col-12',
+			'spellcheck' => true,
+			'rows' => 5,
+			'value' => $this->_tab_donnees['notes_privees']
+		));
+
+		//-------------------
+		// Boutons
+		//-------------------
+
+		//construction bouton Submit
+		$couleurBouton = 'primary';
 
 		//construction bouton Submit
 		if ($this->getOperation() == self::CONSULTER) {
-			$labelBoutonValidation = getLib('RETOUR');
+			$valueBoutonValidation = getLib('RETOUR');
+			$labelBoutonValidation = '<span class="fas fa-reply mr-2"></span>'.$valueBoutonValidation;
 		}
 		elseif ($this->getOperation() == self::AJOUTER) {
-			$labelBoutonValidation = getLib('AJOUTER');
+			$valueBoutonValidation = getLib('AJOUTER');
+			$labelBoutonValidation = '<span class="fas fa-plus-circle mr-3"></span>'.$valueBoutonValidation;
 		}
 		elseif ($this->getOperation() == self::MODIFIER) {
-			$labelBoutonValidation = getLib('MODIFIER');
+			$valueBoutonValidation = getLib('MODIFIER');
+			$labelBoutonValidation = '<span class="far fa-edit mr-3"></span>'.$valueBoutonValidation;
 		}
 		elseif ($this->getOperation() == self::DUPLIQUER) {
-			$labelBoutonValidation = getLib('DUPLIQUER');
+			$valueBoutonValidation = getLib('DUPLIQUER');
+			$labelBoutonValidation = '<span class="fas fa-clone mr-3"></span>'.$valueBoutonValidation;
 		}
 		elseif ($this->getOperation() == self::SUPPRIMER) {
-			$labelBoutonValidation = getLib('SUPPRIMER');
+			$valueBoutonValidation = getLib('SUPPRIMER');
+			$labelBoutonValidation = '<span class="fas fa-trash mr-3"></span>'.$valueBoutonValidation;
+			$couleurBouton = 'danger';
+		}
+		elseif ($this->getOperation() == self::RETIRER) {
+			$valueBoutonValidation = getLib('RETIRER');
+			$labelBoutonValidation = '<span class="fas fa-recycle mr-3"></span>'.$valueBoutonValidation;
 		}
 
 		//boutons
@@ -311,32 +341,56 @@ class Form_user extends UniversalForm {
 			'inputType' => 'submit',
 			'decalage' => '',
 			'label' => $labelBoutonValidation,
-			'clong' => 'col-12 col-sm-6 col-md-4 offset-md-4 col-lg-3 offset-lg-6 col-xl-3 offset-xl-4',
+			'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3 ml-auto',
 			'llong' => 'col-12',
-			'lclass' => 'btn btn-primary',			//classes graphique du bouton
+			'lclass' => 'btn btn-'.$couleurBouton,
 			'javascript' => $javascript,
-			'value' => $labelBoutonValidation
-			));
-		//ajout d'un bouton d'annulation de suppression
+			'value' => $valueBoutonValidation
+		));
+
+		//ajout d'un bouton de retour
 		if (($this->getOperation() == self::SUPPRIMER) || ($this->getOperation() == self::AJOUTER)) {
+			$libelle = '<span class="fas fa-reply mr-2"></span>'.getLib('RETOUR');
 			$javascript = 'onclick="window.history.back()"';
 			$this->createField('bouton', 'retour', array(
 				'newLine' => false,
 				'inputType' => 'button',
-				'label' => getLib('RETOUR'),
-				'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3',
+				'label' => $libelle, 
+				'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3',
 				'llong' => 'col-12',
 				'lclass' => 'btn btn-secondary',	//classes graphique du bouton
 				'javascript' => $javascript
-				)); 		
+			)); 		
 		}
+
 		//ajout d'un bouton d'édition si on est en consultation
+		$profilEdite = $this->_tab_donnees['profil'];
+		$profilAdmin = $_SESSION[_APP_DROITS_]->getIdProfil('PROFIL_ADMIN');
+		$monProfil = $_SESSION[_APP_LOGIN_]->getProfil();
 		if ($this->getOperation() == self::CONSULTER) {
-			$libelle = getLib('EDITER_CET_UTILISATEUR');
-			if ($this->getIdTravail() == $_SESSION[_APP_LOGIN_]->getId()) $libelle = getLib('EDITER_MON_COMPTE');
-			$adresse = str_replace('consulter', 'modifier', $_SERVER['REQUEST_URI']);
+			if (($profilEdite != $profilAdmin) || ($monProfil == $profilAdmin)) {
+				$libelle = '<span class="far fa-edit mr-3"></span>'.getLib('EDITER_CET_UTILISATEUR');
+				if ($this->getIdTravail() == $_SESSION[_APP_LOGIN_]->getId()) $libelle = '<span class="far fa-edit mr-3"></span>'.getLib('EDITER_MON_COMPTE');
+				$adresse = str_replace('consulter', 'modifier', $_SERVER['REQUEST_URI']);
+				$javascript = 'onclick="location.href=\''.$adresse.'\'; return false;"';
+				$this->createField('bouton', 'edit', array(
+					'newLine' => false,
+					'inputType' => 'button',
+					'label' => $libelle,
+					'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3',
+					'llong' => 'col-12',
+					'lclass' => 'btn btn-secondary',	//classes graphique du bouton
+					'javascript' => $javascript
+				));
+			}
+		}
+
+		//ajout d'un bouton d'annulation d'édition si on est en édition
+		if ($this->getOperation() == self::MODIFIER) {
+			$libelle = '<span class="far fa-times-circle mr-3"></span>'.getLib('ANNULER_EDITION');
+			$adresse = str_replace('modifier', 'consulter', $_SERVER['REQUEST_URI']);
 			$javascript = 'onclick="location.href=\''.$adresse.'\'; return false;"';
-			$this->createField('bouton', 'edit', array(
+			$this->createField('bouton', 'annule', array(
 				'newLine' => false,
 				'inputType' => 'button',
 				'label' => $libelle,
@@ -344,21 +398,7 @@ class Form_user extends UniversalForm {
 				'llong' => 'col-12',
 				'lclass' => 'btn btn-secondary',	//classes graphique du bouton
 				'javascript' => $javascript
-				)); 		
-		}
-		//ajout d'un bouton d'annulation d'édition si on est en édition
-		if ($this->getOperation() == self::MODIFIER) {
-			$adresse = str_replace('modifier', 'consulter', $_SERVER['REQUEST_URI']);
-			$javascript = 'onclick="location.href=\''.$adresse.'\'; return false;"';
-			$this->createField('bouton', 'annule', array(
-				'newLine' => false,
-				'inputType' => 'button',
-				'label' => getLib('ANNULER_EDITION'),
-				'clong' => 'col-12 col-sm-6 col-md-4 col-lg-3',
-				'llong' => 'col-12',
-				'lclass' => 'btn btn-secondary',	//classes graphique du bouton
-				'javascript' => $javascript
-				)); 		
+			)); 		
 		}
 	}
 
@@ -390,7 +430,7 @@ class Form_user extends UniversalForm {
 //			$this->_tab_donnees['langue'] = $user->getLangue();
 			$this->_tab_donnees['profil'] = $user->getProfil();
 //			$this->_tab_donnees['testeur'] = $user->getTesteur();
-			$this->_tab_donnees['date_creation'] = $user->getDateCreation();
+			$this->_tab_donnees['date_creation'] = changeDateTimeFormat($user->getDateCreation(), _FORMAT_DATE_TIME_SQL_, _FORMAT_DATE_TIME_);
 			if (empty($user->getDernierAcces())) {
 				$this->_tab_donnees['dernier_acces'] = ''; 
 			}
@@ -473,9 +513,17 @@ class Form_user extends UniversalForm {
 	public function afficher() {
 		parent::afficher();		//permet d'ajouter des tests de construction du formulaire
 		//ATTENTION : les champs disabled ne renvoient aucun POST !!! Donc impossible de récupérer les données depuis une suppression
-		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
-		$chaine = '';
+		$profilEdite = $this->_tab_donnees['profil'];
+		$profilAdmin = $_SESSION[_APP_DROITS_]->getIdProfil('PROFIL_ADMIN');
+		$monProfil = $_SESSION[_APP_LOGIN_]->getProfil();
+		$enable = (! (
+						($this->getOperation() == self::CONSULTER) || 
+						($this->getOperation() == self::SUPPRIMER)	|| 
+						(($profilEdite == $profilAdmin) && ($monProfil != $profilAdmin)) 
+					 )
+				   );
 
+		$chaine = '';
 		$chaine.= '<div class="container-lg px-0">';
 			$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
 				$chaine.= '<fieldset class="border p-3">';

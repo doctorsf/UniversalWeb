@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'separateur'
-// Version 3.18.0 du 07.01.2020
+// Version 3.20.0 du 26.03.2020
 //==============================================================
 
 class UniversalFieldSeparateur extends UniversalField {
@@ -51,8 +51,9 @@ class UniversalFieldSeparateur extends UniversalField {
 		($this->invisible()) ? $invisible = ' invisible' : $invisible = '';
 		$labelHelp = '';
 		if ($this->labelHelp() != '') {
-			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+			$labelHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->labelHelp()).'"';
 			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			($this->labelHelpHtml() == true) ? $labelHelp.= ' data-html="true"' : $labelHelp.= '';
 		}
 		($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
@@ -62,15 +63,11 @@ class UniversalFieldSeparateur extends UniversalField {
 
 			$html.= '<div id="'.$this->idztitre().'" class="'.$this->lclass().'">';
 				//libellé du séparateur
-				if ($labelHelp != '') {
-					$html.= '<p class="py-0 form-control-plaintext">';
-					$html.= '<span '.$labelHelp.'>'.$this->label().'</span>';
-					$html.= '</p>';
-				}
-				else {
-					$html.= '<p class="py-0 form-control-plaintext"><span>'.$this->label().'</span></p>';
-				}
+				$html.= '<p class="py-0 form-control-plaintext" style="color:currentcolor">';
+				$html.= '<span'.$labelHelp.'>'.$this->label().'</span>';
+				$html.= '</p>';
 			$html.= '</div>';
+
 			$html.= '<div id="'.$this->idzchamp().'">';
 				//valeur d'envoi dans le formulaire
 				$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$this->value().'">';

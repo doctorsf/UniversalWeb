@@ -6,23 +6,34 @@
 //-----------------------------------------------------------------------
 // mise à jour : 
 // 29.11.2017
-//		modification des paramètres de getListe (enlevé le param de langue)
+//		Modification des paramètres de getListe (enlevé le param de langue)
 // 05.02.2019
-//		ajout de la méthode importMany
+//		Ajout de la méthode importMany
 // 12.02.2019
-//		test de la méthode importMany et utilisation dans exemple fourni avec UniversalWeb
+//		Test de la méthode importMany et utilisation dans exemple fourni avec UniversalWeb
 // 04.04.2019
-//		correction bug importMany()
+//		Correction bug importMany()
 // 12.11.2019
-//		modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
+//		Modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
 // 06.12.2019
-//		ajout de la méthode statique updateChamp
+//		Ajout de la méthode statique updateChamp
 // 13.12.2019
-//		ajout du paramètre debug à la classe existValeur et existValeurAilleurs
+//		Ajout du paramètre debug à la classe existValeur et existValeurAilleurs
 // 23.12.2019
-//		ajout des méthodes statiques getMin, getMax, getGap
+//		Ajout des méthodes statiques getMin, getMax, getGap
 // 13.01.2020
-//		ajout de la méthode statique catalog
+//		Ajout de la méthode statique catalog
+// 24.01.2020
+//		Ajout de la constante VERSION
+// 30.03.2020
+//		Ajout de la méthode transaction qui execute plusieurs requetes fournies dans le tableau $requetes tout en  opérant une transaction afin de garantir l'intégrité de la base
+// 10.04.2020
+//		Ajout de la méthode getSome qui ramène tous les tuples de la table pour laquelle le $champ a la valeur $valeur
+//		La méthode updateChamp est maintenant exécutée en UPDATE IGNORE à la place du simple UPDATE
+// 20.04.2020
+//		Ajout de la méthode distinct qui ramène une liste unique de contenu d'un champ d'une table
+// 22.04.2020 (V1.3.1)
+//		Ajout du paramètre optionnel "tri" à la méthode "distinct"
 //-----------------------------------------------------------------------
 // Cette classe comporte des méthodes d'acces génériques à une table
 // -------------------------------------
@@ -50,7 +61,67 @@
 
 class SqlSimple {
 
+	const VERSION = 'v1.3.1 (2020-04-20)';
+
 	//************************ METHODES STATIQUES ****************************
+
+	//----------------------------------------------------------------------
+	// Execute plusieurs requetes fournies dans le tableau $requetes tout en  
+	// opérant une transaction afin de garantir l'intégrité de la base
+	// Entree :
+	//		$requetes : tableau des requêtes à exécuter
+	// Retour : 
+	//		0 : aucune modification n'est intervenue sur la base de données
+	//		true : la transaction s'est bien déroulée, toutes les requetes ont été exécutées avec des résultats
+	//		false : erreur SQL
+	//----------------------------------------------------------------------
+	// ATTENTION : cette méthode n'est efficace que pour leables innoDB
+	// Les transactions ne sont pas prises en compte pour les tables ISAM
+	//----------------------------------------------------------------------
+	public function transaction($requetes, $debug=false) {
+		if ($debug) {
+			DEBUG_('requetes', $requetes); 
+			return true;
+		}
+
+		//transaction
+		$maConnexion = getConnexion();
+		$dummy = $maConnexion->beginTransaction();
+		$totalModifs = 0;
+		$lastInsertId = 0;
+		for ($i = 1; $i <= count($requetes); $i++) {
+			if ($i > 1) {
+				//à partir de la deuxième requete, on tente de remplacer le 
+				//terme LAST_INSERT_ID par $lastInsertId
+				$requetes[$i] = str_replace('LAST_INSERT_ID', (string)$lastInsertId, $requetes[$i]);
+			}
+			//DEBUG_('requete', $requetes[$i]); 
+			$res = executeQuery($requetes[$i], $nombre, _SQL_MODE_, $maConnexion);
+			//DEBUG_('res', $res); 
+			if ($res) {
+				$totalModifs += $nombre;
+				if ($i == 1) {
+					//si la première requete est un INSERT, on recupere l'éventuel id auto-incrémenté par la base
+					$lastInsertId = $maConnexion->lastInsertId();
+					//DEBUG_('lastInsertId', $lastInsertId); 
+				}
+			}
+			else break;
+		}
+		if ($res) {
+			if ($totalModifs) {
+				//commit des requetes
+				//DEBUG_('commit'); 
+				$dummy = $maConnexion->commit();
+				return true;
+			}
+			return 0;
+		}
+		//rollback des requetes
+		//DEBUG_('rollback'); 
+		$dummy = $maConnexion->rollBack();
+		return false;
+	}
 
 	//----------------------------------------------------------------------
 	// Obtenir une liste index / champ de toute la table
@@ -71,6 +142,24 @@ class SqlSimple {
 	}
 
 	//----------------------------------------------------------------------
+	// Obtenir une liste unique de valeurs de la colonne $champ de la $table
+	// Entree :
+	//		$table : nom de la table concernée
+	//		$champ : champ recherché
+	//		$tri : champ optionnel de tri
+	// Retour : 
+	//		tableau si ok / false si erreur SQL
+	//----------------------------------------------------------------------
+	static function distinct($table, $champ, $tri='') {
+		$laListe = array();
+		$requete = "SELECT DISTINCT ".$champ." ";
+		$requete.= "FROM ".$table;
+		if ($tri != '') $requete.= " ORDER BY ".$tri;
+		$laListe = executeQuery($requete, $nombre, _SQL_MODE_);
+		return array_column($laListe, $champ);
+	}
+
+	//----------------------------------------------------------------------
 	// Remplissage d'une liste
 	// Entree :
 	//		$default : id de l'item sélectionné par défaut
@@ -80,8 +169,7 @@ class SqlSimple {
 	// Retour : 
 	//		Le code HTML pour la liste déroulante
 	//----------------------------------------------------------------------
-	static function fillSelect($defaut, $table, $index, $champ)
-	{
+	static function fillSelect($defaut, $table, $index, $champ) {
 		$texte = '';
 		$requete = "SELECT ".$index.", ".$champ." ";
 		$requete.= "FROM ".$table." ";
@@ -106,8 +194,7 @@ class SqlSimple {
 	// Retour : 
 	//		La valeur maximum augmentée de $offset
 	//----------------------------------------------------------------------
-	static function getMax($table, $champ, $offset=0)
-	{
+	static function getMax($table, $champ, $offset=0) {
 		$requete = "SELECT MAX(".$champ.") max ";
 		$requete.= "FROM ".$table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
@@ -127,8 +214,7 @@ class SqlSimple {
 	// Retour : 
 	//		La valeur minimum augmentée de $offset
 	//----------------------------------------------------------------------
-	static function getMin($table, $champ, $offset=0)
-	{
+	static function getMin($table, $champ, $offset=0) {
 		$requete = "SELECT MIN(".$champ.") min ";
 		$requete.= "FROM ".$table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
@@ -150,8 +236,7 @@ class SqlSimple {
 	// - En réalité renvoie la valeur directement inférieure au mini (champ -1)
 	// - Limite de la valeur renvoyée [0 .. MAX + 1] (pas de chiffre négatif)
 	//----------------------------------------------------------------------
-	static function getGap($table, $champ, $sauf=999999)
-	{
+	static function getGap($table, $champ, $sauf=999999) {
 		if ((self::getMin($table, $champ)) > 0) {
 			$requete = "SELECT (".$champ." - 1) numero FROM ".$table." ";
 			$requete.= "WHERE (".$champ." - 1) NOT IN ";
@@ -178,8 +263,7 @@ class SqlSimple {
 	//		Nombre de fois valeur trouvée (0 .. x)
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	static function existValeur($table, $field, $valeur, $debug=false)
-	{
+	static function existValeur($table, $field, $valeur, $debug=false) {
 		$requete = "SELECT COUNT(*) nombre FROM ".$table." ";
 		$requete.= "WHERE ".$field." = '".$valeur."'";
 		if ($debug) {
@@ -206,8 +290,7 @@ class SqlSimple {
 	//		Nombre de fois valeur trouvée (0 .. x)
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	static function existValeurAilleurs($table, $field, $valeur, $id, $valeurId, $debug=false)
-	{
+	static function existValeurAilleurs($table, $field, $valeur, $id, $valeurId, $debug=false) {
 		$requete = "SELECT COUNT(*) nombre FROM ".$table." ";
 		$requete.= "WHERE ".$field." = '".$valeur."' ";
 		$requete.= "AND ".$id." != '".$valeurId."' ";
@@ -233,8 +316,7 @@ class SqlSimple {
 	//		valeur du champ $field si trouvé
 	//		false : aucune valeur trouvée ou $key n'est pas une clé unique ou erreur SQL
 	//----------------------------------------------------------------------
-	static function getValeurForKey($table, $field, $key, $valeur, $debug=false)
-	{
+	static function getValeurForKey($table, $field, $key, $valeur, $debug=false) {
 		$requete = "SELECT ".$field." FROM ".$table." ";
 		$requete.= "WHERE ".$key." = '".$valeur."'";
 		if ($debug) {
@@ -263,8 +345,7 @@ class SqlSimple {
 	//		nombre de modification effectué (forcément 1)
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	static function swapBool($table, $champ, $idField, $id, $debug=false)
-	{
+	static function swapBool($table, $champ, $idField, $id, $debug=false) {
 		$requete = "UPDATE ".$table." ";
 		$requete.= "SET ".$champ." = IF(".$champ." = '1', '0', '1') ";
 		$requete.= "WHERE ".$idField." = '".$id."';";
@@ -292,9 +373,8 @@ class SqlSimple {
 	//		nombre de modification effectuées
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	static function updateChamp($table, $champ, $valeur, $idField, $id, $debug=false)
-	{
-		$requete = "UPDATE ".$table." ";
+	static function updateChamp($table, $champ, $valeur, $idField, $id, $debug=false) {
+		$requete = "UPDATE IGNORE ".$table." ";
 		$requete.= "SET ".$champ." = '".$valeur."' ";
 		$requete.= "WHERE ".$idField." = '".$id."';";
 		if ($debug) {
@@ -373,8 +453,7 @@ class SqlSimple {
 	// Retour :
 	//		true (trouve) / false (erreur / pas trouve)
 	//----------------------------------------------------------------------
-	public function get($id, &$tuple, $debug=false)
-	{
+	public function get($id, &$tuple, $debug=false) {
 		$requete = "SELECT ".$this->champs." ";
 		$requete.= "FROM ".$this->table." ";
 		$requete.= "WHERE ".$this->index." = '".$id."';";
@@ -389,6 +468,33 @@ class SqlSimple {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	//----------------------------------------------------------------------
+	// Ramène tous les tuples de la table pour laquelle le $champ a la valeur $valeur
+	// Entree :
+	//		$champ : nom du champ à tester
+	//		$valeur : valeur du champ recherché
+	//		$tri : champ de tri
+	//		$laListe : tableau de tuples chargé
+	// Retour :
+	//		false (erreur SQL) / nombre articles sinon
+	//----------------------------------------------------------------------
+	public function getSome($champ, $valeur, $tri, &$laListe, $debug=false) {
+		$requete = "SELECT ".$this->champs." ";
+		$requete.= "FROM ".$this->table." ";
+		$requete.= "WHERE ".$champ." = '".$valeur."' ";
+		$requete.= "ORDER BY ".$tri." ASC;";
+		if ($debug) {
+			DEBUG_('Requete', $requete); 
+			return true;
+		}
+		$laListe = executeQuery($requete, $nombre, _SQL_MODE_);
+		if ($laListe !== false) {
+			return $nombre;
+		}
+		$laListe = null;
 		return false;
 	}
 
@@ -553,12 +659,11 @@ class SqlSimple {
 	//		nombre de tuples modifiés si modification Ok
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	public function update($id, $chaine, $debug=false)
-	{
+	public function update($id, $chaine, $debug=false) {
 		//ecriture et lancement requete
 		$requete = "UPDATE IGNORE ".$this->table." SET ";
-		$requete.= $chaine;
-		$requete.= "WHERE ".$this->index." = '".$id."'";
+		$requete.= trim($chaine);
+		$requete.= " WHERE ".$this->index." = '".$id."'";
 		if ($debug) {
 			DEBUG_('Requete', $requete); 
 			return true;
@@ -578,8 +683,7 @@ class SqlSimple {
 	//		nombre de tuples supprimés si suppression Ok
 	//		false : erreur SQL
 	//----------------------------------------------------------------------
-	public function delete($id, $debug=false)
-	{
+	public function delete($id, $debug=false) {
 		$requete = "DELETE IGNORE FROM ".$this->table." ";
 		$requete.= "WHERE ".$this->index." = '".$id."'";
 		if ($debug) {

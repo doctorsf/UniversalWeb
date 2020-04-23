@@ -13,6 +13,11 @@ date_default_timezone_set('Europe/Paris');
 $_NB_QUERY = 0;
 
 //----------------------------------------------------------------------
+// Chargement des paramètres de l'application
+//----------------------------------------------------------------------
+Params::load();
+
+//----------------------------------------------------------------------
 // Mode d'execution des requetes SQL en fonction du _RUN_MODE_
 // SQL_MODE_SILENT => aucune info affichée (prod)
 // SQL_MODE_NORMAL => infos ligne, code erreur SQL

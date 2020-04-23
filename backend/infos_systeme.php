@@ -13,22 +13,16 @@
 //		- Affichage et navigation sous forme d'onglets
 // 29.10.2019
 //		- Affichage de toutes les informations connues de version MySQL
+// 05.03.2020
+//		- Remplacé <b> par <span class="font-weight-bold">
 //-----------------------------------------------------------
 require_once('libs/common.inc.php');
 
 function MyClassExists($nomClasse) {
 	if (file_exists(_CLASSES_.$nomClasse.'.class.php')) 
-		return $nomClasse.' : '.$nomClasse::VERSION.'<br />'; 
+		return '<span class="font-weight-bold">'.$nomClasse.'</span> : '.$nomClasse::VERSION.'<br />'; 
 	else 
-		return $nomClasse.' : '.getLib('MANQUANT').'<br />';
-}
-
-function MyFrontendClassExists($nomClasse) {
-	if (file_exists(_FRONTEND_CLASSES_.$nomClasse.'.class.php')) 
-//		return $nomClasse.' : '.$nomClasse::VERSION.'<br />'; 
-		return $nomClasse.' : Version à vérifier<br />'; 
-	else 
-		return $nomClasse.' : '.getLib('MANQUANT').'<br />';
+		return '<span class="font-weight-bold">'.$nomClasse.'</span> : '.getLib('MANQUANT').'<br />';
 }
 
 //gère l'accès au script
@@ -108,8 +102,8 @@ echo '<body>';
 									echo '<div class="card-body">';
 										echo '<h3 class="card-title">'.getLib('VERSION_PHP').' : '.phpversion().'</h3>';
 										echo '<p class="card-text">';
-										echo getLib('MEM_REELLE_PHP').' : '.(memory_get_usage(true) / 1024 / 1024).' Mo<br />';
-										echo getLib('MEM_USED_PHP').' : '.(memory_get_usage(false) / 1024 / 1024).' Mo<br />';
+										echo '<span class="font-weight-bold">'.getLib('MEM_REELLE_PHP').'</span> : '.(memory_get_usage(true) / 1024 / 1024).' Mo<br />';
+										echo '<span class="font-weight-bold">'.getLib('MEM_USED_PHP').'</span> : '.(memory_get_usage(false) / 1024 / 1024).' Mo<br />';
 										echo '<a href="'.$_SERVER['REQUEST_SCHEME'].'://'.$host.'/phpmyadmin/" target="_blank">'.getLib('ACCEDER_PHPMYADMIN').'</a>';
 										echo '</p>';
 									echo '</div>';
@@ -125,12 +119,12 @@ echo '<body>';
 									echo '<div class="card-body">';
 										echo '<h3 class="card-title">'.getLib('VERSION_MYSQL').'</h3>';
 										echo '<p class="card-text">';
-										//echo getLib('VERSION').' : '.$res[$indexColonnes['version']]['Value'].'<br />';
-										//echo getLib('VERSION_INNODB').' : '.$res[$indexColonnes['innodb_version']]['Value'].'<br />';
-										//echo getLib('VERSION_PROTOCOLE').' : '.$res[$indexColonnes['protocol_version']]['Value'].'<br />';
-										//echo 'TLS Version'.' : '.$res[$indexColonnes['tls_version']]['Value'].'<br />';
+										//echo '<span class="font-weight-bold">'.getLib('VERSION').'</span> : '.$res[$indexColonnes['version']]['Value'].'<br />';
+										//echo '<span class="font-weight-bold">'.getLib('VERSION_INNODB').'</span> : '.$res[$indexColonnes['innodb_version']]['Value'].'<br />';
+										//echo '<span class="font-weight-bold">'.getLib('VERSION_PROTOCOLE').'<:SPAN> : '.$res[$indexColonnes['protocol_version']]['Value'].'<br />';
+										//echo '<span class="font-weight-bold">TLS Version</span> : '.$res[$indexColonnes['tls_version']]['Value'].'<br />';
 										foreach ($indexColonnes as $key => $info) {
-											echo '<b>'.$key.'</b> : '.$res[$info]['Value'].'<br />';
+											echo '<span class="font-weight-bold">'.$key.'</span> : '.$res[$info]['Value'].'<br />';
 										}
 										echo '</p>';
 									echo '</div>';
@@ -164,10 +158,10 @@ echo '<body>';
 									echo '<div class="card-body">';
 										echo '<h3 class="card-title">'.getLib('VERSION_APACHE').'</h3>';
 										echo '<p class="card-text">';
-										if (isset($versionApache[0])) echo getLib('VERSION').' : '.$versionApache[0].' '.$os.'<br />';
-										if (isset($versionApache[1])) echo getLib('MODULE_AUTHENTIFICATION').' : '.$versionApache[1].'<br />';
-										if (isset($versionApache[2])) echo 'SSL : '.$versionApache[2].'<br />';
-										if (isset($versionApache[3])) echo 'PHP : '.$versionApache[3].'<br />';
+										if (isset($versionApache[0])) echo '<span class="font-weight-bold">'.getLib('VERSION').'</span> : '.$versionApache[0].' '.$os.'<br />';
+										if (isset($versionApache[1])) echo '<span class="font-weight-bold">'.getLib('MODULE_AUTHENTIFICATION').'</span> : '.$versionApache[1].'<br />';
+										if (isset($versionApache[2])) echo '<span class="font-weight-bold">SSL</span> : '.$versionApache[2].'<br />';
+										if (isset($versionApache[3])) echo '<span class="font-weight-bold">PHP</span> : '.$versionApache[3].'<br />';
 										echo '</p>';
 									echo '</div>';
 								echo '</div>';
@@ -222,24 +216,24 @@ echo '<body>';
 								echo '<div class="card">';
 									echo '<div class="card-body">';
 										echo '<h3>'._APP_TITLE_.'</h3>';
-										echo '_APP_SCHEMA_ : '.((_APP_SCHEMA_ == _SCHEMA_NATUREL_) ? 'Naturel' : 'Domaine').'<br />';
-										echo '_APP_TITLE_ : '._APP_TITLE_.'<br />';
-										echo '_APP_SLOGAN_ : '._APP_SLOGAN_.'<br />';
-										echo '_AUTEUR_ : '._AUTEUR_.'<br />';
-										echo '_COPYRIGHT_ : '._COPYRIGHT_.'<br />';
-										echo '_EMAIL_WEBMASTER_ : '._EMAIL_WEBMASTER_.'<br />';
-										echo '_IP_DEVELOPPEMENT_ : '.implode(' / ', _IP_DEVELOPPEMENT_).'<br />';
+										echo '<span class="font-weight-bold">_APP_SCHEMA_</span> : '.((_APP_SCHEMA_ == _SCHEMA_NATUREL_) ? 'Naturel' : 'Domaine').'<br />';
+										echo '<span class="font-weight-bold">_APP_TITLE_</span> : '._APP_TITLE_.'<br />';
+										echo '<span class="font-weight-bold">_APP_SLOGAN_</span> : '._APP_SLOGAN_.'<br />';
+										echo '<span class="font-weight-bold">_AUTEUR_</span> : '._AUTEUR_.'<br />';
+										echo '<span class="font-weight-bold">_COPYRIGHT_</span> : '._COPYRIGHT_.'<br />';
+										echo '<span class="font-weight-bold">_PARAM_EMAIL_WEBMASTER_</span> : '._PARAM_EMAIL_WEBMASTER_.'<br />';
+										echo '<span class="font-weight-bold">_IP_DEVELOPPEMENT_</span> : '.implode(' / ', _IP_DEVELOPPEMENT_).'<br />';
 										echo '('.getLib('VOTRE_IP').' : '.$_SERVER['REMOTE_ADDR'].')<br />';
-										echo '_APP_BLOWFISH_ : '._APP_BLOWFISH_.'<br />';
-										echo '_RUN_MODE_ : '.((_RUN_MODE_ == _DEVELOPPEMENT_) ? 'Developpement' : 'Production').'<br />';
-										echo '_ANNUAIRE_ : '._ANNUAIRE_.'<br />';
-										echo '_SQL_MODE_: '._SQL_MODE_.'<br />';
-										echo '_APP_VERSION_: '._APP_VERSION_.'<br />';
-										echo '_APP_RELEASE_ : '._APP_RELEASE_.'<br />';
-										echo '_HOST_SYSTEM_ : '._HOST_SYSTEM_.'<br />';
-										echo 'display_startup_errors : '.ini_get('display_startup_errors').'<br />';
-										echo 'display_errors : '.ini_get('display_errors').'<br />';
-										echo 'error_reporting : '.ini_get('error_reporting').'<br />';
+										echo '<span class="font-weight-bold">_APP_BLOWFISH_</span> : '._APP_BLOWFISH_.'<br />';
+										echo '<span class="font-weight-bold">_RUN_MODE_</span> : '.((_RUN_MODE_ == _DEVELOPPEMENT_) ? 'Developpement' : 'Production').'<br />';
+										echo '<span class="font-weight-bold">_ANNUAIRE_</span> : '._ANNUAIRE_.'<br />';
+										echo '<span class="font-weight-bold">_SQL_MODE_</span> : '._SQL_MODE_.'<br />';
+										echo '<span class="font-weight-bold">_APP_VERSION_</span> : '._APP_VERSION_.'<br />';
+										echo '<span class="font-weight-bold">_APP_RELEASE_</span> : '._APP_RELEASE_.'<br />';
+										echo '<span class="font-weight-bold">_HOST_SYSTEM_</span> : '._HOST_SYSTEM_.'<br />';
+										echo '<span class="font-weight-bold">display_startup_errors</span> : '.ini_get('display_startup_errors').'<br />';
+										echo '<span class="font-weight-bold">display_errors</span> : '.ini_get('display_errors').'<br />';
+										echo '<span class="font-weight-bold">error_reporting</span> : '.ini_get('error_reporting').'<br />';
 									echo '</div>';
 								echo '</div>';
 							echo '</div>';
@@ -255,16 +249,9 @@ echo '<body>';
 										echo MyClassExists('UniversalDatabase');
 										echo MyClassExists('Fpdf');
 										echo MyClassExists('PageNavigator');
-										echo '<h3 class="mt-3 mb-0">UniversalWeb</h3>';
-										echo '<p class="lead">(frontend)</p>';
-										echo MyFrontendClassExists('UniversalForm');
-										echo MyFrontendClassExists('UniversalList');
-										echo MyFrontendClassExists('UniversalTree');
-										echo MyFrontendClassExists('UniversalZip');
-										echo MyFrontendClassExists('UniversalCsvImport');
-										echo MyFrontendClassExists('UniversalDatabase');
-										echo MyFrontendClassExists('Fpdf');
-										echo MyFrontendClassExists('PageNavigator');
+										echo MyClassExists('SqlSimple');
+										echo MyClassExists('SimpleListingHelper');
+										echo MyClassExists('SilentMail');
 									echo '</div>';
 								echo '</div>';
 							echo '</div>';
@@ -272,9 +259,9 @@ echo '<body>';
 								echo '<div class="card">';
 									echo '<div class="card-body">';
 										echo '<h3>'.getLib('COMPOSANTS').'</h3>';
-										echo '_JQUERY_VERSION_ : '._JQUERY_VERSION_.'<br />';
-										echo '_BOOTSTRAP_VERSION_ : '._BOOTSTRAP_VERSION_.'<br />';
-										echo '_FONTAWESOME_VERSION_ : '._FONTAWESOME_VERSION_.'<br />';
+										echo '<span class="font-weight-bold">_JQUERY_VERSION_ </span> : '._JQUERY_VERSION_.'<br />';
+										echo '<span class="font-weight-bold">_BOOTSTRAP_VERSION_</span> : '._BOOTSTRAP_VERSION_.'<br />';
+										echo '<span class="font-weight-bold">_FONTAWESOME_VERSION_</span> : '._FONTAWESOME_VERSION_.'<br />';
 									echo '</div>';
 								echo '</div>';
 							echo '</div>';

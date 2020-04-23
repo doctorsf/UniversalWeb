@@ -62,14 +62,21 @@ $_LIBELLES = array(
 	'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
 	'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
 	'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)',
+	'UFC_SAISIE_NON_CONFORME'		=> 'Saisie non conforme',
 
-	'PAS_EXPEDITEUR'				=> 'Pas d\'expéditeur déclaré',
-	'EMAIL_EXPEDITEUR_KO'			=> 'eMail expéditeur non valide',
-	'PAS_DESTINATAIRE'				=> 'Pas de destinaitaire déclaré',
-	'TROP_DESTINATAIRES'			=> 'Trop de destinataires ! 3 maximum autorisés',
-	'PAS_OBJET'						=> 'Pas d\'objet déclaré',
-	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'eMail d\'un destinataire non valide',
-	'EMAIL_ENVOI_ERREUR'			=> 'Erreur lors de l\'envoi du mail',
+	//------------------------------------------
+	// Libellés des classes UniversalWeb SilentMail (UWSM)
+	//------------------------------------------
+	'UWSM_TEST'						=> 'Test',
+	'UWSM_SUCCESS'					=> 'Message envoyé avec succès&hellip;',
+	'UWSM_NO_SENDER'				=> 'Pas d\'expéditeur déclaré',
+	'UWSM_BAD_SENDER'				=> 'eMail expéditeur non valide',
+	'UWSM_NO_OBJECT'				=> 'Pas d\'objet déclaré',
+	'UWSM_NO_RECIPIENT'				=> 'Pas de destinaitaire déclaré',
+	'UWSM_TOO_MANY_RECIPIENTS'		=> 'Trop de destinataires ! 3 maximum autorisés',
+	'UWSM_BAD_RECIPIENT'			=> 'eMail d\'un destinataire non valide',
+	'UWSM_SEND_ERROR'				=> 'Erreur lors de l\'envoi',
+	'UWSM_ERROR_UNKNOWN'			=> 'Erreur inconnue',
 
 	//------------------------------------------
 	// ERREURS
@@ -110,6 +117,7 @@ $_LIBELLES = array(
 	'AUTOLOG'						=> 'Autolog',
 	'FRANCAIS'						=> 'français',
 	'ANGLAIS'						=> 'anglais',
+	'MANQUANT'						=> 'Manquant',
 
 	//------------------------------------------
 	// LOGS
@@ -207,12 +215,23 @@ $_LIBELLES = array(
 	'AUCUNE_REF_TROUVEE'			=> 'Aucune référence trouvée',
 	'1_REF_TROUVEE'					=> '1 référence trouvée',
 	'X_REF_TROUVEE'					=> '%d références trouvées',
-	'COOKIE_DISCLAIMER'				=> 'En poursuivant votre navigation sur ce site, vous acceptez le dépôt de cookies à des fins de gestion de l\'application uniquement&hellip;',
+	'COOKIE_DISCLAIMER'				=> 'En poursuivant votre navigation sur ce site, vous acceptez le dépôt de cookies aux seules fins de gestion du site&hellip;',
 	'JACCEPTE'						=> 'J\'accepte'
 );
 
 $_MOIS_EN_CLAIR	= array('', 'janvier', 'février', 'mars','avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'); 
 $_CIVILITE = array('', 'M.', 'Mme', 'Melle', 'Inconnue');
+
+//--------------------------------------
+// Affiche un texte "nombre de références " + verbe ou participe passé
+// Entrée : $nb : nombre à transcrire
+// Retour : la chaine de catactère résultante
+//--------------------------------------
+function getLibNbRefsTrouvees($nb) {
+	if ($nb == 0)		return 'Aucune référence trouvée';
+	elseif ($nb == 1)	return '1 référence trouvée';
+	else				return $nb.' références trouvées';
+}
 
 //------------------------------------------------------------------
 // Construction d'une chaine avec des paramètres passés en option
@@ -271,4 +290,16 @@ function getULib($indice, $param1='', $param2='', $param3='', $param4='', $param
 function existeLib($indice) {
 	global $_LIBELLES;
 	return isset($_LIBELLES[$indice]);
+}
+
+//------------------------------------------------------------------
+// Renvoie le libellé ci-celui-ci existe, l'indice sinon
+//------------------------------------------------------------------
+// Entrée 
+//		$indice : indice du template de la chaine dans $_LIBELLES
+// Retour
+//		la traduction si existe / $indice sinon
+//------------------------------------------------------------------
+function getLibIfExists($indice) {
+	if (existeLib($indice)) return getLib($indice); else return $indice;
 }

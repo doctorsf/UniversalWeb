@@ -113,9 +113,20 @@ echo '<body>';
 					$_SESSION[_ID_LISTING_]->drawBody($listing);
 				echo '</table>';
 
+				//affichage légende
+				//--------------------------------------
+				echo '<div class="d-flex justify-content-end">';
+					//pas de légende
+					echo '<div>';
+					echo '</div>';
+					if (_RUN_MODE_ == _DEVELOPPEMENT_) {
+						echo '<p class="mb-0 text-right text-muted"><small>'.getLib('TAILLE_LISTING').' : '.$_SESSION[_ID_LISTING_]->getSize().'%</small></p>';
+					}
+				echo '</div>';
+
 				//réaffichage de la navigation en bas de page
 				//--------------------------------------
-				echo $navigation;
+				//echo $navigation;
 				
 			echo '</div>'; //col
 		echo '</div>';  //row tableau

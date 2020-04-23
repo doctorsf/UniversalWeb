@@ -32,7 +32,7 @@ defined('_CLASSES_')			|| define('_CLASSES_',			_LIBS_.'classes/');
 defined('_APP_BLOWFISH_')		|| define('_APP_BLOWFISH_',		'videotheque');
 defined('_APP_ID_')				|| define('_APP_ID_',			md5(_APP_BLOWFISH_));			//id de l'application
 defined('_APP_TITLE_')			|| define('_APP_TITLE_',		'Saisie vidéothèque');
-defined('_EMAIL_WEBMASTER_')	|| define('_EMAIL_WEBMASTER_',	'webmaster@yoursite.fr');
+defined('_PARAM_EMAIL_WEBMASTER_')	|| define('_PARAM_EMAIL_WEBMASTER_',	'webmaster@yoursite.fr');
 defined('_AUTEUR_')				|| define('_AUTEUR_',			'Auteur');
 defined('_COPYRIGHT_')			|| define('_COPYRIGHT_',		'Auteur - 2016');
 defined('_APP_VERSION_')		|| define('_APP_VERSION_',		'v0.0.0');

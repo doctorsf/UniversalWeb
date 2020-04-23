@@ -33,6 +33,8 @@ delete()			: supprime un tuple
 	l'ancienne méthode renvoyait toujours 0
 12.11.2019
 	- Modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
+06.03.2020
+	- Correction bug dans backend/libs/sql_logs et frontend/libs/sql_logs
 ------------------------------------------------------------------------*/
 
 //- CREATION tables logs --------------------------------------
@@ -87,7 +89,7 @@ class sqlLogs extends SqlSimple {
 
 	//purge les logs de plus de 3 mois
 	public function epure() {
-		$requete.= "DELETE FROM ".$this->table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+		$requete = "DELETE FROM ".$this->table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $nombre;
@@ -99,7 +101,7 @@ class sqlLogs extends SqlSimple {
 	//Contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
 	//la méthode retourne donc true ou false
 	public function purge() {
-		$requete.= "TRUNCATE TABLE ".$this->table;
+		$requete = "TRUNCATE TABLE ".$this->table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return true;

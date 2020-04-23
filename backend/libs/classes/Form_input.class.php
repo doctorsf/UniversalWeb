@@ -380,7 +380,7 @@ class Form_input extends UniversalForm {
 		$enable = true;
 
 		$chaine = '';
-		$chaine.= '<div class="container-lg px-0 mt-5">';
+		$chaine.= '<div class="container-lg px-0">';
 			$chaine.= '<h1>'.$this->field('form_title')->value().'</h1>';
 			$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
 				$chaine.= '<fieldset style="border:1px silver solid;padding:1.5rem">';

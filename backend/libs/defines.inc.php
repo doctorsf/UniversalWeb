@@ -58,7 +58,14 @@ else die('Schema d\'url non renseigné');
 defined('_IMAGES_FRONT_END_')		|| define('_IMAGES_FRONT_END_',			_URL_FRONT_END_.'images/');
 
 //chemins relatifs (../xxx) vers les images du frontend
+defined('_PATH_FRONT_END_')			|| define('_PATH_FRONT_END_',			'../frontend/');
 defined('_PATH_IMAGES_FRONT_END_')	|| define('_PATH_IMAGES_FRONT_END_',	'../frontend/images/');
+
+//chemins autorisés d'acces aux media du frontend
+defined('_PATHS_MEDIA_AUTORISES_')	|| define('_PATHS_MEDIA_AUTORISES_',	array(
+	'commun'	=> _PATH_IMAGES_FRONT_END_.'commun/', 
+	'drapeaux'	=> _PATH_IMAGES_FRONT_END_.'drapeaux/'
+));
 
 //chemins
 defined('_IMAGES_')					|| define('_IMAGES_',					'images/');
@@ -113,18 +120,23 @@ defined('_BRIQUE_DEBUG_')			|| define('_BRIQUE_DEBUG_',				_BRIQUES_.'brique_deb
 defined('_BRIQUE_MESSAGE_')			|| define('_BRIQUE_MESSAGE_',			_BRIQUES_.'brique_message.inc.php');
 defined('_BRIQUE_ERREUR_')			|| define('_BRIQUE_ERREUR_',			_BRIQUES_.'brique_erreur.inc.php');
 
+defined('_URL_ACTIONS_DIVERS_')		|| define('_URL_ACTIONS_DIVERS_',		'actions_divers.php');
 defined('_URL_ACTIONS_DROITS_')		|| define('_URL_ACTIONS_DROITS_',		'actions_droits.php');
 defined('_URL_AUTHENTIFICATION_')	|| define('_URL_AUTHENTIFICATION_',		'authentification.php');
 defined('_URL_INDEX_')				|| define('_URL_INDEX_',				'index.php');
 defined('_URL_LANGUE_')				|| define('_URL_LANGUE_',				'langue.php');
 defined('_URL_LISTING_DROITS_')		|| define('_URL_LISTING_DROITS_',		'listing_droits.php');
 defined('_URL_LISTING_USERS_')		|| define('_URL_LISTING_USERS_',		'listing_users.php');
-defined('_URL_LOGOUT_')				|| define('_URL_LOGOUT_',				'logout.php');
 defined('_URL_USER_')				|| define('_URL_USER_',					'user.php');
+defined('_URL_LISTING_PARAMS_')		|| define('_URL_LISTING_PARAMS_',		'listing_params.php');
+defined('_URL_PARAM_')				|| define('_URL_PARAM_',				'param.php');
+defined('_URL_REGLAGES_')			|| define('_URL_REGLAGES_',				'reglages.php');
+defined('_URL_LOGOUT_')				|| define('_URL_LOGOUT_',				'logout.php');
 defined('_URL_INFOS_SYSTEME_')		|| define('_URL_INFOS_SYSTEME_',		'infos_systeme.php');
 defined('_URL_MAINTENANCE_')		|| define('_URL_MAINTENANCE_',			'maintenance.php');
 defined('_URL_LISTING_LOGS_')		|| define('_URL_LISTING_LOGS_',			'listing_logs.php');
 defined('_URL_VERSIONNING_')		|| define('_URL_VERSIONNING_',			'versionning.php');
+defined('_URL_MEDIA_')				|| define('_URL_MEDIA_',				'media.php');
 
 //drapeaux
 defined('_DRAPEAU_FR_')				|| define('_DRAPEAU_FR_',				_IMAGES_DRAPEAUX_.'fr.jpg');
@@ -133,3 +145,4 @@ defined('_DRAPEAU_US_')				|| define('_DRAPEAU_US_',				_IMAGES_DRAPEAUX_.'uk.jp
 //regex
 defined('PAGEREGEX')				|| define('PAGEREGEX',					'#^[0-9]{0,}$#');				//0..n chiffres ou rien
 defined('SAVEDBREGEX')				|| define('SAVEDBREGEX',				'#.[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$#'); //*yyyy-mm-dd_hh-mm-ss
+defined('IDREGEX')					|| define('IDREGEX',					'#^[0-9]{1,}$#');				//1..n chiffres

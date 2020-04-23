@@ -113,3 +113,4 @@ defined('_DRAPEAU_US_')				|| define('_DRAPEAU_US_',				_IMAGES_DRAPEAUX_.'uk.jp
 
 //regex
 defined('PAGEREGEX')				|| define('PAGEREGEX',					'#^[0-9]{0,}$#');				//0..n chiffres ou rien
+defined('IDREGEX')					|| define('IDREGEX',					'#^[0-9]{1,}$#');				//1..n chiffres

@@ -109,7 +109,7 @@ function writeHtmlFooter($scriptSup='', $fonctionsJquery='')
 	//activation tooltip bootstrap (avec initialisation 800ms a l'affichage et 100 à la disparition)
 	$chaine.= '$("[data-toggle=\'tooltip\']").tooltip({ delay: { show: 800, hide: 100 } });';
 	//code Cookie Disclaimer
-	$chaine.= '$(\'body\').cookieDisclaimer({';
+	$chaine.= '$("body").cookieDisclaimer({';
 	$chaine.= 'layout: "bar",';
 	$chaine.= 'position: "top",';
 	$chaine.= 'style: "dark",';
@@ -159,48 +159,52 @@ function writeHtmlFooter($scriptSup='', $fonctionsJquery='')
 	return $chaine;
 }
 
-//- FONCTIONS D'AFFICHAGE DE MESSAGES --------------------------------------
+//--------------------------------------------------------------------------
+// FONCTIONS D'AFFICHAGE DE MESSAGES
 // Positionnement d'un message (écrit en vert)
 // Entree : 
 //		$leMessage : chaine représentant le message à afficher
+//		$position : position d'affichage du message (valeur choix utilisée pour le tri lors de l'affichage)
 // Sortie : 
 //		Rien
 //--------------------------------------------------------------------------
 // Fonctionnement : la chaine est stockée dans une variable de session qui
 // sera relue ultérieurement
 //--------------------------------------------------------------------------
-function riseMessage($leMessage)
+function riseMessage($leMessage, $position=0)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = $leMessage;
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-success';
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['message'] = '<span class="far fa-thumbs-up mr-2"></span>'.$leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['color'] = 'alert-success';
 }
 
-//- FONCTIONS D'AFFICHAGE DE MESSAGES --------------------------------------
-// Positionnement d'un message d'erreur (écrit en rouge)
+//--------------------------------------------------------------------------
+// FONCTIONS D'AFFICHAGE DE MESSAGES
+// Positionnement d'un message d'erreur (écrit en rouge, orange ou bleu)
 // Entree : 
 //		$leMessage : chaine représentant le message à afficher
+//		$position : position d'affichage du message (valeur choix utilisée pour le tri lors de l'affichage)
 // Sortie : 
 //		Rien
 //--------------------------------------------------------------------------
 // Fonctionnement : la chaine est stockée dans une variable de session qui
 // sera relue ultérieurement
 //--------------------------------------------------------------------------
-function riseErrorMessage($leMessage)
+function riseErrorMessage($leMessage, $position=0)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = '<span class="fa fa-exclamation-circle mr-2"></span>'.$leMessage;
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-danger';
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['message'] = '<span class="fas fa-exclamation-circle mr-2"></span>'.$leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['color'] = 'alert-danger';
 }
 
-function riseWarningMessage($leMessage)
+function riseWarningMessage($leMessage, $position=0)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = '<span class="fa fa-exclamation-triangle mr-2"></span>'.$leMessage;
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-warning';
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['message'] = '<span class="fas fa-exclamation-triangle mr-2"></span>'.$leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['color'] = 'alert-warning';
 }
 
-function riseInfoMessage($leMessage)
+function riseInfoMessage($leMessage, $position=0)
 {
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['message'] = '<span class="fa fa-info mr-2"></span>'.$leMessage;
-	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION']['color'] = 'alert-info';
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['message'] = '<span class="fas fa-info mr-2"></span>'.$leMessage;
+	$_SESSION[_APP_ID_.'MESSAGE_APPLICATION'][$position]['color'] = 'alert-info';
 }
 
 //- AFFICHAGE DE MESSAGES D'ALERTE -----------------------------------------
@@ -260,8 +264,8 @@ function sendMailToAdmin($titre, $informations)
 	//envoi d'un email au client avec rappel des identifiants
 	$mail = new SilentMail();
 	$mail->setMode('plain');
-	$mail->setFrom(_EMAIL_WEBMASTER_);
-	$mail->addTo(_EMAIL_WEBMASTER_);
+	$mail->setFrom(_PARAM_EMAIL_WEBMASTER_);
+	$mail->addTo(_PARAM_EMAIL_WEBMASTER_);
 	$mail->setSubject(_APP_TITLE_.' - '.$titre);
 	$mail->setBody($informations);
 	return $mail->send();

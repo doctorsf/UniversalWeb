@@ -32,8 +32,9 @@ require_once(_LIBS_.'routines.inc.php');			//routines generale inter-application
 //requetes SQL
 require_once(_SQL_.'sql_droits.inc.php');			//appels SQL orientés droits
 require_once(_SQL_.'sql_users.inc.php');			//appels SQL orientés users
-require_once(_SQL_.'sql_logs.inc.php');				//appels SQL divers
+require_once(_SQL_.'sql_logs.inc.php');				//appels SQL logs
 require_once(_SQL_.'sql_divers.inc.php');			//appels SQL divers
+require_once(_SQL_.'sql_params.inc.php');			//appels SQL parametres
 
 //code propre à l'application
 require_once(_LIBS_.'droits.inc.php');				//droits propres à l'application

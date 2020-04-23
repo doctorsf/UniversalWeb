@@ -35,6 +35,12 @@
 //		- ajout du test 'DEFAULT' qui n'en est pas un : si test DEFAULT posé, alors le champ prend la valeur définie par 'defaut' si il est à l'origine vide
 // V2.1.0 (2019-09-06)
 //		- ajout des tests 'MIN_LENGTH_X' (longueur minimale de saisie) et 'MAX_LENGTH_X' (longueur maximale de saisie)
+// V2.2.0 (2020-04-21)
+//		- ajout du test personnalisé REGEX (un test sur une regex)
+//		- ajout du test personnalisé CUSTOM (un test exécuté par une fonction de callback)
+//		- ajout du champ 'testValue' dans le modèle. Contient la regex à tester pour le test personnalisé REGEX ou la methode de callback pour le test personnalisé CUSTOM
+//		- adapté pour le multi-lingues
+//		- amélioration des rapports d'erreur
 //----------------------------------------------------------------------
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -67,7 +73,7 @@ class UniversalCsvImport {
 	private $_modele = array();			//modele (structure) du fichier d'import
 	private $_entete = array();			//tableau contenant l'entete (Numéro de Colonne CSV / identifiant du modèle)
 
-	const VERSION = 'v2.1.0 (2019-09-06)';
+	const VERSION = 'v2.2.0 (2020-04-21)';
 
 	//--------------------------------------
 	// Méthodes privées
@@ -133,6 +139,7 @@ class UniversalCsvImport {
 	public function getLibelle($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['libelle']; else return getLib('ERREUR');}
 	public function getSqlField($id)	{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['sqlField']; else return getLib('ERREUR');}
 	public function getMatch($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['match']; else return getLib('ERREUR');}
+	public function getMatchValue($id)	{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['matchValue']; else return getLib('ERREUR');}
 	public function getActive($id)		{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['active']; else return getLib('ERREUR');}
 	public function getCommentaire($id)	{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['commentaire']; else return getLib('ERREUR');}
 	public function getCss($id)			{if (array_key_exists($id, $this->_modele)) return $this->_modele[$id]['css']; else return getLib('ERREUR');}
@@ -176,6 +183,11 @@ class UniversalCsvImport {
 		else {
 			$this->_modele[$id]['match'] = array_unique(array_merge($this->_modele[$id]['match'], $match));
 		}
+	}
+	//positionnement du champ "matchValue" pour la colonne $id
+	public function setMatchValue($id, $valeur) {
+		$this->_keyExists($id);
+		$this->_modele[$id]['matchValue'] = $valeur;
 	}
 	//positionnement du champ "active" pour la colonne $id
 	public function setActive($id, $valeur) {
@@ -223,6 +235,7 @@ class UniversalCsvImport {
 			'libelle' => '',				//libellé à afficher pour la colonne
 			'sqlField' => '',				//champ SQL correspondant
 			'match' => array(),				//définitions des tests primaires
+			'matchValue' => '',				//valeur à tester dans le cas d'un match REGEX ou CUSTOM
 			'commentaire' => '',			//commentaire
 			'css' => '',					//code css à appliquer au commentaire
 			'defaut' => '',					//valeur par défaut à appliquer au champ si le match 'DEFAULT' est positionné
@@ -294,13 +307,16 @@ class UniversalCsvImport {
 			'UFC_ECHEC'						=> 'Échec&hellip;',
 			'UFC_MATCH_INVALIDE'			=> 'Paramètre de propriété testMatches inconnu!',
 			'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
-			'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)'
+			'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)',
+			'UFC_SAISIE_NON_CONFORME'		=> 'Saisie non conforme',
+			'UFC_REGEX_MANQUANTE'			=> 'REGEX manquante',
+			'UFC_SAISIE_ATTENDUE_PARMI'		=> 'Saisie attentue parmi : ',
 		);
 		return vsprintf($libelles[$mnemo], $params);
 	}
 
 	//------------------------------------------
-	// Active une colonne pour qu'elle soit pruise en compte dans la lecture
+	// Active une colonne pour qu'elle soit prise en compte dans la lecture
 	// par défaut, toutes les colonnes sont actives à leur création
 	//------------------------------------------
 	// Entrée : 
@@ -357,11 +373,9 @@ class UniversalCsvImport {
 	//	(
 	//		[civilite] => Mme
 	//		[prenom] => Francoise
-	//		[nom_usuel] => REBOURS
-	//		[nom_famille] => MARIE
-	//		[nom_marital] => REBOURS
+	//		[nom_usuel] => DUPUY
 	//		[sexe] => Féminin
-	//		[email] => francoise.marie@intradef.gouv.fr
+	//		[email] => francoise.dupuy@email.com
 	//		[erreur] => 
 	//	)
 	//--------------------------------------
@@ -568,9 +582,34 @@ class UniversalCsvImport {
 				elseif (($res = utf8_left($test, 5)) == 'PARMI') {
 					//pour tous les PARMI (autres)
 					if (($enregistrement[$keyModele] != '') && (!in_array($enregistrement[$keyModele], $this->$test))) {
-//						$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : Saisie attendue parmi : '.implode(', ', $this->$test).'</span>';
-						//modification de la classe pour Wyniss : on affiche pas la liste des choix attendus
-						$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : Saisie non conforme</span>';
+						$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : '.getLib('UFC_SAISIE_ATTENDUE_PARMI').implode(', ', $this->$test).'</span>';
+						//$enregistrement[$keyModele] = '<span class="text-danger"><del>'.$enregistrement[$keyModele].'</del> : '.getLib('UFC_SAISIE_NON_CONFORME').'</span>';
+						$enregistrement['erreur'] = true;
+						break;
+					}
+				}
+				elseif ($test == 'REGEX') {
+					//test sur une REGEX personnalisée
+					if ($colonneModele['matchValue'] == '') {
+						$enregistrement[$keyModele] = '<span class="text-danger">Missing REGEX</span>';
+						$enregistrement['erreur'] = true;
+						break;
+					}
+					if (($enregistrement[$keyModele] != '') && (!preg_match($colonneModele['matchValue'], $enregistrement[$keyModele]))) {
+						$enregistrement[$keyModele] = '<span class="text-danger">'.getLib('UFC_SAISIE_NON_CONFORME').'</span>';
+						$enregistrement['erreur'] = true;
+						break;
+					}
+				}
+				elseif ($test == 'CUSTOM') {
+					//test fait avec une méthode personnalisée (callback) de la classe fille qui doit renvoyer true si pas d'erreur, false si le test est en erreur
+					if ($colonneModele['matchValue'] == '') {
+						$enregistrement[$keyModele] = '<span class="text-danger">Missing '.$colonneModele['matchValue'].' method</span>';
+						$enregistrement['erreur'] = true;
+						break;
+					}
+					if (($enregistrement[$keyModele] != '') && (!call_user_func_array(array($this, $colonneModele['matchValue']), array($enregistrement[$keyModele])))) {
+						$enregistrement[$keyModele] = '<span class="text-danger">'.getLib('UFC_SAISIE_NON_CONFORME').'</span>';
 						$enregistrement['erreur'] = true;
 						break;
 					}
@@ -598,17 +637,18 @@ class UniversalCsvImport {
 		$chaine = '';
 			$chaine.= '<div class="row">';
 				$chaine.= '<div class="col-12">';
-					$chaine.= '<h1 class="display-4">'.getLib('UFC_ERREURS_A_CORRIGER').'</h1>';
-					if ($nbErreur == 1)
-						$chaine.= $nbErreur.' référence trouvée';
-					else 
-						$chaine.= $nbErreur.' références trouvées';
+					$leMessage['title'] = getLib('UFC_ERREURS_A_CORRIGER');
+					$leMessage['color'] = 'danger';
+					$leMessage['dismiss'] = 'false';
+					$leMessage['footer'] = '<a href="'.$_SERVER['REQUEST_URI'].'">'.getLib('CORRIGEZ_RELANCEZ').'</a>';
+					($nbErreur == 1) ? $leMessage['text'] = getLib('LIGNE_ERREURS') : $leMessage['text'] = getLib('LIGNES_ERREURS', $nbErreur);
+					$chaine.= bootstrapAlert($leMessage);
 					$chaine.= '<table class="table table-hover table-striped">';
 						$chaine.= '<thead>';
 							$chaine.= '<tr>';
-								$chaine.= '<th class="text-center" width="5%">CSV</th>';
+								$chaine.= '<th class="text-center uw-w5">CSV</th>';
 								foreach ($this->_modele as $key => $colonne) {
-									$chaine.= '<th class="text-left" width="'.div(95, $this->getNbColonnes()).'%">'.$key.'</th>';
+									$chaine.= '<th class="text-left uw-w'.div(95, $this->getNbColonnes()).'">'.$key.'</th>';
 								}
 							$chaine.= '</tr>';
 						$chaine.= '</thead>';
@@ -616,9 +656,9 @@ class UniversalCsvImport {
 							foreach ($data as $numLine => $enreg) {
 								if ($data[$numLine]['erreur'] == true) {
 									$chaine.= '<tr>';
-										$chaine.= '<td width="5%" align="center">'.$data[$numLine]['ligne'].'</td>';
+										$chaine.= '<td class="text-center uw-w5">'.$data[$numLine]['ligne'].'</td>';
 										foreach ($this->_modele as $key => $colonne) {
-											$chaine.= '<td align="left" width="'.div(95, $this->getNbColonnes()).'%" class="small">'.$enreg[$key].'</td>';
+											$chaine.= '<td class="text-left uw-w'.div(95, $this->getNbColonnes()).'" class="small">'.$enreg[$key].'</td>';
 										}
 									$chaine.= '</tr>';
 								}
@@ -645,26 +685,25 @@ class UniversalCsvImport {
 		$chaine = '';
 			$chaine.= '<div class="row">';
 				$chaine.= '<div class="col-12">';
-					$chaine.= '<div class="d-flex flex-row align-items-center">';
-						$chaine.= '<h1 class="display-4">Erreurs à corriger avant importation</h1>';
-					$chaine.= '</div>';
-					if ($nbErreur == 1)
-						$chaine.= $nbErreur.' référence trouvée';
-					else 
-						$chaine.= $nbErreur.' références trouvées';
+					$leMessage['title'] = getLib('UFC_ERREURS_A_CORRIGER');
+					$leMessage['color'] = 'danger';
+					$leMessage['dismiss'] = 'false';
+					$leMessage['footer'] = '<a href="'.$_SERVER['REQUEST_URI'].'">'.getLib('CORRIGEZ_RELANCEZ').'</a>';
+					($nbErreur == 1) ? $leMessage['text'] = getLib('LIGNE_ERREURS') : $leMessage['text'] = getLib('LIGNES_ERREURS', $nbErreur);
+					$chaine.= bootstrapAlert($leMessage);
 					$chaine.= '<table class="table table-hover table-striped">';
 						$chaine.= '<thead>';
 							$chaine.= '<tr>';
-								$chaine.= '<th class="text-center" width="5%">CSV</th>';
-								$chaine.= '<th class="text-left" width="95%">contenu</th>';
+								$chaine.= '<th class="text-center uw-w5">CSV</th>';
+								$chaine.= '<th class="text-left uw-w95">'.getLib('INFORMATION').'</th>';
 							$chaine.= '</tr>';
 						$chaine.= '</thead>';
 						$chaine.= '<tbody>';
 							foreach ($data as $numLine => $enreg) {
 								if ($data[$numLine]['erreur'] == true) {
 									$chaine.= '<tr>';
-										$chaine.= '<td width="5%" align="center">'.$data[$numLine]['ligne'].'</td>';
-										$chaine.= '<td align="left" width="95%">';
+										$chaine.= '<td class="text-center uw-w5">'.$data[$numLine]['ligne'].'</td>';
+										$chaine.= '<td class="text-left uw-w95">';
 										foreach ($enreg as $key => $colonne) {
 											$chaine.= '<mark>'.$key.'</mark> : '.$enreg[$key].'<br />';
 										}
@@ -689,16 +728,15 @@ class UniversalCsvImport {
 	//		Affichage des données sur la sortie standard
 	//-----------------------------------------------------------
 	public function displayRawErrors($data, $nbErreur) {
-		$chaine = '<h1>Erreurs à corriger avant importation</h1>';
-		$chaine.= '<p>';
-		if ($nbErreur == 1)
-			$chaine.= $nbErreur.' référence trouvée';
-		else 
-			$chaine.= $nbErreur.' références trouvées';
-		$chaine.= '</p>';
+		$leMessage['title'] = getLib('UFC_ERREURS_A_CORRIGER');
+		$leMessage['color'] = 'danger';
+		$leMessage['dismiss'] = 'false';
+		$leMessage['footer'] = '<a href="'.$_SERVER['REQUEST_URI'].'">'.getLib('CORRIGEZ_RELANCEZ').'</a>';
+		($nbErreur == 1) ? $leMessage['text'] = getLib('LIGNE_ERREURS') : $leMessage['text'] = getLib('LIGNES_ERREURS', $nbErreur);
+		$chaine = bootstrapAlert($leMessage);
 		foreach ($data as $numLine => $enreg) {
 			if ($data[$numLine]['erreur'] == true) {
-				$chaine.= '<p>ligne CSV n°'.$data[$numLine]['ligne'].'</p>';
+				$chaine.= '<p>'.getLib('LIGNE_CSV_X', $data[$numLine]['ligne']).'</p>';
 				$chaine.= '<pre>';
 				foreach($enreg as $key => $value) {
 					$chaine.= '['.$key.'] => '.$value.'<br />';

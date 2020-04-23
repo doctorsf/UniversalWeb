@@ -9,6 +9,16 @@ require_once('libs/common.inc.php');
 //gère l'accès au script
 $operation = grantAcces() or die();
 
+//recuperation des parametres URL
+$id = -1;
+if (isset($_GET['id'])) {
+	$id = MySQLDataProtect($_GET['id']);
+	//test cohérence id
+	if (!preg_match(IDREGEX, $id)) {		
+		$operation = 'erreur';
+	}
+}
+
 //creation de l'objet table Application
 $table = new table();
 
@@ -35,7 +45,6 @@ echo '<body>';
 			echo '<div class="col">';
 
 				//on interdit toute modification ou suppression de l'id système (ou inférieur d'ailleurs)
-				(isset($_GET['id'])) ? $id = mySqlDataProtect($_GET['id']) : $id = -1;
 				if ((($operation == 'modifier') || ($operation == 'supprimer') || ($operation == 'retirer')) && ($id <= _ID_SYSTEM_)) $operation = 'erreur';
 
 				$frm = new Form_squelette($operation, 1);
@@ -79,8 +88,6 @@ echo '<body>';
 					case 'retirer': 
 					case 'modifier':
 					case 'supprimer': {
-						//recuperation de l'id de l'item à charger
-						(isset($_GET['id'])) ? $id = mySqlDataProtect($_GET['id']) : $id = -1;
 						$res = $table->get($id, $tuple);
 						if ($res !== false) {
 							$frm->charger($id, $tuple);
@@ -105,7 +112,7 @@ echo '<body>';
 					// Valide retirer
 					//--------------------------------------
 					case 'valid_retirer': {
-						$res = $tabgle->retire($frm->getIdTravail());
+						$res = $table->retire($frm->getIdTravail());
 						if ($res === false) {
 							riseErrorMessage(getLib('XXX_RETIRE_ECHEC'));
 						}
@@ -160,7 +167,7 @@ echo '<body>';
 							}
 						}
 						else {
-							riseErrorMessage(getLib('XXX_SUPPRIMER_IMPOSSIBLE', 'quoi', nbRefsTrouvees($nb)));
+							riseErrorMessage(getLib('XXX_SUPPRIMER_IMPOSSIBLE', 'quoi', getLibNbRefsTrouvees($nb)));
 						}
 						//branchement vers la page d'appel
 						goPageBack();

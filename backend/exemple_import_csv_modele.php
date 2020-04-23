@@ -8,7 +8,7 @@ require_once('libs/common.inc.php');
 
 //on vérifie que ce script ne soit lancé (inclus) QUE par le script exemple_import_csv.php
 if (getScriptName() != 'exemple_import_csv.php') {
-	$leMessage = 'Erreur commande&hellip;';
+	$leMessage = getLib('ERREUR_COMMANDE');
 	include_once(_BRIQUE_ERREUR_);
 	die();
 }
@@ -20,9 +20,9 @@ function getListe($tri, $sens, &$laListe) {
 	return count($laListe);
 }
 
-$cols['colonne'] = SimpleListingHelper::createCol(array('name' => 'N° Colonne', 'size' => 10, 'align' => 'center'));
-$cols['champ'] = SimpleListingHelper::createCol(array('name' => 'Information', 'size' => 20));
-$cols['attendu'] = SimpleListingHelper::createCol(array('name' => 'Saisie attendue', 'size' => 70));
+$cols['colonne'] = SimpleListingHelper::createCol(array('name' => getLib('NO_COLONNE'), 'size' => 10, 'align' => 'center'));
+$cols['champ'] = SimpleListingHelper::createCol(array('name' => getLib('INFORMATION'), 'size' => 20));
+$cols['attendu'] = SimpleListingHelper::createCol(array('name' => getLib('SAISIE_ATTENDUE'), 'size' => 70));
 
 //-------------------------------------
 // Ensemble des fonctions d'affichage du contenu des colonnes
@@ -56,11 +56,11 @@ $totalLignes = getListe($tri, $sens, $donnees) ;
 //affichage du nombre de lignes trouvés
 //--------------------------------------
 echo '<div class="container-lg px-0 mt-5">';
-echo '<p class="lead">Structure du fichier d\'import CSV attendue</p>';
+echo '<p class="lead">'.getLib('STRUCTURE_CSV_IMP_ATTENDUE').'</p>';
 
 //affichage du tableau
 //--------------------------------------
-echo '<table class="table table-hover table-striped table-responsive">';	// table-striped table-sm 
+echo '<table class="table table-hover table-striped table-responsive-xl">';	// table-striped table-sm 
 	//affichage de l'entete
 	SimpleListingHelper::drawHead($cols, $tri, $sens);
 	//affichage du corps du tableau : donnees

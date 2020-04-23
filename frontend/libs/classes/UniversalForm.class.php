@@ -209,6 +209,16 @@
 //		- Positionnement systématique du focus sur le premier champ en erreur (le focus par défaut est mémorisé puis repositioné lorsqu'il n'y a plus d'erreurs)
 // Version 3.18.0 du 07.01.2020
 //		- Ajout de la propriété "cheight" pour les composants Area, Select, Comment, filtreSelect, FiltreText et Text qui permet de modifier la taille des zones de texte (lg ou sm)
+// Version 3.18.1 du 17.03.2020
+//		- Correction petit bug sur affichage du curseur d'aide. Il s'affichait aussi hors des formulaires UniversalForm
+// Version 3.18.2 du 19.03.2020
+//		- Correction "Separateur" pour permettre le choix de la couleur du texte (impossible avant)(p.style="color:currentcolor")
+// Version 3.19.0 du 19.03.2020
+//		- Ajout des propriétés booléènes "labelHelpHtml", "labelPlusHelpHtml" et "titreHelpHtml" qui permettent de passer du HTML dans les tooltip
+//		- Simplification du code pour les aides tooltip
+// Version 3.20.0 du 26.03.2020
+//		- objet UniversalFieldImage : ajouté l'utilisation du paramètre 'complement'. On peut maintenant lui passer une fonction de callback qui sera chargée d'afficher l'image (par 
+//			exemple en la créant à la volée). Le nom de l'image (chemin réel) est toujours contenu dans 'value'
 //==============================================================
 
 //-------------------------------------------------------------------------
@@ -256,7 +266,7 @@ class UniversalForm {
 	private $_ligneEncours = false;		//dessin d'une ligne de champs en cours ?
 	private $_memAutofocus = null;		//mémorise le premier objet du formulaire qui a le focus
 
-	const VERSION = 'v3.18.0 (2020-01-07)';
+	const VERSION = 'v3.20.0 (2020-03-26)';
 	const COPYRIGHT = '&copy;2014-2020 Fabrice Labrousse';
 	const CONSULTER = 'consulter';
 	const AJOUTER = 'ajouter';
@@ -377,7 +387,7 @@ class UniversalForm {
 		$chaine.= '}';
 
 		//curseur en forme de point d'interrogation si title sur un label
-		$chaine.= 'span[data-toggle="tooltip"], form label[title], form legend[title], form legend[title] label, p[class="form_error"] {';
+		$chaine.= 'form.uf span[data-toggle="tooltip"], form label[title], form legend[title], form legend[title] label, p[class="form_error"] {';
 			$chaine.= 'cursor: help;';
 		$chaine.= '}';
 
@@ -561,6 +571,7 @@ class UniversalForm {
 				$this->_id_travail = mySqlDataProtect($_POST['hidIdTravail'.'_'.$this->_idForm]);
 			foreach($this->_lesChamps as $champ) {
 				$champ->relever();
+				//DEBUG_('releve '.$champ->postName(), $champ->value());
 			}
 		}
 		

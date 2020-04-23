@@ -12,7 +12,6 @@ defined('_APP_SLOGAN_')				|| define('_APP_SLOGAN_',				'Slogan de l\'applicatio
 defined('_APP_VERSION_')			|| define('_APP_VERSION_',				'v1.0.0');
 defined('_AUTEUR_')					|| define('_AUTEUR_',					'Auteur');
 defined('_COPYRIGHT_')				|| define('_COPYRIGHT_',				'&copy;');
-defined('_EMAIL_WEBMASTER_')		|| define('_EMAIL_WEBMASTER_',			'');
 defined('_IP_DEVELOPPEMENT_')		|| define('_IP_DEVELOPPEMENT_',			array('xxx.xxx.xxx.xxx', 'xxx.xxx.xxx.xxx'));	//ip développeurs
 defined('_APP_BLOWFISH_')			|| define('_APP_BLOWFISH_',				'unechainedecaractereunique');
 defined('_RUN_MODE_')				|| define('_RUN_MODE_',					_DEVELOPPEMENT_);		//_DEVELOPPEMENT_ / _PRODUCTION_

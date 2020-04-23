@@ -86,6 +86,25 @@ echo '<body>';
 		echo '<div class="row">';
 			echo '<div class="col">';
 
+				//interdiction de gérer les utilisateurs si non autorisé
+				//on force l'id au sien
+				if (!accesAutorise('FONC_ADM_GERER_USERS')) {
+					$id = $_SESSION[_APP_LOGIN_]->getId();
+				}
+
+				//verification si on ne cherche pas à modifier un compte adminsitrateur (sans que l'on soit soit même administrateur)
+				if (($operation == 'modifier') || ($operation == 'supprimer')) {
+					(isset($_GET['id'])) ? $id = mySqlDataProtect($_GET['id']) : $id = 0;
+					$user = new User();
+					if ($res = $user->chargeUser($id)) {
+						$profilEdite = $user->getProfil();
+						$profilAdmin = $_SESSION[_APP_DROITS_]->getIdProfil('PROFIL_ADMIN');
+						$monProfil = $_SESSION[_APP_LOGIN_]->getProfil();
+						if (($profilEdite == $profilAdmin) && ($monProfil != $profilAdmin)) $operation = 'erreur';
+					}
+					else $operation = 'erreur';
+				}
+
 				$frm = new Form_user($operation, 1);
 				$action = $frm->getAction();
 
@@ -129,7 +148,7 @@ echo '<body>';
 					case 'supprimer': {
 						//recuperation de l'id de l'utilisateur à charger
 						//si on est pas administrateur on ne peux pas acceder aux informations d'un autre user
-						if (!accesAutorise('FONC_ADM_APP')) {
+						if (!accesAutorise('FONC_ADM_GERER_USERS')) {
 							$id = $_SESSION[_APP_LOGIN_]->getId();
 						}
 						else {

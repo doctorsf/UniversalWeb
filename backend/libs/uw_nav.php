@@ -29,6 +29,8 @@
 //		- Déplacement du fichier d'erreurs dans le répertoire LIBS : fonction userErrorHandler()
 // 22.04.2019
 //		- Modification userErrorHandler pour prise en compte du fichier d'erreur standardisé _PHP_FILE_ERRORS_
+// 08.04.2020
+//		- Correction bug de la fonction getUrlWithoutFirstSlash()
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -223,12 +225,7 @@ function getRefererScriptName()
 //--------------------------------------------------------------------------
 function getUrlWithoutFirstSlash($url)
 {
-	$parse = parse_url($url);
-	if (empty($parse['path'])) return $url;
-	$parts = explode('/', $parse['path']);
-	if (isset($parts[0])) unset($parts[0]);
-	$url = implode('/', $parts);
-	return $url;
+	return substr_replace($url, '', 0, 1);
 }
 
 //--------------------------------------------------------------------------

@@ -156,6 +156,29 @@ switch ($fonctionChoisie)
 		break;
 	}
 
+	//----------------------------------------------------------------------------------
+	// Utilisé par la liste des paramètres de l'application.
+	// Les paramètres sont affichés selon la valeur "ordre" de la table "params". 
+	// L'ordre d'affichage des paramètres est modifiable par drag & drop des lignes <tr> du tableau des paramètres. 
+	// Chaque drag & Drop fait appel à la fonction Ajax ci-dessous qui se charge de réordonner l'affichage en intervertissant
+	// source et cible
+	// Entrée : 
+	//		source : paramètre ayant pour ordonnancement la valeur "source"
+	//		cible  : paramètre ayant pour ordonnancement la valeur "cible"
+	//----------------------------------------------------------------------------------
+	case 'uw_paramSort' : 
+	{
+		if ((isset($_GET['source'])) && (isset($_GET['cible']))) {
+			$source = mySQLDataProtect($_GET['source']);
+			$cible = mySQLDataProtect($_GET['cible']);
+			//modifie la base de données en conséquence
+			$dummy = SqlParams::paramSort($source, $cible);
+		}
+		//on ne renvoie rien ici car la fonction n'appelle pas de fonction de callback
+		$retour = '';
+		break;
+	}
+
 	//----------------------------------
 	// fonctions inexistante
 	//----------------------------------

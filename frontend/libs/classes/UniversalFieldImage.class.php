@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'image'
-// Version 3.18.0 du 07.01.2020
+// Version 3.20.0 du 26.03.2020
 //==============================================================
 
 class UniversalFieldImage extends UniversalField {
@@ -32,21 +32,15 @@ class UniversalFieldImage extends UniversalField {
 		($this->lclass() != '') ? $lclass = ' '.$this->lclass() : $lclass = '';
 		$labelHelp = '';
 		if ($this->labelHelp() != '') {
-			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'"';
+			$labelHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->labelHelp()).'"';
 			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			($this->labelHelpHtml() == true) ? $labelHelp.= ' data-html="true"' : $labelHelp.= '';
 		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->llong().$lclass.$invisible.'"'.$style.'>';
-			if ($labelHelp == '') {
-				//il n'y a pas d'aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
-			}
-			else {
-				//on ajoute une aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
-					$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
-				$html.= '</label>';
-			}
+			$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
+				$html.= '<span'.$labelHelp.'>'.$this->label().'</span>';
+			$html.= '</label>';
 		$html.= '</div>';
 		return $html;
 	}
@@ -69,7 +63,13 @@ class UniversalFieldImage extends UniversalField {
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		$html = '<div id="'.$this->idzchamp().'" class="mb-3 '.$this->clong().$invisible.'">';
-			$html.= '<img class="form-control h-auto img-fluid'.$cclass.$erreur.'" id="'.$this->id().'" src="'.$this->value().'" style="'.$border.'" '.$this->javascript().'/>';
+			//définition de l'origine de l'image (simple fichier ou contruite à la volée par une fonction de callback présente dans complement())
+			if (empty($this->complement())) {
+				$html.= '<img class="form-control h-auto img-fluid'.$cclass.$erreur.'" id="'.$this->id().'" src="'.$this->value().'" style="'.$border.'" '.$this->javascript().'/>';
+			}
+			else {
+				$html.= '<img class="form-control h-auto img-fluid'.$cclass.$erreur.'" id="'.$this->id().'" src="'.call_user_func($this->complement(), $this->value()).'" style="'.$border.'" '.$this->javascript().'/>';
+			}
 			$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$this->value().'" />';
 			if ($this->erreur()) $html.= '<p class="form_error" title="'.$this->libErreurHelp().'">'.$this->libErreur().'</p>';
 		$html.= '</div>';
@@ -82,21 +82,15 @@ class UniversalFieldImage extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 		$labelHelp = '';
 		if ($this->labelHelp() != '') {
-			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'"';
+			$labelHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->labelHelp()).'"';
 			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			($this->labelHelpHtml() == true) ? $labelHelp.= ' data-html="true"' : $labelHelp.= '';
 		}
 		$style = '';
 		$html = '<div id="'.$this->idztitre().'" class="text-'.$this->lalign().' '.$this->lclass().'"'.$style.'>';
-			if ($labelHelp == '') {
-				//il n'y a pas d'aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">'.$this->label().'</label>';
-			}
-			else {
-				//on ajoute une aide sur le label
-				$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
-					$html.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
-				$html.= '</label>';
-			}
+			$html.= '<label class="mb-0'.$erreur.'" for="'.$this->id().'">';
+				$html.= '<span'.$labelHelp.'>'.$this->label().'</span>';
+			$html.= '</label>';
 		$html.= '</div>';
 		return $html;
 	}
@@ -118,7 +112,13 @@ class UniversalFieldImage extends UniversalField {
 		($this->cclass() != '') ? $cclass = ' '.$this->cclass() : $cclass = '';
 		($this->erreur() == true) ? $erreur = ' is-invalid' : $erreur = '';
 		$html = '<div id="'.$this->idzchamp().'">';
-			$html.= '<img class="form-control h-auto img-fluid'.$cclass.$erreur.'" id="'.$this->id().'" src="'.$this->value().'" style="'.$border.'" '.$this->javascript().'/>';
+			//définition de l'origine de l'image (simple fichier ou contruite à la volée par une fonction de callback présente dans complement())
+			if (empty($this->complement())) {
+				$html.= '<img class="form-control h-auto img-fluid'.$cclass.$erreur.'" id="'.$this->id().'" src="'.$this->value().'" style="'.$border.'" '.$this->javascript().'/>';
+			}
+			else {
+				$html.= '<img class="form-control h-auto img-fluid'.$cclass.$erreur.'" id="'.$this->id().'" src="'.call_user_func($this->complement(), $this->value()).'" style="'.$border.'" '.$this->javascript().'/>';
+			}
 			$html.= '<input type="hidden" name="'.$this->postName().'" value="'.$this->value().'" />';
 			if ($this->erreur()) $html.= '<p class="form_error" title="'.$this->libErreurHelp().'">'.$this->libErreur().'</p>';
 		$html.= '</div>';

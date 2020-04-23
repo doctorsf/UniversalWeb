@@ -5,7 +5,11 @@
 // Traitement d'arbres hiérarchiques. S'appuie sur la méthode des intervalles
 // Adapté par Fabrice Labrousse
 // http://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/
-// Version 1.0.0 du 01.02.2018
+//------------------------------------------------------------------
+// 01.02.2018
+//		- Version 1.0.1
+// 03.02.2020 (V1.0.1)
+//		- Correction méthodes addLeave et addNode -> échappement des chaines
 //------------------------------------------------------------------
 
 class UniversalTree {
@@ -13,7 +17,7 @@ class UniversalTree {
 	private $_table = '';		//nom de la table dans la base de données
 	private $_key = '';			//nom du champ (à clé unique) de l'élément de l'arbre
 
-	const VERSION = 'v1.0.0 (2018-02-01)';
+	const VERSION = 'v1.0.1 (2020-02-03)';
 
 	//----------------------------------------------
 	// récupère les valeurs gauche, droite et niveau d'un élément
@@ -350,7 +354,7 @@ class UniversalTree {
 		$requete.= ($droite + 1).", ";
 		$requete.= ($droite + 2).", ";
 		$requete.= $niveau.", ";
-		$requete.= "'".implode("', '", array_values($infos))."'";
+		$requete.= "'".implode("', '", array_addslashes(array_values($infos)))."'";
 		$requete.= ")";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res === false) return false;
@@ -398,7 +402,7 @@ class UniversalTree {
 		$requete.= ($gauche + 1).", ";
 		$requete.= ($droite + 1).", ";
 		$requete.= ($niveau + 1).", ";
-		$requete.= "'".implode("', '", array_values($infos))."'";
+		$requete.= "'".implode("', '", array_addslashes(array_values($infos)))."'";
 		$requete.= ")";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res === false) return false;

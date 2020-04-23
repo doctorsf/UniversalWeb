@@ -88,9 +88,9 @@ class Form_squelette extends UniversalForm {
 
 		$javascript = '';
 		if ($this->getOperation() == self::SUPPRIMER)
-			$javascript = 'onclick="return confirm(\''.getLib('EMBALLAGE_SUPPRIMER_CERTAIN').'\');"';
+			$javascript = 'onclick="return confirm(\''.getLib('XXX_SUPPRIMER_CERTAIN').'\');"';
 		if ($this->getOperation() == self::RETIRER)
-			$javascript = 'onclick="return confirm(\''.getLib('EMBALLAGE_RETIRER_CERTAIN').'\');"';
+			$javascript = 'onclick="return confirm(\''.getLib('XXX_RETIRER_CERTAIN').'\');"';
 		$this->createField('bouton', 'submit', array(
 			'newLine' => true,
 			'dbfield' => 'bouton',
@@ -118,7 +118,7 @@ class Form_squelette extends UniversalForm {
 				)); 		
 		}
 		//ajout d'un bouton d'édition si on est en consultation (sauf pour id_emballage <= 0)
-		if (($this->getOperation() == self::CONSULTER) && ($this->_tab_donnees['id_emballage'] > _ID_SYSTEM_)) {
+		if (($this->getOperation() == self::CONSULTER) && ($this->_tab_donnees['id_xxx'] > _ID_SYSTEM_)) {
 			$libelle = '<span class="far fa-edit mr-3"></span>'.getLib('EDITER');
 			$adresse = str_replace('consulter', 'modifier', $_SERVER['REQUEST_URI']);
 			$javascript = 'onclick="location.href=\''.$adresse.'\'; return false;"';
@@ -169,7 +169,7 @@ class Form_squelette extends UniversalForm {
 		//positionnement de l'id du tuple sur lequel on travaille
 		$this->setIdTravail($id);
 		//hydratation des donnees
-		$this->_tab_donnees['libelle'] = $tuple['libelle'];
+		$this->_tab_donnees = $tuple;
 		//hydratation des donnees locales au formulaire
 		$this->construitChamps();
 		return true;
@@ -216,17 +216,23 @@ class Form_squelette extends UniversalForm {
 	public function afficher() {
 		parent::afficher();		//permet d'ajouter des tests de construction du formulaire
 		//ATTENTION : les champs disabled ne renvoient aucun POST !!! Donc impossible de récupérer les données depuis une suppression
-		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::SUPPRIMER)));
+		$enable = (!(($this->getOperation() == self::CONSULTER) || ($this->getOperation() == self::RETIRER) || ($this->getOperation() == self::SUPPRIMER)));
 		$chaine = '';
 
+		($this->_tab_donnees['active'] == 0) ? $actif = ' text-muted unactived' : $actif = ' text-info';
+
 		$chaine.= '<div class="container-lg px-0 mt-5">';
-			$chaine.= '<h1>Titre</h1>';
-			$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
-				$chaine.= '<fieldset class="border p-4">';
-					$chaine.= $this->draw($enable);
-				$chaine.= '</fieldset>';
-				$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').' (1) '.getLib('LECTURE_SEULE').'</p>';
-			$chaine.= '</form>';
+			$chaine.= '<div class="card border-info">';
+				$chaine.= '<div class="uw-card-header'.$actif.'">';
+					$chaine.= '<h3 class="mb-5"><span class="far fa-flag"></span>&nbsp;'.getLib('TITRE').'</h3>';
+				$chaine.= '</div>';
+				$chaine.= '<div class="card-body">';
+					$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
+						$chaine.= $this->draw($enable);
+						$chaine.= '<p class="small">(*) '.getLib('CHAMP_REQUIS').'</p>';
+					$chaine.= '</form>';
+				$chaine.= '</div>';
+			$chaine.= '</div>';
 		$chaine.= '</div>';
 		return $chaine;
 	}

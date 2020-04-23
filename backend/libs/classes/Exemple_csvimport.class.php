@@ -20,6 +20,13 @@ class Exemple_csvimport extends UniversalCsvImport {
 	public $PARMI_GENRES = array('drame', 'science-fiction', 'comédie', 'western', 'fantastique');
 
 	//---------------------------------------
+	// Tests personnalisé sur la colonne imdb
+	//---------------------------------------	
+	public function testVisuel($valeur) {
+		return in_array($valeur, $this->PARMI_VISUEL);
+	}
+
+	//---------------------------------------
 	// creation du modèle d'importation
 	//---------------------------------------
 	public function buildModele() {
@@ -33,12 +40,24 @@ class Exemple_csvimport extends UniversalCsvImport {
 			'css' => 'text-danger',
 			'active' => true
 		));
-
+/*
 		$this->createColonne('annee', array(
 			'colonne' => 1, 
 			'libelle' => 'Année', 
 			'sqlField' => 'annee', 
 			'match' => array('REQUIRED', 'CHECK_INTEGER_4'), 
+			'commentaire' => 'Année de sortie du film (4 chiffres obligatoires)',
+			'css' => 'text-danger',
+			'active' => true
+		));
+*/
+		//autre possibilité : test avec un REGEX personnalisé
+		$this->createColonne('annee', array(
+			'colonne' => 1, 
+			'libelle' => 'Année', 
+			'sqlField' => 'annee', 
+			'match' => array('REQUIRED', 'REGEX'), 
+			'matchValue' => '#^[0-9]{4}$#', 
 			'commentaire' => 'Année de sortie du film (4 chiffres obligatoires)',
 			'css' => 'text-danger',
 			'active' => true
@@ -49,17 +68,30 @@ class Exemple_csvimport extends UniversalCsvImport {
 			'libelle' => 'Réalisateur', 
 			'sqlField' => 'realisateur', 
 			'match' => array('DEFAULT'), 
-			'commentaire' => 'Nom du réalisateur (saisie obligatoire)',
 			'defaut' => 'Inconnu',
+			'commentaire' => 'Nom du réalisateur (saisie obligatoire)',
 			'css' => 'text-danger',
 			'active' => true
 		));
 
+/*
 		$this->createColonne('visuel', array(
 			'colonne' => 3, 
 			'libelle' => 'Visuel', 
 			'sqlField' => 'visuel', 
 			'match' => array('REQUIRED', 'PARMI_VISUEL'), 
+			'commentaire' => 'Type de visuel (saisie obligatoire)',
+			'css' => 'text-danger',
+			'active' => true
+		));
+*/
+		//autre possibilité : test avec une méthode personnalisée
+		$this->createColonne('visuel', array(
+			'colonne' => 3, 
+			'libelle' => 'Visuel', 
+			'sqlField' => 'visuel', 
+			'match' => array('REQUIRED', 'CUSTOM'), 
+			'matchValue' => 'testVisuel', 
 			'commentaire' => 'Type de visuel (saisie obligatoire)',
 			'css' => 'text-danger',
 			'active' => true

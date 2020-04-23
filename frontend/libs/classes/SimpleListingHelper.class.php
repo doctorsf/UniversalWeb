@@ -23,9 +23,19 @@
 // 04.12.2019
 //		- Appliqué le CSS aux tags <th> et <td> (drawBody)
 //		- Viré les propriétés HTML "width" et "align" depréciés en HTML 5 et remplacé par du CSS
+// 14.04.2020
+//		- Ajout de paramètres possibles pour permettre du drag & drop sur les lignes
+//			si on ajoute aux données du listing :
+//			- 'ligne-draggable' : on permet à la ligne <tr> d'être draggable
+//			- 'ligne-droppable' : on permet à la ligne <tr> de recevoir un drop
+//			- 'ligne-info' : on ajoute un attribut 'info' à la ligne <tr> (pour y mettre ce que l'on veux)
+// 21.04.2020 (v1.1.1)
+//		- Méthode drwawTotal utilise maintenant la fonction de langue getLibNbRefsTrouvees($nombreLignes);
 //--------------------------------------------------------------------------
 
 class SimpleListingHelper {
+
+	const VERSION = 'v1.1.1 (2020-04-14)';
 
 	//--------------------------------------------------------------------------
 	// Création d'une colonne de listing. Cette fonction permet d'initialiser les
@@ -121,11 +131,7 @@ class SimpleListingHelper {
 	//--------------------------------------------------------------------------
 	public static function drawTotal($nombreLignes)
 	{
-		if ($nombreLignes == 0)
-			echo getLib('AUCUNE_REF_TROUVEE');
-		elseif ($nombreLignes == 1)
-			echo getLib('1_REF_TROUVEE');
-		else echo getLib('X_REF_TROUVEE', $nombreLignes);
+		echo getLibNbRefsTrouvees($nombreLignes);
 	}
 
 	//--------------------------------------------------------------------------
@@ -193,13 +199,22 @@ class SimpleListingHelper {
 	// Retour
 	//		echo du code HTML d'affichage
 	//--------------------------------------------------------------------------
+	// 14.04.2020 - Ajout de paramètres possibles pour permettre du drag & drop sur les lignes
+	// si on ajoute aux données du listing :
+	//		- 'ligne-draggable' : on permet à la ligne <tr> d'être draggable
+	//		- 'ligne-droppable' : on permet à la ligne <tr> de recevoir un drop
+	//		- 'ligne-info' : on ajoute un attribut 'info' à la ligne <tr> (pour y mettre ce que l'on veux)
+	//--------------------------------------------------------------------------
 	public static function drawBody($cols, $listing, $page)
 	{
 		//affichage du corps du tableau : donnees
 		echo '<tbody>';
-		foreach($listing as $ligne)	{
-			(!empty($ligne['line-color'])) ? $couleur = ' class="'.$ligne['line-color'].'"' : $couleur = '';
-			echo '<tr'.$couleur.'>';
+		foreach($listing as $indice => $ligne)	{
+			(!empty($ligne['line-color']))		? $couleur = ' class="'.$ligne['line-color'].'"'	: $couleur = '';
+			(!empty($ligne['line-draggable']))	? $draggable = ' draggable="true"'					: $draggable = '';
+			(!empty($ligne['line-droppable']))	? $dropper = ' dropper="true"'						: $dropper = '';
+			(!empty($ligne['line-info']))		? $info = ' info="'.$ligne['line-info'].'"'			: $info = '';
+			echo '<tr'.$couleur.$dropper.$draggable.$info.'>';
 			foreach($cols as $indiceCol => $colonne) {
 				($colonne['header']) ? $tag = 'th scope="row"' : $tag = 'td';
 				echo '<'.$tag.' class="'.trim('text-'.$colonne['align'].' '.$colonne['css']).'">';

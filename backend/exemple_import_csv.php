@@ -61,13 +61,9 @@ function import($importFile) {
 		//-------------------------------------------
 		else {
 			//affichage des infos non valide dans un tableau
-			echo $csv->displayErrors($data, $nbErreur);
-			if ($nbErreur == 1) {
-				echo '<p class="lead text-danger">1 ligne comporte une ou plusieurs erreurs&hellip;</p>';
-			}
-			else {
-				echo '<p class="lead text-danger">'.$nbErreur.' lignes comportent une ou plusieurs erreurs&hellip;</p>';
-			}
+			echo '<div class="container-lg px-0">';
+				echo $csv->displayRawErrors($data, $nbErreur);
+			echo '</div>';
 			return false;
 		}
 
@@ -92,7 +88,12 @@ function import($importFile) {
 
 	}
 	else {
-		echo '<p class="lead text-danger">Fichier d\'importation '.$importFile.' CSV inexistant !</p>';
+		$leMessage['title'] = getLib('ERREUR');
+		$leMessage['text'] = getLib('FICHIER_IMPORT_X_INEXISTANT', $importFile);
+		$leMessage['color'] = 'danger';
+		$leMessage['dismiss'] = 'false';
+		$leMessage['footer'] = '<a href="'.$_SERVER['REQUEST_URI'].'">'.getLib('CORRIGEZ_RELANCEZ').'</a>';
+		echo bootstrapAlert($leMessage);
 		return false;
 	}
 }
@@ -101,6 +102,31 @@ function import($importFile) {
 //-----------------------------------------------------------
 $titrePage = _APP_TITLE_;
 $scriptSup = '';
+$scriptSup.= '<script>';
+$scriptSup.= '"use strict";';
+$scriptSup.= 'var idFile = document.getElementById("idFile");';				//champ invisible de type 'file'
+$scriptSup.= 'var idUpload = document.getElementById("idUpload");';			//champ 'visible' recevant le nom fichier choisi
+$scriptSup.= 'var idBtUpload = document.getElementById("idBtUpload");';		//bouton d'ouverture du selecteur de fichiers
+$scriptSup.= 'var idSubmit = document.getElementById("idSubmit");';			//bouton de validation du formulaire
+//clic sur l'icone bouton d'upload lance le clic sur le champ 'file' invisible
+$scriptSup.= 'idBtUpload.addEventListener("click", function() {';
+$scriptSup.= '	idFile.click();';
+$scriptSup.= '});';
+//recopie du fichier choisi (champ invisible 'file') vers champ visible ('upload')
+$scriptSup.= 'idFile.addEventListener("change", function() {';
+$scriptSup.= '	idUpload.value = idFile.files[0].name;';
+$scriptSup.= '	idSubmit.disabled = false';
+$scriptSup.= '});';
+//supprimer eventuelle erreur précédentes
+$scriptSup.= 'idFile.addEventListener("click", function() {';
+$scriptSup.= '	idUpload.classList.remove("is-invalid");';
+$scriptSup.= '	idUpload.value = "";';
+$scriptSup.= '	var ufztitre_upload = document.getElementById("ufztitre_upload");';
+$scriptSup.= '	ufztitre_upload.querySelector("label").classList.remove("danger-color");';
+$scriptSup.= '	var ufzchamp_upload = document.getElementById("ufzchamp_upload");';
+$scriptSup.= '	ufzchamp_upload.querySelector("p.form_error").innerText = "";';
+$scriptSup.= '});';
+$scriptSup.= '</script>';
 $fJquery = '';
 echo writeHTMLHeader($titrePage, '', '');
 
@@ -151,8 +177,8 @@ echo '<body>';
 							$donnees = $frm->getData();
 							//DEBUG_('donnees', $donnees);
 							//import du fichier vers le dossier navette
-							$file = $donnees['file1']['files'];
-							//[file1] => Array
+							$file = $donnees['file']['files'];
+							//[file] => Array
 							//	(
 							//		[nbFiles] => 1
 							//		[files] => Array
@@ -180,15 +206,14 @@ echo '<body>';
 							if (move_uploaded_file($file['tmp_name'], $dest_dossier.$dest_fichier)) {
 								//OK on procède à l'import
 								$res = import($dest_dossier.$dest_fichier);
-								if ($res == false) {
-									echo '<p class="lead">Corrigez-les erreurs et <a href="'.$_SERVER['REQUEST_URI'].'">relancez le processus</a> d\'import</p>';
-								}
-								else {
-									echo 'Document importé&hellip;';
+								if ($res != false) {
+									riseMessage('Document importé&hellip;');
+									goReferer();
 								}
 							}
 							else {
-								echo '<p class="lead text-danger">Impossible d\'uploader le fichier '.$file['name'].' !</p>';
+								riseErrorMessage(getLib('FICHIER_IMPORT_X_ERROR', $file['name']));
+								goReferer();
 							}
 						}
 						break;

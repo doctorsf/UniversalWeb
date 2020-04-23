@@ -24,7 +24,7 @@ $_LIBELLES = array(
 	//------------------------------------------
 	// Libellés des classes UniversalField (UFC)
 	//------------------------------------------
-	'UFC_ERREURS_A_CORRIGER'		=> 'Errors to correct before import',
+	'UFC_ERREURS_A_CORRIGER'		=> 'Errors to fix before import',
 	'UFC_CHAMP_REQUIS'				=> 'This field is required',
 	'UFC_CHAMP_NUMERIQUE'			=> 'This field must be numeric',
 	'UFC_CHOIX_INVALIDE'			=> 'Not a valid choice',
@@ -65,11 +65,29 @@ $_LIBELLES = array(
 	'UFC_MATCH_INVALIDE'			=> 'Unknown testMatches property!',
 	'UFC_MAX_LENGTH'				=> 'length > %d chars (%d)',
 	'UFC_MIN_LENGTH'				=> 'length < %d chars (%d)',
+	'UFC_SAISIE_NON_CONFORME'		=> 'Incorrect entry',
+	'UFC_REGEX_MANQUANTE'			=> 'REGEX missing',
+	'UFC_SAISIE_ATTENDUE_PARMI'		=> 'Awaited entry among : ',
+
+	//------------------------------------------
+	// Libellés des classes UniversalWeb SilentMail (UWSM)
+	//------------------------------------------
+	'UWSM_TEST'						=> 'Test',
+	'UWSM_SUCCESS'					=> 'eMail sent with success&hellip;',
+	'UWSM_NO_SENDER'				=> 'Sender unknown',
+	'UWSM_BAD_SENDER'				=> 'Bad sender eMail',
+	'UWSM_NO_OBJECT'				=> 'No subject',
+	'UWSM_NO_RECIPIENT'				=> 'No recipient',
+	'UWSM_TOO_MANY_RECIPIENTS'		=> 'Too many recipient! Maximum 3',
+	'UWSM_BAD_RECIPIENT'			=> 'Bad email for a recipient',
+	'UWSM_SEND_ERROR'				=> 'Error sending email',
+	'UWSM_ERROR_UNKNOWN'			=> 'unknown error',
 
 	//------------------------------------------
 	// ERREURS
 	//------------------------------------------
 	'ERREUR'						=> 'Error',
+	'ERREURS'						=> 'Errors',
 	'ERREUR_AUCUNE'					=> 'No Error',
 	'ERREUR_SQL'					=> 'SQL error&hellip;',
 	'ERREUR_COMMANDE'				=> 'Choice error&hellip;',
@@ -86,6 +104,27 @@ $_LIBELLES = array(
 	'PHP_ERROR_FILE_ERROR'			=> 'Error while deleting PHP Errors File!',
 	'ERREURS_BACKEND'				=> 'Backend Errors',
 	'ERREURS_FRONTEND'				=> 'Frontend Errors',
+	'MODIFICATION_PRISE_EN_COMPTE'	=> 'Updated',
+
+	//------------------------------------------
+	// IMPORT EN MASSE
+	//------------------------------------------
+	'IMPORT_CSV'					=> 'CSV import', 
+	'STRUCTURE_CSV_IMP_ATTENDUE'	=> 'Structure of the CSV import file expected',
+	'IMPORT_REGLES'					=> 'Each import file must be limited to 1000 lines. Its format must conform to the model specified below. Refer to this template to forge the expected CSV import file (semicolon separator)',
+	'SELECTION_FICHIER_UPLOADER'	=> 'Choose the file to upload',
+	'IMPORT_FICHIER_CSV_X'			=> 'CSV import file',
+	'NO_COLONNE'					=> 'Col #',
+	'SAISIE_ATTENDUE'				=> 'Expected input',
+	'X_VIDE_SINON'					=> 'X to import the line else empty',
+	'OBLIGATOIRE_PARMI'				=> 'Required from : ',
+	'LIGNE_ERREURS'					=> '1 line contains one or more errors&hellip;',
+	'LIGNES_ERREURS'				=> '%d lines contains one or more errors&hellip;',
+	'CORRIGEZ_RELANCEZ'				=> 'Correct the errors then restart the process',
+	'IMPORT_EN_COURS'				=> 'Import in progress&hellip;',
+	'FICHIER_IMPORT_X_INEXISTANT'	=> 'CSV import file "%s" does not exists!',
+	'FICHIER_IMPORT_X_ERROR'		=> 'Cannot upload file "%s"!',
+	'LIGNE_CSV_X'					=> 'CSV line #%d',
 
 	//------------------------------------------
 	// MOTS / VERBES
@@ -109,6 +148,8 @@ $_LIBELLES = array(
 	'SUPPRIMER'						=> 'Delete',
 	'ANNULER'						=> 'Cancel',
 	'RETOUR'						=> 'Back',
+	'FERMER'						=> 'Close',
+	'UPLOADER'						=> 'Upload',
 	'LEGENDE'						=> 'Caption',
 	'PROFIL'						=> 'Profile',
 	'ID'							=> 'Id',
@@ -147,6 +188,14 @@ $_LIBELLES = array(
 	'TYPE'							=> 'Type',
 	'OPERATION'						=> 'Operation',
 	'DATE'							=> 'Date',
+	'COMMENTAIRE'					=> 'Comment',
+	'VALEUR'						=> 'Value',
+	'GALERIE'						=> 'Gallery',
+	'COMMENTAIRES'					=> 'Comments',
+	'INFORMATION'					=> 'Information',
+	'SANS_OBJET'					=> 'Not applicable',
+	'OBLIGATOIRE'					=> 'Required',
+	'EMPLACEMENT'					=> 'Place',
 
 	//------------------------------------------
 	// LOGS
@@ -274,6 +323,48 @@ $_LIBELLES = array(
 	'PROFIL_REN_CODE_EXISTE_DEJA'	=> 'This profile code already exists&hellip;',
 
 	//------------------------------------------
+	// PARAMETRAGE
+	//------------------------------------------
+	'REGLAGES'						=> 'Settings',
+	'REGLAGES_APPLICATION'			=> 'Application settings',
+	'PARAMETRE'						=> 'Setting value',
+	'PARAMETRES'					=> 'Advanced settings',
+	'AJOUTER_PARAMETRE'				=> 'Add a setting',
+	'MODIFIER_PARAMETRE'			=> 'Update this setting',
+	'REGLAGES_OK'					=> 'Settings updated',
+	'SUPPRIMER_PARAMETRE'			=> 'Delete this setting',
+	'SUPPRIMER_PARAMETRE_CERTAIN'	=> 'Do you really want to definitively delete this setting ?',
+	'PARAMETRE_REGLAGE'				=> 'Application setting',
+	'PARAMETRE_REGLAGE_HELP'		=> 'If this parameter allows the adjustment of the application by the webmaster, toggle to give him access', 
+	'PARAMETRE_LIBELLE_HELP'		=> 'Caption to display for the webmaster. May be a mnemonic caption.',
+	'PARAMETRE_TYPE'				=> 'Parameter type',
+	'PARAMETRE_TYPE_HELP'			=> 'text*, boolean, number, date',
+	'PARAMETRE_MIN'					=> 'Min value',
+	'PARAMETRE_MIN_HELP'			=> 'Depending on the type of parameter, if<br/>"<b><em>text</em></b>" : not used<br />"<b><em>number</em></b>" : Minimum value that setting can receive<br />"<b><em>boolean</em></b>" : value returned by the setting when the swich is on',
+	'PARAMETRE_MAX'					=> 'Max value',
+	'PARAMETRE_MAX_HELP'			=> 'Depending on the type of parameter, if<br/>"<b><em>text</em></b>" : setting input max length<br />"<b><em>number</em></b>" : maximum value that the setting can receive<br />"<b><em>boolean</em></b>" : value returned by the setting when the swich is off',
+	'PARAMETRE_STEP'				=> 'Value step',
+	'PARAMETRE_STEP_HELP'			=> '"<b><em>number</em></b>" (only) : value step for updating between min and max value',
+	'MINI_INF_MAXI'					=> 'Min value must be less or equal to max value',
+	'MAXI_SUP_MINI'					=> 'Max value must be more or equal to min value',
+	'PARAM_COMMENTS_HELP'			=> 'Help for the setting value. May be a mnemonic caption.',
+
+	'MODE_DEBUG'					=> 'Debug Mode',
+	'MODE_DEBUG_HELP'				=> 'Reserved to programmers. Unswitch when site is in production',
+	'SUPP_DEFINITIVE_ENREG'			=> 'Permanently delete records ?',
+	'SUPP_DEFINITIVE_ENREG_HELP'	=> 'If checked, deleted records will be definitively deleted, not marked',
+	'COMMENTAIRES_FACEBOOK'			=> 'Facebook Comments',
+	'COMMENTAIRES_FACEBOOK_HELP'	=> 'Display an grant Facebook comments ?',
+	'LIKE_FACEBOOK'					=> 'Facebook Like Box',
+	'LIKE_FACEBOOK_HELP'			=> 'Display and grant Facebook Like Box ?',
+	'FACEBOOK_URL'					=> 'Facebook url page',
+	'FACEBOOK_URL_HELP'				=> 'Facebook url page associated to the e-shop',
+	'AUTORISER_PUBLICITE'			=> 'Allow commercials',
+	'AUTORISER_PUBLICITE_HELP'		=> 'Activate commercials site areas ?',
+	'WEBMASTER_EMAIL'				=> 'Webmaster email',
+	'WEBMASTER_EMAIL_HELP'			=> 'In some case this eMail can receive technic mails from customers',
+
+	//------------------------------------------
 	// BASE DE DONNEES
 	//------------------------------------------
 	'SAUVEGARDE_BD'					=> 'Save Database',
@@ -309,8 +400,10 @@ $_LIBELLES = array(
 	// SYSTEME
 	//------------------------------------------
 	'SYSTEME'						=> 'System',
+	'TABLE'							=> 'Table',
 	'INFORMATIONS_SYSTEME'			=> 'System Information',
-	'SIGNATURE_CODE'				=> 'Code Hash',
+	'SIGNATURE_BASE'				=> 'Database hash',
+	'SIGNATURE_CODE'				=> 'Code hash',
 	'SIGNATURE_FINALE'				=> 'Final hash',
 	'VERSION_PHP'					=> 'PHP Version',
 	'INFOS_PHP'						=> 'PHP Infos',
@@ -322,16 +415,26 @@ $_LIBELLES = array(
 	'VERSION_PROTOCOLE'				=> 'Protocol Version',
 	'VERSION_APACHE'				=> 'Apache Version',
 	'MODULE_AUTHENTIFICATION'		=> 'Authentication module',
-	'PAS_EXPEDITEUR'				=> 'Sender unknown',
-	'EMAIL_EXPEDITEUR_KO'			=> 'Bad sender eMail',
-	'PAS_DESTINATAIRE'				=> 'No recipient',
-	'TROP_DESTINATAIRES'			=> 'Too much recipient! Maximum 3',
-	'PAS_OBJET'						=> 'No subject',
-	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'Bad email for a recipient',
-	'EMAIL_ENVOI_ERREUR'			=> 'Error sending email',
 	'ERREURS_BACKEND'				=> 'Backend Errors',
 	'ERREURS_FRONTEND'				=> 'Frontend Errors',
 	'VOTRE_IP'						=> 'Your IP',
+	'ZONE_DE_TELEVERSEMENT'			=> 'Upload area',
+
+	//------------------------------------------
+	// MEDIA
+	//------------------------------------------
+	'MEDIA'							=> 'Media',
+	'MEDIA_DU_SITE'					=> 'Site media',
+	'MEDIA_DISPONIBLE'				=> 'Available media',
+	'SELECTION_MEDIA_UPLOAD'		=> 'Media upload selection',
+	'UPLOAD_MEDIA'					=> 'Media upload',
+	'MEDIA_PATH'					=> 'Media path',
+	'MEDIA_PATH_HELP'				=> 'Choose the path to the media',
+	'MEDIA_SUPPRIMER'				=> 'Delete this media',
+	'MEDIA_SUPPRIMER_CERTAIN'		=> 'Are you sure you want to delete this media?',
+	'MEDIA_UPLOAD_SUCCES'			=> 'Media "%s" uploaded with success!',
+	'MEDIA_UPLOAD_ERREUR'			=> 'Error while uploading media "%s"',
+	'ZONE_DE_TELEVERSEMENT'			=> 'Upload drop zone',
 
 	//------------------------------------------
 	// AUTRE
@@ -339,9 +442,6 @@ $_LIBELLES = array(
 	'IGNORER_LE_CHAMP'				=> 'Ignore field',
 	'CLASSEMENT_ASCENDANT'			=> 'Ascending sort',
 	'CLASSEMENT_DESCENDANT'			=> 'Descending sort',
-	'AUCUNE_REF_TROUVEE'			=> 'No result found',
-	'1_REF_TROUVEE'					=> '1 result found',
-	'X_REF_TROUVEE'					=> '%d results found',
 	'NOM_COLONNE'					=> 'Column Name?',
 	'ACTIONS'						=> '<span class="fas fa-child fa-lg"></span>'
 );
@@ -358,6 +458,17 @@ $_MENU_FILTRE_TEXT = array('ALL' => 'All',
 						   'CON' => 'Contends', 
 						   'DNC' => 'Do not contends', 
 						   'END' => 'Ends by');
+
+//--------------------------------------
+// Affiche un texte "nombre de références " + verbe ou participe passé
+// Entrée : $nb : nombre à transcrire
+// Retour : la chaine de catactère résultante
+//--------------------------------------
+function getLibNbRefsTrouvees($nb) {
+	if ($nb == 0)		return 'No item found';
+	elseif ($nb == 1)	return '1 item found';
+	else				return $nb.' items found';
+}
 
 //------------------------------------------------------------------
 // Construction d'une chaine avec des paramètres passés en option
@@ -416,4 +527,16 @@ function getULib($indice, $param1='', $param2='', $param3='', $param4='', $param
 function existeLib($indice) {
 	global $_LIBELLES;
 	return isset($_LIBELLES[$indice]);
+}
+
+//------------------------------------------------------------------
+// Renvoie le libellé ci-celui-ci existe, l'indice sinon
+//------------------------------------------------------------------
+// Entrée 
+//		$indice : indice du template de la chaine dans $_LIBELLES
+// Retour
+//		la traduction si existe / $indice sinon
+//------------------------------------------------------------------
+function getLibIfExists($indice) {
+	if (existeLib($indice)) return getLib($indice); else return $indice;
 }

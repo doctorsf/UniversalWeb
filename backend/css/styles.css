@@ -96,6 +96,90 @@ body {
 }
 
 /*----------------------------------------*/
+/* modification CARD
+/*----------------------------------------*/
+.uw-card-header {
+	padding: .75rem 1.25rem;
+	margin-bottom: 0;
+}
+
+/*----------------------------------------*/
+/* Couleurs								  */
+/*----------------------------------------*/
+.actived {
+	background-color: #B3FFB3;		/* vert */
+}
+.papier {
+	background-color: #f5f5f5;		/* gris */
+}
+.readonly {
+	background-color: #e0e0e0;		/* silver */
+}
+.other {
+	background-color: #e2ffb3;		/* 	pastel clair vert */
+}
+
+.text-unactived {
+    color: #d4d4ff!important;
+}
+.text-soldout {
+    color: #ffd9b3!important;
+}
+.text-reserved {
+    color: #b8e68a!important;
+}
+.text-deleted {
+    color: #f5c6cb!important;
+}
+
+.unactived, .table-unactived, .table-unactived>td, .table-unactived>th {	/* violet */
+    background-color: #d4d4ff;
+}
+.soldout, .table-soldout, .table-soldout>td, .table-soldout>th {			/* orange (warning)*/
+    background-color: #ffd9b3;
+}
+.reserved, .table-reserved, .table-reserved>td, .table-reserved>th {		/* vert (success) */
+    background-color: #b8e68a;
+}
+.deleted, .table-deleted, .table-deleted>td, .table-deleted >th {			/* rouge (danger) */
+    background-color: #f5c6cb;
+}
+
+.border-unactived {
+    border-color: #d4d4ff!important;
+}
+.border-soldout {
+    border-color: #ffd9b3!important;
+}
+.border-reserved {
+    border-color: #b8e68a!important;
+}
+.border-deleted {
+    border-color: #f5c6cb!important;
+}
+
+.badge-systeme {
+    color: #000;
+    background-color: #b8daff;
+}
+.badge-unactived {
+    color: #000;
+    background-color: #d4d4ff;
+}
+.badge-soldout {
+    color: #000;
+    background-color: #ffd9b3;
+}
+.badge-reserved {
+    color: #000;
+    background-color: #b8e68a;
+}
+.badge-deleted {
+    color: #000;
+    background-color: #f5c6cb;
+}
+
+/*----------------------------------------*/
 /* utilisation dans le cadre des exemples */
 /*----------------------------------------*/
 .rouge {
@@ -108,7 +192,7 @@ body {
 	color:green;
 }
 .souligne {
-	font-decoration:underline;
+	text-decoration:underline;
 }
 .gras {
 	font-weight:bold;

@@ -11,7 +11,21 @@ Date : 30.07.2014
 	"films" pour les exemples d'utilisation UniversalList. Lancé par active_application.php
 27.11.2018
 	- Correction syntaxique après premier essai sqlDivers_createTableExemplesFilms
+18.03.2020
+	- Ajout fonction sqlDivers_updateTableAutoIncrement()
 ------------------------------------------------------------------------*/
+
+
+//----------------------------------------------------------------------
+// Modification de a valeur de l'auto-incrément d'une table
+// A utiliser avec trés grande précaution !!
+//----------------------------------------------------------------------
+function sqlDivers_updateTableAutoIncrement($table, $value)
+{
+	$requete = "ALTER TABLE ".$table." AUTO_INCREMENT = ".$value;
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	return $res;
+}
 
 //- CREATION table profils basique --------------------------------------
 function sqlDivers_createTableExemplesFilms()
@@ -25,7 +39,7 @@ function sqlDivers_createTableExemplesFilms()
 	$requete.= "UNIQUE KEY `titre` (`titre`), ";
 	$requete.= "KEY `annee` (`annee`), ";
 	$requete.= "KEY `genre` (`genre`)";
-	$requete.= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	$requete.= ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
 		//Contenu minimum de la table `profils`

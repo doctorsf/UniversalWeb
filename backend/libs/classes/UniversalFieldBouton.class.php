@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'bouton'
-// Version 3.18.0 du 07.01.2020
+// Version 3.20.0 du 26.03.2020
 //==============================================================
 
 class UniversalFieldBouton extends UniversalField {
@@ -84,8 +84,9 @@ class UniversalFieldBouton extends UniversalField {
 		($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 		$labelHelp = '';
 		if ($this->labelHelp() != '') {
-			$labelHelp = ' title="'.$this->labelHelp().'" data-toggle="tooltip"';
+			$labelHelp = ' data-toggle="tooltip" title="'.$this->labelHelp().'"';
 			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			($this->labelHelpHtml() == true) ? $labelHelp.= ' data-html="true"' : $labelHelp.= '';
 		}
 		$zchampClasses = trim($clong.$border.$erreur.$invisible);
 		$buttonClasses = trim($llong.$lclass);
@@ -93,7 +94,7 @@ class UniversalFieldBouton extends UniversalField {
 		$html.= '<div id="'.$this->idzchamp().'" class="mb-3 '.$zchampClasses.'"'.$style.'>';
 			//le libellé du bouton retourné est toujours valueBase (valeur de base) car value peut être "notposted" si le bouton 
 			//submit n'est pas cliqué (cas de plusieurs submits sur le même formulaire
-			$html.= '<button type="'.$this->inputType().'"'.$enable.' id="'.$this->id().'" class="'.$buttonClasses.'"'.$this->javascript().' name="'.$this->postName().'" value="'.$this->valueBase().'"'.$labelHelp.'/>'.$this->label().'</button>';
+			$html.= '<button type="'.$this->inputType().'"'.$enable.' id="'.$this->id().'" class="'.$buttonClasses.'"'.$this->javascript().' name="'.$this->postName().'" value="'.$this->valueBase().'"'.$labelHelp.'>'.$this->label().'</button>';
 			if ($this->showErreur()) $html.= '<p class="form_error"'.$libErreurHelp.'>'.$this->libErreur().'</p>';
 		$html.= '</div>';
 

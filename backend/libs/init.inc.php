@@ -6,37 +6,43 @@
 // init.inc.php
 //--------------------------------------------------------------------------
 
-//Définit le décalage horaire par défaut de toutes les fonctions date/heure
+// Définit le décalage horaire par défaut de toutes les fonctions date/heure
 date_default_timezone_set('Europe/Paris');
 
-//comptabilisation du nombre de requetes SQL : remise à zéro
+// Comptabilisation du nombre de requetes SQL : remise à zéro
 $_NB_QUERY = 0;
 
-//type de release (issu lecture release.txt)
+//----------------------------------------------------------------------
+// Paramètres de l'application
+//----------------------------------------------------------------------
+// Paramètres issus de la base de données
+Params::load();
+
+// Type de release (issu lecture release.txt)
 defined('_APP_RELEASE_') || define('_APP_RELEASE_', getRelease());
 
 //----------------------------------------------------------------------
-// Mode d'execution des requetes SQL en fonction du _RUN_MODE_
+// Mode d'execution des requetes SQL + reporting des erreurs
 // SQL_MODE_SILENT => aucune info affichée (prod)
 // SQL_MODE_NORMAL => infos ligne, code erreur SQL
 // SQL_MODE_DEBUG  => infos complete + rappel requete
 //----------------------------------------------------------------------
 if (_RUN_MODE_ == _DEVELOPPEMENT_) {
-	//execution des requetes SQL en mode debug
+	// Execution des requetes SQL en mode debug
 	defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_DEBUG);
-	//rapporte et affiche toutes les erreurs PHP
+	// Rapporte et affiche toutes les erreurs PHP
 	ini_set('display_startup_errors', 'On');
 	ini_set('display_errors', 'stdout');
 	error_reporting(-1);
 }
 else {
-	//execution des requete en mode silencieux
+	// Execution des requete en mode silencieux
 	defined('_SQL_MODE_') || define('_SQL_MODE_', SQL_MODE_SILENT);
-	//Désactiver le rapport d'erreurs et n'affiche aucune erreur
+	// Désactiver le rapport d'erreurs et n'affiche aucune erreur
 	ini_set('display_startup_errors', 'Off');
 	ini_set('display_errors', 'stderr');
 	error_reporting(0); 
-	//Spécifie la fonction utilisateur "userErrorHandler" comme gestionnaire d'erreurs
+	// Spécifie la fonction utilisateur "userErrorHandler" comme gestionnaire d'erreurs
 	$old_error_handler = set_error_handler("userErrorHandler");
 }
 
@@ -64,7 +70,7 @@ if  ((!isset($_SESSION[_APP_LOGIN_])) || ($_SESSION[_APP_LOGIN_] == null)) {
 //----------------------------------------------------------------------
 // Choix de la langue
 //----------------------------------------------------------------------
-//langue par défaut 'fr'
+// Langue par défaut 'fr'
 if (empty($_SESSION[_APP_LANGUE_ENCOURS_])) {
 	$_SESSION[_APP_LANGUE_ENCOURS_] = 'fr';
 }
@@ -76,7 +82,7 @@ if ((isset($_SESSION[_APP_LANGUE_CHANGEE_])) && ($_SESSION[_APP_LANGUE_CHANGEE_]
 	//reset de l'info de changement de langue
 	unset($_SESSION[_APP_LANGUE_CHANGEE_]);
 }
-//chargement de la langue adéquate
+// Chargement de la langue adéquate
 if ($_SESSION[_APP_LANGUE_ENCOURS_] == 'fr') {
 	require_once(_LANGUES_.'langue_fr.inc.php');
 }
@@ -84,10 +90,12 @@ elseif ($_SESSION[_APP_LANGUE_ENCOURS_] == 'en') {
 	require_once(_LANGUES_.'langue_us.inc.php');
 }
 
-//----------------------------------------------------------------------
 // Positionnement de l'image de remplacement des images inexistentes (utilisé par la fonction getThumb())
-//----------------------------------------------------------------------
 setThumbReplacement(_IMAGES_LANGUE_.'small_affiche_nondisponible.jpg');
+
+//prise en compte du script en cours
+$scriptName = explode('/', $_SERVER['SCRIPT_NAME']);
+$scriptName = end($scriptName);
 
 //----------------------------------------------------------------------
 //test si utilisateur connecté, sinon renvoi phase de connexion
@@ -96,10 +104,6 @@ if (!$_SESSION[_APP_LOGIN_]->isLogged() && (basename($_SERVER['PHP_SELF']) != _U
 	header('Location: '._URL_BASE_SITE_._URL_AUTHENTIFICATION_);
 }
 
-//prise en compte du script en cours
-$scriptName = explode('/', $_SERVER['SCRIPT_NAME']);
-$scriptName = end($scriptName);
 //DEBUG_('scriptName', $scriptName);
-
 //DEBUG_('_APP_DROITS_', $_SESSION[_APP_DROITS_]);
 //DEBUG_(_APP_LOGIN_, $_SESSION[_APP_LOGIN_]);

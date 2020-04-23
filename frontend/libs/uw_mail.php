@@ -50,7 +50,7 @@ function sendSilentEmail($exp, $destinataires, $objet, $contenu, $copie_webmestr
 	for ($i = 0; $i < $nb_contenus; $i++)
 		$message.= $contenu[$i]."\r\n";
 	$message = stripslashes($message);
-	if ($copie_webmestre) $copie_webmestre = 'Bcc: '._EMAIL_WEBMASTER_."\r\n"; else $copie_webmestre = '';
+	if ($copie_webmestre) $copie_webmestre = 'Bcc: '._PARAM_EMAIL_WEBMASTER_."\r\n"; else $copie_webmestre = '';
 	$headers =  'From: '.$exp."\r\n".
 				$copie_webmestre.
 				'Reply-To: '.$exp."\r\n".

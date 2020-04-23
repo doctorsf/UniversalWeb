@@ -85,7 +85,7 @@
 //	  chaines de caractères (ex : les placeholders)
 //------------------------------------------------------------------
 // 09.01.2020 : VERSION 3.0.0
-//	Attention : le code écrit avcec des version inférieures ne fonctionne plus
+//	Attention : le code écrit avec des version inférieures ne fonctionne plus
 //	- Changement de tous les mots clés de test (constantes de la classe UniversalListColonne)en version anglaise pour une meilleurs compréhension du fonctionnement
 //		TOUT => CMP_ALL									valeur (ALL)
 //		EGAL => CMP_EQUAL								valeur (EQL)
@@ -104,6 +104,22 @@
 //	- Remplacement des mots clés 'TOUT' et 'TOUTES' et par la constante UniversalListColonne::CMP_ALL pour désigner la sélection de toutes les valeurs d'un filtre select (méthode _buildFiltreSelect)
 // 13.01.2020 : VERSION 3.0.1
 //	- Correction bugs avec usage IGN qui ne fonctionnait plus suites à modifs v3.0.0
+// 31.01.2020 : VERSION 3.0.2
+//	- Correction méthode drawBody : remplacé tag html 'align=' par class='text-'
+// 31.01.2020 : VERSION 3.1.0
+//	- Les filtres externes de type 'search' (donc les plus simples) peuvent maintenant effectuer leur recherche sur plusieurs champs. Pour ce faire, il suffit de saisir dans le paramètre 'filtreScope' du 
+//		filtre externe la liste des champs à interroger séparés par le caractère pipe (|) ex : 'filtreScope' => 'titre|resume'
+//------------------------------------------------------------------
+// 10.02.2020 : VERSION 4.0.0 (ancien code V3 compatible)
+//	Extension d'utilisation des filtres externes de type 'none' (cad non graphique) pour envoyer directement des bribes complexes de SQL : Ceci a impliqué les modifications suivantes
+//	- Ajout du mot cle CMP_SQL (valeur 'SQL') pour signifier un filtre externe qui envoi son propre code SQL (uniquement pour les types 'none')
+//	- Correction du constructeur UniversalFiltreExterne => pas de création d'objet UniversalForm pour les filtres externes de type 'none' puisque ils sont non graphique (gain mémoire)
+//	- Méthode UniversalListFiltreExterne::getActif modifiée pour que les filtres externes de type 'none' renvoient la valeur brute du champ _actif
+//	- Modification du filtre externe checkbox (n'affiche plus une checkbox mais un switch customisable via le nouveau paramètre filtreCustom uniquement valable pour ce type de filtre externe)
+// 15.03.2020 : Version 4.1.0
+//	- Ajout des méthodes setFiltreTag et getFiltreTag sur les filtres externes. Permet de passer n'importe quelle information supplémentaire
+// 19.03.2020 : Version 4.2.0
+//	- passage de la fonction createTable() en fonction statique
 //------------------------------------------------------------------
 
 //*****************************************************************************************
@@ -145,7 +161,8 @@ class UniversalListColonne {
 	//mots clés utilisés par les classes pour les filtres de type 'text'
 	//pour info les valeurs passées à ces constantes ne sont jamais utilisées, on pourrait y mettre n'importe quoi (0..100 par ex), elle permettent juste de donner une unicité à chaque constante
 	//ce sont les constantes qui sont utilisées !
-	const CMP_ALL					= 'ALL';								
+	const CMP_ALL					= 'ALL';
+	const CMP_SQL					= 'SQL';		//ajout V4.0.0
 	const CMP_EQUAL					= 'EQL';
 	const CMP_DIFFERENT				= 'DIF';
 	const CMP_BEGINS_BY				= 'BEG';
@@ -342,6 +359,7 @@ class UniversalListFiltreExterne {
 	private $_sqlFields = array();											//tableau de champs SQL concernés par le filtre ('indice au choix : un nombre, un libellé' => 'champ SQL')
 	private $_universalForm = null;											//valeur de la recherche sur la colonne	concernée
 	private $_filtreType			= 'search';								//type de filtre externe 'search' ou 'multisearch' (pour les prédéfinis) ou autre
+	private $_filtreCustom			= 'checkbox';							//Customisation du filtre externe (réservé aux type checkbox)
 	private $_filtreScope			= '';									//tableau de couple valeur => libellé pour le addon du champ de classe UniversalFieldSearch
 	private $_filtreRange			= UniversalListColonne::CMP_CONTENDS;	//étendue de la recherche sur la colonne (par défaut comparaison sur 'contient')
 	private $_filtreRangeDefault	= UniversalListColonne::CMP_CONTENDS;	//range : valeur par défaut
@@ -349,6 +367,7 @@ class UniversalListFiltreExterne {
 	private $_filtreValueDefault	= '';									//valeur du filtre par défaut
 	private $_filtreColor			= 'primary';							//Couleur du champ de filtrage UniversalForm
 	private $_filtreHelp			= '';									//libelle d'aide sur le filtre
+	private $_filtreTag				= '';									//On y met ce que l'on veux, cela permet de communiquer avec le filtre
 
 	public function __construct(array $donnees) {
 		$this->_hydrate($donnees);
@@ -359,57 +378,71 @@ class UniversalListFiltreExterne {
 		$this->_filtreValueDefault = $this->_filtreValue;
 
 		//construction du formulaire UniversalForm
-		//on commence par un seul type de filtre externe : search avec addon
-		$this->_universalForm = new UniversalForm('fe'.$this->_id, rand (1000, 9999));
-		$this->_universalForm->createField('hidden', 'soumissionFormulaire', array(
-			'value' => 'ok'
-			));
-		if ($this->_filtreType == 'search') {
-			//type search avec addon
-			$this->_universalForm->createField('search', $this->_id, array(
-				'dbfield' => $this->_id,
-				'inputType' => 'search',
-				'label' => '<span class="fas fa-search"></span>',
-				'labelHelp' => $this->_filtreHelp,
-				'lpos' => 'before',
-				'lclass' => 'btn btn-'.$this->_filtreColor,
-				'maxlength' => 255,
-				'placeholder' => $this->_translate('RECHERCHE', 'recherche'),
-				'value' => $this->_filtreValue
-			));
-		}
-		elseif ($this->_filtreType == 'multisearch') {
-			//type search avec addon
-			$this->_universalForm->createField('search', $this->_id, array(
-				'dbfield' => $this->_id,
-				'inputType' => 'search',
-				'addon' => true,
-				'apos' => 'before',
-				'aclass' => 'btn btn-'.$this->_filtreColor,
-				'complement' => $this->_filtreScope,
-				'label' => '<span class="fas fa-search"></span>',
-				'labelHelp' => $this->_filtreHelp,
-				'lpos' => 'before',
-				'lclass' => 'btn btn-'.$this->_filtreColor,
-				'maxlength' => 255,
-				'placeholder' => $this->_translate('RECHERCHE', 'recherche'),
-				'value' => $this->_filtreValue
-			));
-		}
-		elseif ($this->_filtreType == 'checkbox') {
-			//type search avec addon
-			$this->_universalForm->createField('checkbox', $this->_id, array(
-				'dbfield' => $this->_id,
-				'dpos' => 'alone',
-				'label' => $this->_libelle,
-				'lpos' => 'after',
-				'labelHelp' => $this->_filtreHelp,
-				'clong' => 'col-12',
-				'javascript' => 'onchange="submit()"',
-				'value' => 1,
-				'valueInverse' => 0,
-				'checked' => ($this->_actif == true)
-			));
+		if ($this->_filtreType != 'none') {									//correction V4.0.0 => pas de création d'objet UniversalForm pour les filtres externes de type 'none' puisque non graphique
+			//on commence par un seul type de filtre externe : search avec addon
+			$this->_universalForm = new UniversalForm('fe'.$this->_id, rand (1000, 9999));
+			$this->_universalForm->createField('hidden', 'soumissionFormulaire', array(
+				'value' => 'ok'
+				));
+			if ($this->_filtreType == 'search') {
+				//type search avec addon
+				$this->_universalForm->createField('search', $this->_id, array(
+					'dbfield' => $this->_id,
+					'inputType' => 'search',
+					'label' => '<span class="fas fa-search"></span>',
+					'labelHelp' => $this->_filtreHelp,
+					'lpos' => 'before',
+					'lclass' => 'btn btn-'.$this->_filtreColor,
+					'maxlength' => 255,
+					'placeholder' => $this->_translate('RECHERCHE', 'recherche'),
+					'value' => $this->_filtreValue
+				));
+			}
+			elseif ($this->_filtreType == 'multisearch') {
+				//type search avec addon
+				$this->_universalForm->createField('search', $this->_id, array(
+					'dbfield' => $this->_id,
+					'inputType' => 'search',
+					'addon' => true,
+					'apos' => 'before',
+					'aclass' => 'btn btn-'.$this->_filtreColor,
+					'complement' => $this->_filtreScope,
+					'label' => '<span class="fas fa-search"></span>',
+					'labelHelp' => $this->_filtreHelp,
+					'lpos' => 'before',
+					'lclass' => 'btn btn-'.$this->_filtreColor,
+					'maxlength' => 255,
+					'placeholder' => $this->_translate('RECHERCHE', 'recherche'),
+					'value' => $this->_filtreValue
+				));
+			}
+			elseif ($this->_filtreType == 'checkbox') {
+				//type search avec addon
+				$this->_universalForm->createField('switch', $this->_id, array(
+					'dbfield' => $this->_id,
+					'label' => $this->_libelle,
+					'custom' => $this->_filtreCustom,
+					'labelHelp' => $this->_filtreHelp,
+					'clong' => 'col-12',
+					'javascript' => 'onchange="submit()"',
+					'value' => 1,
+					'valueInverse' => 0,
+					'checked' => ($this->_actif == true)
+				));
+				/* Ancien filtre checkbox : a été remplacé par un switch customisable bootstrap dans la V4.0.0
+				$this->_universalForm->createField('checkbox', $this->_id, array(
+					'dbfield' => $this->_id,
+					'dpos' => 'alone',
+					'label' => $this->_libelle,
+					'lpos' => 'after',
+					'labelHelp' => $this->_filtreHelp,
+					'clong' => 'col-12',
+					'javascript' => 'onchange="submit()"',
+					'value' => 1,
+					'valueInverse' => 0,
+					'checked' => ($this->_actif == true)
+				)); */
+			}
 		}
 	}
 
@@ -465,6 +498,7 @@ class UniversalListFiltreExterne {
 	private function _setLibelle($valeur)		{$this->_libelle = $valeur;}
 	private function _setActif($valeur)			{$this->_actif = $valeur;}
 	private function _setFiltreType($valeur)	{$this->_filtreType = $valeur;}
+	private function _setFiltreCustom($valeur)	{$this->_filtreCustom = $valeur;}
 	private function _setFiltreScope($valeur)	{$this->_filtreScope = $valeur;}
 	private function _setFiltreRange($valeur)	{$this->_filtreRange = $valeur;}
 	private function _setFiltreValue($valeur)	{$this->_filtreValue = $valeur;}
@@ -498,23 +532,27 @@ class UniversalListFiltreExterne {
 		}
 	}
 
+	public function setFiltreTag($valeur)	{$this->_filtreTag = $valeur;}
+
 	//=======================================
 	// Getters
 	//=======================================
 	public function getId()					{return $this->_id;}
+	public function getFiltreCustom()		{return $this->_filtreCustom;}
 	public function getValue()				{if (is_array($this->_filtreValue)) return $this->_filtreValue[1]; else return $this->_filtreValue;}
 	public function getFiltreRange()		{return $this->_filtreRange;}
 	public function getFiltreValue()		{return $this->_filtreValue;}
 	public function getChampSql()			{if (is_array($this->_sqlFields)) return $this->_sqlFields[$this->_filtreValue[0]]; else return $this->_sqlFields;}
 	public function getUniversalForm()		{return $this->_universalForm;}
 	public function getActif() {
-		if ($this->_filtreType == 'checkbox') {
+		if (($this->_filtreType == 'checkbox') || ($this->_filtreType == 'none')) {					//modification V4.0.0
 			return $this->_actif;
 		}
 		if (is_array($this->_filtreValue)) $saisie = $this->_filtreValue[1]; else $saisie = $this->_filtreValue;
 		$this->_actif = ($saisie != '');
 		return $this->_actif;
 	}
+	public function getFiltreTag()			{return $this->_filtreTag;}
 
 	//=======================================
 	// Méthodes publiques
@@ -526,6 +564,7 @@ class UniversalListFiltreExterne {
 	} 
 
 	public function afficher() {
+		if ($this->_filtreType == 'none') return;			//correction V4.0.0 => un filtre externe de type 'none' n'est pas affichable car non graphique
 		$chaine = '';
 		$chaine.= '<form class="uf" action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">';
 		$chaine.= $this->_universalForm->draw(true);
@@ -876,7 +915,7 @@ class UniversalList {
 	private $_headClass = '';				//classe CSS de l'entête de la table
 	private $_filtresClass = 'thead-light';	//classe CSS du bandeau de filtres (première ligne du tableau)
 
-	const VERSION = 'V3.0.1 (2020-01-13)';
+	const VERSION = 'V4.2.0 (2020-03-19)';
 	const NB_LIGNES_PAR_PAGE = 25;
 	const SHOW_BUTTONS = true;
 
@@ -1067,48 +1106,211 @@ class UniversalList {
 	private function _buildFiltreExterne($id, $filtreExt) 
 	{
 		$leFiltre = '';
+
 		//si le fitre externe est actif
 		if ($filtreExt->getActif()) {
+
+			//on explose le champ pour vérifier si il y en a plusieurs sur lesquels on veut appliquer le filtre (V3.1.0)
+			$lesChampsSql = explode('|', $filtreExt->getChampSql());
+
+			//creation SQL du filtre par traitement de l'opérateur de comparaison
+			//CMP_ALL
+			//-----------
 			if ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_ALL) {
 			}
+
+			//CMP_SQL (Ajout V4.0.0)
+			//envoi du code SQL stocké dans la valeur du filtre (_filtreValue)
+			//-----------
+			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_SQL) {
+				$leFiltre.= "AND ".$filtreExt->getValue()." ";
+			}
+
+			//CMP_EQUAL
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_EQUAL) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." = '".$filtreExt->getValue()."' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." = '".$filtreExt->getValue()."'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." = '".$filtreExt->getValue()."' ";
 			}
+
+			//CMP_DIFFERENT
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_DIFFERENT) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." != '".$filtreExt->getValue()."' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." != '".$filtreExt->getValue()."'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." != '".$filtreExt->getValue()."' ";
 			}
+
+			//CMP_BEGINS_BY
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_BEGINS_BY) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." LIKE '".$filtreExt->getValue()."%' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." LIKE '".$filtreExt->getValue()."%'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." LIKE '".$filtreExt->getValue()."%' ";
 			}
+
+			//CMP_CONTENDS
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_CONTENDS) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." LIKE '%".$filtreExt->getValue()."%' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." LIKE '%".$filtreExt->getValue()."%'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." LIKE '%".$filtreExt->getValue()."%' ";
 			}
+
+			//CMP_DO_NOT_CONTENDS
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_DO_NOT_CONTENDS) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." NOT LIKE '%".$filtreExt->getValue()."%' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." NOT LIKE '%".$filtreExt->getValue()."%'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." NOT LIKE '%".$filtreExt->getValue()."%' ";
 			}
+
+			//CMP_ENDS_BY
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_ENDS_BY) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." LIKE '%".$filtreExt->getValue()."' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." LIKE '%".$filtreExt->getValue()."'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." LIKE '%".$filtreExt->getValue()."' ";
 			}
+
+			//CMP_BEGINS_BY_NUMBER
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_BEGINS_BY_NUMBER) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." REGEXP '^[0-9]' ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." REGEXP '^[0-9]'";
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." REGEXP '^[0-9]' ";
 			}
+
+			//CMP_GREATER_THAN
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_GREATER_THAN) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." > ".$filtreExt->getValue()." ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." > ".$filtreExt->getValue();
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." > ".$filtreExt->getValue()." ";
 			}
+
+			//CMP_GREATER_OR_EQUAL_TO
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_GREATER_OR_EQUAL_TO) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." >= ".$filtreExt->getValue()." ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." >= ".$filtreExt->getValue();
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." >= ".$filtreExt->getValue()." ";
 			}
+
+			//CMP_LOWER_THAN
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_LOWER_THAN) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." < ".$filtreExt->getValue()." ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." < ".$filtreExt->getValue();
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." < ".$filtreExt->getValue()." ";
 			}
+
+			//CMP_LOWER_OR_EQUAL_TO
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_LOWER_OR_EQUAL_TO) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." <= ".$filtreExt->getValue()." ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." <= ".$filtreExt->getValue();
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." <= ".$filtreExt->getValue()." ";
 			}
+
+			//EQUAL_TO
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::EQUAL_TO) {
-				$leFiltre.= "AND ".$filtreExt->getChampSql()." = ".$filtreExt->getValue()." ";
+				if (count($lesChampsSql) > 1) {
+					$leFiltre.= "AND (";
+					foreach($lesChampsSql as $key => $champSql) {
+						$leFiltre.= $champSql." = ".$filtreExt->getValue();
+						if ($key < count($lesChampsSql) - 1) $leFiltre.= " OR ";
+					}
+					$leFiltre.= ") ";
+				}
+				else 
+					$leFiltre.= "AND ".$filtreExt->getChampSql()." = ".$filtreExt->getValue()." ";
 			}
+
+			//CMP_IGNORE
+			//-----------
 			elseif ($filtreExt->getFiltreRange() == UniversalListColonne::CMP_IGNORE) {
 			}
+
 		}
 		return $leFiltre;
 	}
@@ -1194,7 +1396,7 @@ class UniversalList {
 	// ATTENTION : Ne sauvegarde pas les filtres externes
 	// Retour : true / false
 	//-------------------------------------
-	public function createTable() {
+	static function createTable() {
 		$requete = "CREATE TABLE IF NOT EXISTS "._PREFIXE_TABLES_."listings (";
 		$requete.= "id tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, ";
 		$requete.= "titre varchar(255) NOT NULL, ";
@@ -1326,7 +1528,7 @@ class UniversalList {
 	// - tri souhaité, sens d'affichage, page encours, tri encours
 	// Gestion du formulaire :
 	// - test si un POST a été généré
-	// - prise en compte des informations du formlaire
+	// - prise en compte des informations du formulaire
 	//-------------------------------------
 	public function getParams() {
 		//recuperation de la page encours
@@ -1394,11 +1596,13 @@ class UniversalList {
 
 		//recuperation des évènements sur les filtres externes
 		foreach ($this->_filtresExternes as $key => $filtreExterne) {
-			$action = $filtreExterne->getUniversalForm()->getAction();
-			if ($action == 'valid_fe'.$key) {
-				$donnees = $filtreExterne->getUniversalForm()->getData();
-				//DEBUG_('donnees de '.$key, $donnees);
-				$this->filtresUpdate($donnees);
+			if (null !== $filtreExterne->getUniversalForm()) {					//ajout V4.0.0 => pas de récupération d'action sur filtre externe type 'none' puisqu'il n'encapsule plus d'objet UniversalForm
+				$action = $filtreExterne->getUniversalForm()->getAction();
+				if ($action == 'valid_fe'.$key) {
+					$donnees = $filtreExterne->getUniversalForm()->getData();
+					//DEBUG_('donnees de '.$key, $donnees);
+					$this->filtresUpdate($donnees);
+				}
 			}
 		}
 
@@ -1496,7 +1700,11 @@ class UniversalList {
 					($colonne->getHeader()) ? $tag = 'th scope="row"' : $tag = 'td';
 					//supprimé la taille de la colonne pour permettre à du code javascript de la modifier en drag & drop
 					//echo '<'.$tag.' width="'.$colonne->getSize().'%" align="'.$colonne->getAlign().'">';
-					echo '<'.$tag.' align="'.$colonne->getAlign().'">';
+					$classe = '';
+					if (($colonne->getAlign() == 'center') || ($colonne->getAlign() == 'right')) {
+						$classe = ' class="text-'.$colonne->getAlign().'"';
+					}
+					echo '<'.$tag.$classe.'>';
 					if (($colonne->getFiltre()) && (!$colonne->getFiltreActif())) {
 						//la colonne possède un filtre inactif
 						echo '<span class="text-warning">'.$this->_translate('INACTIF', 'inactif').'</span>';
@@ -1776,7 +1984,7 @@ class UniversalList {
 	//----------------------------------------------------------------------
 	// Mise à jour des filtres de la liste selon saisie issue du formulaire
 	// - Si valeur du filtre == CMP_IGNORE, on désactive le filtre et on l'active dans le cas contraire
-	// ---- Pour les filtres de tupe 'text' : 
+	// ---- Pour les filtres de type 'text' : 
 	// - L'indice 0 renvoyé par le paramètre données (issu du formulaire de filtres) correspond au 'RANGE' (range du filtre)
 	// - L'indice 1 renvoyé par le paramètre données (issu du formulaire de filtres) correspond a 'VALUE' (valeur du filtre)
 	// - Le formulaire renvoie la chaine 'NULL' si le filtre n'est pas actif. Donc à prendre en compte

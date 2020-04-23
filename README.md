@@ -691,7 +691,7 @@ function getLibLower($indice, $param1='', $param2='', $param3='', $param4='', $p
 }
 
 -----------------
-V3.19.0.0 (en cours)
+V3.19.0.0 (13.01.2020)
 -----------------
 1. Ajout fonction getLibLower() aux fichiers de langues
 2. SqlSimple 
@@ -721,3 +721,71 @@ V3.19.0.0 (en cours)
 	- Remplacement des mots clés 'TOUT' et 'TOUTES' et par la constante UniversalListColonne::CMP_ALL pour désigner la sélection de toutes les valeurs d'un filtre select (méthode _buildFiltreSelect)
 7. UniversalList en Version VERSION 3.0.1 (13.01.2020)
 	- Correction bugs avec usage IGN qui ne fonctionnait plus suites à modifs v3.0.0
+
+-----------------
+V3.20.0.0 (en cours)
+-----------------
+1. SqlSimple
+	- Ajout de la constante VERSION et prise en compte dans le script infos_système.php (24.01.2020)	
+2. uw_chaines.php
+	- Amélioration de la fonction truncateText() -> Ajout du paramètre $wordwarp (29.01.2020)
+	- Ajout de la fonction array_addslashes() (03.02.2020)
+	- Ajout de la fonction array_stripslashes() (03.02.2020)
+3. UniversalList en version 3.0.2 (31.01.2020)
+	- Correction méthode drawBody : remplacé tag html 'align=' par class='text-'
+4. UniversalList en version 3.1.0 (31.01.2020)
+	- Les filtres externes de type 'search' (donc les plus simples) peuvent maintenant effectuer leur recherche sur plusieurs champs. Pour ce faire, il suffit de saisir dans le paramètre 'filtreScope' du 
+	filtre externe la liste des champs à interroger séparés par le caractère pipe (|) ex : 'filtreScope' => 'titre|resume'
+5. UniversalTree en version 1.0.1 (03.02.2020)
+	- Correction bug méthodes addNode et addLeave. L'échappement des chaines est maintenant pris en compte automatiquement (utiliose la nouvelle fonctions array_addslashes() de uw_chaines.php)
+6. UniversalList en version 4.0.0 (10.02.2020)
+	- Extension d'utilisation des filtres externes de type 'none' (cad non graphique) pour envoyer directement des bribes complexes de SQL => nouveau mot-clé CMP_SQL (valeur 'SQL')
+	- Correction du constructeur UniversalFiltreExterne => pas de création d'objet UniversalForm pour les filtres externes de type 'none' puisque ils sont non graphique (gain mémoire)
+	- Modification du filtre externe checkbox (n'affiche plus une checkbox mais un switch customisable via le nouveau paramètre filtreCustom uniquement valable pour ce type de filtre externe)
+7. Correction bug dans backend/libs/sql_logs et frontend/libs/sql_logs (06.03.2020)
+8. Amélioration graphique script backend/infos_systeme.php (05.03.2020)
+
+-----------------
+V3.21.0.0 (en cours)
+-----------------
+1. UniversalForm en Version 3.19.0 (19.03.2020)
+2. UniversalList en Version 4.2.0 (19.03.2020)
+3. backend/sql_divers.inc.php 
+	- Ajout fonction sqlDivers_updateTableAutoIncrement() (18.03.2020)
+4. Ajout de la signature de la base de données dans les outils administrateur (23.03.2020)
+	- uw_flux en version du 23.03.2020
+5. UniversalForm en Version 3.20.0 (26.03.2020)
+	- ajout du paramètre 'complement' pour UniversalFieldImage ce qui permet via l'appel callback d'appeler des images extérieures au site
+6. Ajout du module d'affichage et de gestion de paramètres pour l'application dans le menu système
+7. briques_messages
+	- Transformation du message en tableau de messages indicé selon (tri dans l'ordre choisi avant affichage) (01.01.2020)
+	- En conséquence, ajout d'un 2ème paramètre non obligatoire aux fonctions riseMessage(), riseErrorMessage(), riseWarningMessage(), riseInfoMessage() qui permet de choisir dans quel ordre les messages
+	envoyés seront affichés (lorsqu'il y a bien entendu plus de 2 message de créés avant changement de script) 	
+8. SqlSimple en Version 1.1.0 
+	- Ajout de la méthode transaction qui execute plusieurs requetes fournies dans le tableau $requetes tout en  opérant une transaction afin de garantir l'intégrité de la base (30.03.2020)
+9. Ajout d'un gestionnaire de media au backend (03.04.2020)
+10. PageNavigator en Version 2.3.0 (07.04.2020)
+	- Ajout de la méthode setAncre qui permet de positionner une ancre navigateur à la fin de l'url (uniquement en schéma standard)
+11. SilentMail en version 2.0.0 (07.04.2020)
+	- Ajout d'un numéro de version de la classe
+	- Modification et uniformisation des constantes de message d'erreur + libellés UniversalWeb
+	- Ajout de la valeur 'test' au paramètre 'trace' de la méthode send() qui permet de simuler l'envoi de mail
+	- Création de la méthode statique getMessage permettant de récupérer un message en clair selon le code d'erreur passé en paramètre
+	- Ajout des méthodes publiques getTo, getCc, getBcc et getFrom
+12. uw_nav
+	- Correction bug de la fonction getUrlWithoutFirstSlash() (08.04.2020)
+13. SqlSimple en Version 1.2.0 (10.04.2020)
+	- Ajout de la méthode getSome qui ramène tous les tuples de la table pour laquelle le $champ a la valeur $valeur
+	- La méthode updateChamp est maintenant exécutée en UPDATE IGNORE à la place du simple UPDATE
+14. SimpleListingHelper en Version 1.1.0 (14.04.2020)
+	- Ajout du numéro de version plus mise à jour dans info_systeme.php
+	- Ajout de paramètres possibles pour permettre du drag & drop sur les lignes
+		si on ajoute aux données du listing :
+		- 'ligne-draggable' : on permet à la ligne <tr> d'être draggable
+		- 'ligne-droppable' : on permet à la ligne <tr> de recevoir un drop
+		- 'ligne-info' : on ajoute un attribut 'info' à la ligne <tr> (pour y mettre ce que l'on veux)
+15. Ajout de la gestion des paramètres pour les administrateur
+16. Ajout de la gestion des réglages pour les webmasters
+17. Ajout droit "Gérer les utilisateurs" (FONC_ADM_GERER_USERS) et modification code en conséqsuence (permet de facilement donner les droits de gestion à un autre profil qu'ADM)
+18. Correction bug affichage date de création du compte dans formulaire user
+19. Ajout de la fonction getLibIfExists() dans les fichiers de langue

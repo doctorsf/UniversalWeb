@@ -175,7 +175,7 @@ echo '<body>';
 								echo '<span class="fas fa-trash" data-toggle="tooltip" title="'.getLib('SUPPRIMER_LA_SAUVEGARDE').'"></span>';
 							echo '</a>';
 						}
-						echo '<div class="container-lg px-0 mt-5">';
+						echo '<div class="container-lg px-0">';
 							echo '<h1>'.getLib('RESTORATION_BD').'</h1>';
 							echo '<p class="lead">'.getLib('SAUVEGARDES_LISTE').'</p>';
 							$dirname = _SAUVEGARDE_BASE_; 
@@ -257,12 +257,55 @@ echo '<body>';
 					}
 
 					//--------------------------------------
+					// affiche la signature de la structure de la base de données (pas les données)
+					//--------------------------------------
+					case 'dbsign':
+					{
+						//recherche de la signature de la base
+						$signature = signatureDatabase($lesTables);
+
+						echo '<div class="container-lg px-0">';
+							echo '<div class="row">';
+								echo '<div class="col">';
+									echo '<div class="d-flex flex-row align-items-center">';
+										echo '<h1>'.getLib('SIGNATURE_BASE').' (sha1)</h1>';
+									echo '</div>';
+									echo '<table class="table table-hover table-striped table-responsive">';
+										echo '<thead>';
+										echo '<tr>';
+											echo '<th class="text-left" width="60%">'.getLib('TABLE').'</th>';
+											echo '<th class="text-left" width="40%">SHA1</th>';
+										echo '</tr>';
+										echo '</thead>';
+										echo '<tbody>';
+											foreach($lesTables as $table) {
+												echo '<tr>';
+													echo '<td width="60%">'.$table['name'].'</td>';
+													echo '<td width="40%">'.$table['sha1'].'</td>';
+												echo '</tr>';
+											}
+										echo '</tbody>';
+									echo '<tfoot>';
+										echo '<tr class="table-success">';
+										  echo '<td class="lead">'.getLib('SIGNATURE_FINALE').'</td>';
+										  echo '<td class="lead ">'.$signature.'</td>';
+										echo '</tr>';
+									echo '</tfoot>';
+								echo '</table>';
+							echo '</div>';
+						echo '</div>';
+
+						break;
+					}
+
+					//--------------------------------------
 					// affiche le hash du code
 					//--------------------------------------
 					case 'hash':
 					{
 						function drawlines(&$hashs) {
 							$fichiers = array(
+								_URL_ACTIONS_DIVERS_, 
 								_URL_ACTIONS_DROITS_, 
 								_URL_AUTHENTIFICATION_, 
 								_URL_INFOS_SYSTEME_, 
@@ -270,9 +313,12 @@ echo '<body>';
 								_URL_LANGUE_, 
 								_URL_LISTING_DROITS_, 
 								_URL_LISTING_LOGS_, 
+								_URL_LISTING_PARAMS_, 
 								_URL_LISTING_USERS_, 
 								_URL_LOGOUT_, 
 								_URL_MAINTENANCE_, 
+								_URL_MEDIA_, 
+								_URL_PARAM_, 
 								'reponses-ajax.php',
 								_URL_USER_, 
 								_LIBS_.'common.inc.php', 
@@ -302,6 +348,8 @@ echo '<body>';
 								_CLASSES_.'Form_import_csv.class.php', 
 								_CLASSES_.'Form_input.class.php', 
 								_CLASSES_.'Form_login.class.php', 
+								_CLASSES_.'Form_media.class.php', 
+								_CLASSES_.'Form_param.class.php', 
 								_CLASSES_.'Form_recherche_addon.class.php', 
 								_CLASSES_.'Form_recherche_simple.class.php', 
 								_CLASSES_.'Form_user.class.php', 
@@ -310,6 +358,7 @@ echo '<body>';
 								_CLASSES_.'Listing_logs.class.php', 
 								_CLASSES_.'Login.class.php', 
 								_CLASSES_.'PageNavigator.class.php', 
+								_CLASSES_.'Params.class.php', 
 								_CLASSES_.'SilentMail.class.php', 
 								_CLASSES_.'SimpleListingHelper.class.php', 
 								_CLASSES_.'SqlSimple.class.php', 
@@ -340,6 +389,7 @@ echo '<body>';
 								_SQL_.'sql_divers.inc.php', 
 								_SQL_.'sql_droits.inc.php', 
 								_SQL_.'sql_logs.inc.php', 
+								_SQL_.'sql_params.inc.php',
 								_SQL_.'sql_users.inc.php', 
 								_CSS_.'styles.css', 
 								_JAVASCRIPT_.'oXHR.js', 
@@ -367,7 +417,7 @@ echo '<body>';
 							return $chaine;
 						}
 
-						echo '<div class="container-lg px-0 mt-5">';
+						echo '<div class="container-lg px-0">';
 							echo '<div class="row">';
 								echo '<div class="col">';
 									echo '<div class="d-flex flex-row align-items-center">';
@@ -431,6 +481,7 @@ echo '<body>';
 								'../frontend/libs/classes/Ldap.class.php',
 								'../frontend/libs/classes/Login.class.php',
 								'../frontend/libs/classes/PageNavigator.class.php',
+								'../frontend/libs/classes/Parametres.class.php',
 								'../frontend/libs/classes/SilentMail.class.php',
 								'../frontend/libs/classes/SimpleListingHelper.class.php',
 								'../frontend/libs/classes/SqlSimple.class.php',
@@ -501,7 +552,7 @@ echo '<body>';
 							return $chaine;
 						}
 
-						echo '<div class="container-lg px-0 mt-5">';
+						echo '<div class="container-lg px-0">';
 							echo '<div class="row">';
 								echo '<div class="col">';
 									echo '<div class="d-flex flex-row align-items-center">';

@@ -15,3 +15,4 @@ $dbMysqldump = '';				//chemin complet vers mysqldump.exe
 
 //préfixe des tables
 defined('_PREFIXE_TABLES_')	|| define('_PREFIXE_TABLES_', 'uw_');
+defined('_PT_')	|| define('_PT_', 'uw_');

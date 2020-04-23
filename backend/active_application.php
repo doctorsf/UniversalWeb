@@ -29,6 +29,7 @@ require_once(_SQL_.'sql_droits.inc.php');			//appels SQL orientés droits
 require_once(_SQL_.'sql_users.inc.php');			//appels SQL orientés utilisateurs
 require_once(_SQL_.'sql_logs.inc.php');				//appels SQL orientés Logs
 require_once(_SQL_.'sql_divers.inc.php');			//appels SQL orientés Divers
+require_once(_SQL_.'sql_params.inc.php');			//appels SQL orientés Paramètres
 
 //version PHP minimum requis : 5.6.0 (a cause des constantes de classes tableau MENU MENU_IGNORE) 
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
@@ -118,6 +119,14 @@ if ($res) {
 	echo 'Création table Logs_types -> OK<br />';
 }
 else die('Erreur lors de la création de la table Logs Types');
+
+//création de la table des paramètres appli
+//--------------------------------
+$res = sqlParams_createTableParams();
+if ($res) {
+	echo 'Création table Params -> OK<br />';
+}
+else die('Erreur lors de la création de la table Params');
 
 //création de la table d'exemples "films"
 //--------------------------------

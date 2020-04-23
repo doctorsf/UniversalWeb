@@ -52,6 +52,10 @@
 // 30.11.2018
 //		- Fonction transposePourUrl() -> Correction Bug suite à passage en PHP 7.2 -> $str[0] = '' ne marche plus !
 //			il faut remplacer par $str = substr($str, 1)
+// 29.01.2020
+//		- Amélioration de la fonction truncateText() -> Ajout du paramètre $wordwarp
+// 03.02.2020
+//		- Ajout des fonctions array_addslashes() et array_stripslashes()
 //--------------------------------------------------------------------------
 
 defined('CODAGE_ANSI')				|| define('CODAGE_ANSI', 0);
@@ -273,10 +277,24 @@ function utf8_strpos($haystack, $needle, $offset=0) {
 // Entree :
 //		$texte : le texte concerné
 //		$longueur : longueur max
+//		$wordwrap : booleen (true, on ne coupe pas les mots, false on autorise la coupure des mots)
 // Retour : renvoie le texte formatté
 //----------------------------------------------------------------------
-function truncateText($texte, $longueur) {
-	return mb_strimwidth($texte, 0, $longueur, '&hellip;', 'UTF-8');
+// Amélioration du 29.01.2020 -> Ajout du paramètre $wordwarp
+//----------------------------------------------------------------------
+function truncateText($texte, $longueur, $wordwrap=false) {
+	if ($wordwrap) {
+		//on ne veux pas couper les mots
+		if (mb_strlen($texte, 'UTF-8') > $longueur) {
+			$texte = mb_substr($texte, 0, $longueur, 'UTF-8');
+			$texte = mb_strrchr($texte, ' ', true, 'UTF-8').'&hellip;';
+		}
+		return $texte;
+	}
+	else {
+		//on autorise la coupure de mots
+		return mb_strimwidth($texte, 0, $longueur, '&hellip;', 'UTF-8');
+	}
 }
 
 //----------------------------------------------------------------------
@@ -657,7 +675,49 @@ function mod($a, $b) {
 //=========================================================
 
 
+//----------------------------------------------------------------------
+// Passe la fonction addslashes à tout un tableau
+// Entree : 
+//		$tableau  : le tableau
+//		$cle2 : clé secondaire si la valeur de chaque clé est un tableau indicé par cle2
+// Sortie : 
+//		le tableau modifié
+//----------------------------------------------------------------------
+function array_addslashes($tableau, $cle2=null)
+{
+	if (empty($tableau)) return '';
+	foreach($tableau as $key => $item) {
+		if ($cle2 !== null) {
+			$tableau[$key][$cle2] = addslashes($tableau[$key][$cle2]);
+		}
+		else {
+			$tableau[$key] = addslashes($tableau[$key]);
+		}
+	}
+	return $tableau;
+}
 
+//----------------------------------------------------------------------
+// Passe la fonction striplashes à tout un tableau
+// Entree : 
+//		$tableau  : le tableau
+//		$cle2 : clé secondaire si la valeur de chaque clé est un tableau indicé par cle2
+// Sortie : 
+//		le tableau modifié
+//----------------------------------------------------------------------
+function array_striplashes($tableau, $cle2=null)
+{
+	if (empty($tableau)) return '';
+	foreach($tableau as $key => $item) {
+		if ($cle2 !== null) {
+			$tableau[$key][$cle2] = stripslashes($tableau[$key][$cle2]);
+		}
+		else {
+			$tableau[$key] = stripslashes($tableau[$key]);
+		}
+	}
+	return $tableau;
+}
 
 //----------------------------------------------------------------------
 // Transforme le contenu d'une tableau de lignes de texte en une seule

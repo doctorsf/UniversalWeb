@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'radio' button
-// Version 3.18.0 du 07.01.2020
+// Version 3.20.0 du 26.03.2020
 //==============================================================
 
 class UniversalFieldRadio extends UniversalField {
@@ -83,20 +83,21 @@ class UniversalFieldRadio extends UniversalField {
 		($this->erreur() == true) ? $erreur = ' danger-color' : $erreur = '';
 		$labelHelp = '';
 		if ($this->labelHelp() != '') {
-			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'"';
+			$labelHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->labelHelp()).'"';
 			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			($this->labelHelpHtml() == true) ? $labelHelp.= ' data-html="true"' : $labelHelp.= '';
 		}
 		$chaine = '<div id="'.$this->idztitre().'" style="'.$style.'">';
-			if ($labelHelp == '') {
-				//il n'y a pas d'aide sur le label
-				$chaine.= '<label for="'.$this->id().'" class="'.$lclass.$erreur.'">'.$this->label().'</label>';
-			}
-			else {
+//			if ($labelHelp == '') {
+//				//il n'y a pas d'aide sur le label
+//				$chaine.= '<label for="'.$this->id().'" class="'.$lclass.$erreur.'">'.$this->label().'</label>';
+//			}
+//			else {
 				//on ajoute une aide sur le label
 				$chaine.= '<label for="'.$this->id().'" class="'.$lclass.$erreur.'">';
-					$chaine.= '<span data-toggle="tooltip"'.$labelHelp.'>'.$this->label().'</span>';
+					$chaine.= '<span'.$labelHelp.'>'.$this->label().'</span>';
 				$chaine.= '</label>';
-			}
+//			}
 		$chaine.= '</div>';
 		return $chaine;
 	}
@@ -189,18 +190,14 @@ class UniversalFieldRadio extends UniversalField {
 				($this->tclass() != '') ? $tclass = ' '.$this->tclass() : $tclass = '';
 				$titreHelp = '';
 				if ($this->titreHelp() != '') {
-					$titreHelp = ' title="'.htmlspecialchars($this->titreHelp()).'" data-toggle="tooltip"';
+					$titreHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->titreHelp()).'"';
 					($this->titreHelpPos() != '') ? $titreHelp.= ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp.= ' data-placement="auto"';
+					($this->titreHelpHtml() == true) ? $titreHelp.= ' data-html="true"' : $titreHelp.= '';
 				}
 				$classeTitre = 'text-'.$this->talign().' col-form-label'.$tlong.$tclass;
 				$style = '';
 				$html.= '<legend class="'.$classeTitre.'"'.$style.'>';
-				if ($titreHelp != '') {
-					$html.= '<span '.$titreHelp.'>'.$this->titre().'</span>';
-				}
-				else {
-					$html.= '<span>'.$this->titre().'</span>';
-				}
+					$html.= '<span'.$titreHelp.'>'.$this->titre().'</span>';
 				$html.= '</legend>';
 			}
 

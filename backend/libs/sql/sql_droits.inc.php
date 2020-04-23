@@ -72,7 +72,8 @@ function sqlDroits_createTableFonctionnalites()
 	if ($res !== false) {
 		//Contenu de la table `fonctionnalites`
 		$requete = "INSERT IGNORE INTO `"._PREFIXE_TABLES_."fonctionnalites` (`id_fonctionnalite`, `id_groupe_fonctionnalite`, `libelle`, `code`) VALUES ";
-		$requete.= "(1, 2, 'Administrer l\'application', 'FONC_ADM_APP');";
+		$requete.= "(1, 2, 'Administrer l\'application', 'FONC_ADM_APP'), ";
+		$requete.= "(2, 2, 'Gérer les utilisateurs', 'FONC_ADM_GERER_USERS');";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	}
 	return $res;
@@ -91,7 +92,9 @@ function sqlDroits_createTableDroits()
 	if ($res !== false) {
 		//Contenu de la table `droits`
 		$requete = "INSERT IGNORE INTO `"._PREFIXE_TABLES_."droits` (`id_fonctionnalite`, `id_profil`, `autorisation`) VALUES ";
-		$requete.= "(1, 1, 1);";
+		$requete.= "(1, 1, 1), ";
+		$requete.= "(2, 0, 0), ";
+		$requete.= "(2, 1, 1);";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	}
 	return $res;

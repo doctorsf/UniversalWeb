@@ -17,6 +17,9 @@
 // 15.12.2019 : correction _drawStandard() si $path n'existait pas (ex //index.php)
 // Version 2.2.3 (13.01.2020)
 //		- Correction bug usage setLangue() qui ne fonctionnait pas
+// Version 2.3.0 (07.04.2020)
+//		- Ajout de la méthode setAncre qui permet de positionner une ancre navigateur à la fin de l'url.
+//			Cette ancre n'est possible QUE sur les les schémas standard _PAGE_NAVIGATOR_SCHEMA_STANDARD_ et doit être passé après le constructeur
 //------------------------------------------------------------------
 // Affiche et gére une navigation par pages
 //   de la forme << Prec. | Page : 1 2 3 .. 9 | Suiv. >>
@@ -67,6 +70,7 @@ class PageNavigator {
 	private $_schema = self::SCHEMA_STANDARD;				//type d'url utilisée par le site
 	private $_indicePage = null;							//indice de la particule dans l'uri ou se trouve l'information de page
 	private $_lg = 'fr';									//langue dans laquelle il faut afficher le navigateur
+	private $_ancre = '';									//ancre optionnelle à ajouter à l'url
 
 	private $_nb_pages;										//nombre de pages gérées par le navigateur (calcul)
 	private $_prec;											//texte signignant l'item "précédent"
@@ -91,7 +95,7 @@ class PageNavigator {
 								'link' => 'transparent',
 								'secondary' => '#ccc');
 
-	const VERSION = 'v2.2.3 (2020-01-13)';
+	const VERSION = 'v2.3.0 (2020-04-07)';
 
 	const SCHEMA_STANDARD = 1;								//ex : /fr/photos.php?data=xxx&page=y (ici indicePage y = null)
 	const SCHEMA_REWRITTE = 2;								//ex : /fr/photos-xxx-y-blabla.htm	 (ici indicePage y = 3)
@@ -108,6 +112,7 @@ class PageNavigator {
 	public function setSchema($valeur) {$this->_schema = $valeur;}						//type d'url utilisée par le site
 	public function setIndicePage($valeur) {$this->_indicePage = $valeur;}				//indice de la particule dans l'uri ou se trouve l'information de page
 	public function setLangue($valeur) {$this->_lg = $valeur; $this->_build();}			//langue dans laquelle il faut afficher le navigateur
+	public function setAncre($valeur) {$this->_ancre = $valeur;}						//ancre optionelle à ajoute rà la fin de l'url
 
 	public function __construct(
 						$total_data, 
@@ -130,18 +135,7 @@ class PageNavigator {
 	}
 
 	private function _build() {		
-		//initialisation des propriétés de l'objet
-//		$this->_total_data = $total_data;
-//		$this->_nb_lignes_par_page = $nb_lignes_par_page;
-//		$this->_nb_item_menu = $nb_item_menu;
-//		$this->_page_encours = $page_encours;
-//		$this->_schema = $schema;
-//		$this->_indicePage = $indicePage;
-//		$this->_lg = $lg;
-
 		//si l'on passe $nb_item_menu à 0 cela revient à demander un navigateur minimaliste
-//		if ($nb_item_menu == 0) $this->_minimaliste = true;
-//		if ($this->_nb_item_menu == 0) $this->_minimaliste = true;
 		$this->_minimaliste = ($this->_nb_item_menu == 0);
 		
 		//calcul du nombre de pages de résultat
@@ -257,7 +251,7 @@ class PageNavigator {
 			$this->_url.= '&amp;';
 
 		//shéma des url
-		$shemaUrl = $this->_url.'page=[xx]';
+		$shemaUrl = $this->_url.'page=[xx]'.$this->_ancre;
 
 		//Affichage
 		return $this->_affichage($shemaUrl);

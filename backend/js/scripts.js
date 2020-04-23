@@ -21,6 +21,26 @@ function getScreenResolution() {
 }
 
 //----------------------------------------------------------------------------------
+// Appel Ajax de la méthode uw_paramSort qui intervertit la position (ordre 
+// d'affichage) de deux paramètres. En cas de succès, le javascript recharge la page
+//----------------------------------------------------------------------------------
+function uw_paramSort(source, cible) {
+	if (xhr && xhr.readyState != 0) {
+		xhr.abort(); // On annule la requête en cours si une déja envoyée!
+	}
+	var xhr = getXMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+			//en cas de succes on reactualise la page
+			// Recharge la page actuelle, sans utiliser le cache
+			document.location.reload(true);
+		}
+	}
+	xhr.open("GET", "reponses-ajax.php?f=uw_paramSort&source=" + source + "&cible=" + cible, true);
+	xhr.send(null);
+}
+
+//----------------------------------------------------------------------------------
 // Appel Ajax de la méthode uw_moveGroupe qui positionne une fonctionnalité dans un
 // groupe de fonctionnalités. En cas de succès, le javascript recharge la page
 //----------------------------------------------------------------------------------

@@ -22,12 +22,12 @@ $operation = grantAcces() or die();
 //		'sens' (sens du tri ASC ou DESC)
 //		'title' (Description "title" de la colonne
 //-------------------------------------
-$cols[0] = SimpleListingHelper::createCol(array('name' => getLib('PROFIL'),			'size' => 9,	'tri' => 'profil'));
-$cols[1] = SimpleListingHelper::createCol(array('name' => getLib('ID'),				'size' => 15,	'tri' => 'id_user'));
-$cols[2] = SimpleListingHelper::createCol(array('name' => getLib('NOM_PRENOM'),		'size' => 20,	'tri' => 'nom,prenom'));
-$cols[3] = SimpleListingHelper::createCol(array('name' => getLib('EMAIL'),			'size' => 20,	'tri' => 'email'));
-$cols[4] = SimpleListingHelper::createCol(array('name' => getLib('DATE_CREATION'),	'size' => 17,	'tri' => 'date_creation'));
-$cols[5] = SimpleListingHelper::createCol(array('name' => getLib('DERNIER_ACCES'),	'size' => 17));
+$cols[0] = SimpleListingHelper::createCol(array('name' => getLib('PROFIL'),			'size' => 10,	'tri' => 'profil'));
+//$cols[1] = SimpleListingHelper::createCol(array('name' => getLib('ID'),				'size' => 15,	'tri' => 'id_user'));
+$cols[2] = SimpleListingHelper::createCol(array('name' => getLib('NOM_PRENOM'),		'size' => 24,	'tri' => 'nom,prenom'));
+$cols[3] = SimpleListingHelper::createCol(array('name' => getLib('EMAIL'),			'size' => 24,	'tri' => 'email'));
+$cols[4] = SimpleListingHelper::createCol(array('name' => getLib('DATE_CREATION'),	'size' => 20,	'tri' => 'date_creation'));
+$cols[5] = SimpleListingHelper::createCol(array('name' => getLib('DERNIER_ACCES'),	'size' => 20));
 $cols[8] = SimpleListingHelper::createCol(array('name' => getLib('SUPPR'),			'size' => 2,	'align' => 'center'));
 
 //-------------------------------------
@@ -108,10 +108,10 @@ echo '<body>';
 	// CORPS								
 	//--------------------------------------
 	echo '<section>';
-	echo '<article>';
+	echo '<article class="container-xl">';
 
 		echo '<div class="row">';
-			echo '<div class="col">';
+			echo '<div class="col p-0">';
 
 				//titre du listing et bouton d'actions
 				//--------------------------------------
@@ -147,27 +147,26 @@ echo '<body>';
 					SimpleListingHelper::drawBody($cols, $listing, $page);
 				echo'</table>';
 
+				//affichage légende
+				//--------------------------------------
+				echo '<div class="d-flex justify-content-between">';
+					echo '<div>';
+						echo '<p span class="mb-0 text-muted small">'.getLib('LEGENDE').' : </span>';
+						echo '<span class="badge badge-unactived mr-1">'.getLib('COMPTE_DESACTIVE').'</span>';
+					echo '</div>';
+					if (_RUN_MODE_ == _DEVELOPPEMENT_) {
+						echo '<p class="mb-0 text-right text-muted"><small>'.getLib('TAILLE_LISTING').' : '.SimpleListingHelper::getSize($cols).'%</small></p>';
+					}
+				echo '</div>';
+
 				//affichage barre de navigation
 				//--------------------------------------
-				echo $navigation;
+				//echo $navigation;
 
 			echo '</div>';
 		echo '</div>';
 
 	echo '</article>';
-	echo '</section>';
-
-	//--------------------------------------
-	// BLOC LEGENDE
-	//--------------------------------------
-
-	echo '<section>';
-		echo '<table class="table table-responsive">';			//table-sm
-			echo '<tr>';
-			echo '<td>'.getLib('LEGENDE').' : </td>';
-			echo '<td class="table-info">'.getLib('COMPTE_DESACTIVE').'</td>';
-			echo '</tr>';
-		echo '</table>';
 	echo '</section>';
 
 	//--------------------------------------

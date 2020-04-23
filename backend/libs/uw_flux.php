@@ -38,10 +38,12 @@
 //		- Création de 2 constantes supplémentaires (LOADCSV_DELIMITER_SEMICOLON et LOADCSV_DELIMITER_TAB)
 //		- Nom de variable $flag changé en $presentation plus parlant
 // 22.04.2019
-//		fonction saveCSV()
-//		- Ajout d'1 nouveau paramètre facultatif ($delimiter)
+//		- fonction saveCSV()
+//			Ajout d'1 nouveau paramètre facultatif ($delimiter)
 // 15.05.2019
-//		Ajout de l'option -R à la commande Mysqldump qui permet de sauver AUSSI les procédures et fonctions stockées
+//		- Ajout de l'option -R à la commande Mysqldump qui permet de sauver AUSSI les procédures et fonctions stockées
+// 23.03.2020
+//		- Ajout de la fonction signatureDatabase() qui renvoie un hash SHA1 de la structure de la base de données
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -313,8 +315,9 @@ function saveDatabase($nomDb, $versionApp, $repertoire_sauvegardes, $listeDesTab
 		$listeTables = implode(' ', $listeDesTables);
 	}
 
-	//construction de la ligne de commande mysqldump.exe
+	//construction de la ligne de commande mysqldump.exe --skip-definer
 	$ligne = $dbMysqldump.' --host='.$dbServer.' --user='.$dbLogin.' --password='.$dbPassword.' -R '.$dbDatabase.' '.$listeTables.' > '.$repertoire_sauvegardes.$nom_fichier; 
+
 	//si ajout de " 2>&1" à la fin de la ligne de commande, alors les erreurs (STDERR) seront écrites dans le fichier de sortie (STDOUT)
 	//$ligne.= " 2>&1"; 
 
@@ -363,6 +366,53 @@ function restoreDatabase($repertoire_sauvegardes, $fichier)
 	//lancement de la requete mysql
 	system($chaine, $return_var);
 	return ($return_var == 0);
+}
+
+//----------------------------------------------------------------------
+// Propose une signature de la base de données construicte sur les 
+// structures de ses tables
+// Entree :	
+//		$lesTables : Tableau en retour des tables de la base et de 
+//			leurs signatures individuelles
+//			Array (
+//				[0] => Array (
+//						[name] => nomtable
+//						[sha1] => 0ea82da522d0b21854cf7c48a2369821
+//					)
+//				[1] => Array (
+//						[name] => nomtable
+//						[sha1] => fbe2eec37f407d3ba8016dce7131b87d
+//					)
+//				etc.
+// Retour :
+//		false si erreur
+//		MD5 de la base si OK
+//----------------------------------------------------------------------
+function signatureDatabase(&$lesTables) 
+{
+	global $dbDatabase;
+	$lesTables = array();
+
+	//recupere la liste des tables préfixées
+	$requete = "SHOW TABLES";
+	$res = executeQuery($requete, $nombre, _SQL_MODE_);
+	if ($res !== false) {
+		foreach($res as $ligne) {
+			if (mb_substr($ligne['Tables_in_'.$dbDatabase], 0, mb_strlen(_PT_)) == _PT_) {
+				$lesTables[]['name'] = $ligne['Tables_in_'.$dbDatabase];
+			}
+		}
+		//on recupere la structure de chaque table
+		foreach($lesTables as $indice => $table) {
+			$requete = "SHOW FULL FIELDS FROM ".$table['name'];
+			$res = executeQuery($requete, $nombre, _SQL_MODE_);
+			//et on en cree un hach MD5
+			$lesTables[$indice]['sha1'] = sha1(serialize($res));
+		}
+		//propose un hachage de l'ensemble des tables)
+		return md5(serialize($lesTables));
+	}
+	return false;
 }
 
 //----------------------------------------------------------------------

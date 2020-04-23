@@ -36,10 +36,28 @@ function grantAcces()
 
 		//-------------------------------------------------
 		case _URL_ACTIONS_DROITS_ : {
+			if (_RUN_MODE_ == _DEVELOPPEMENT_) {
+				$droitATester	= 'FONC_ADM_APP';
+				$opAutorises	= array('droits', 'delniv', 'addniv', 'addfonc', 'delfonc', 'renniv', 'valid_renniv', 'rennivcode', 'valid_rennivcode', 
+										'rennivid', 'valid_rennivid', 'renfonc', 'valid_renfonc', 'renfonccode', 'valid_renfonccode', 'renfoncid', 'valid_renfoncid', 
+										'rengrp', 'valid_rengrp', 'addgrp', 'delgrp');
+				if (in_array($operation, $opAutorises)) break;
+				$droitATester	= 'dev';
+				break;
+			}
+
 			$droitATester	= 'FONC_ADM_APP';
-			$opAutorises	= array('droits', 'delniv', 'addniv', 'addfonc', 'delfonc', 'renniv', 'valid_renniv', 'rennivcode', 'valid_rennivcode', 
-									'rennivid', 'valid_rennivid', 'renfonc', 'valid_renfonc', 'renfonccode', 'valid_renfonccode', 'renfoncid', 'valid_renfoncid', 
-									'rengrp', 'valid_rengrp', 'addgrp', 'delgrp');
+			$opAutorises	= array('droits');
+			if (in_array($operation, $opAutorises)) break;
+
+			$droitATester	= 'erreur';
+			break;
+		}
+
+		//-------------------------------------------------
+		case _URL_ACTIONS_DIVERS_ : {
+			$droitATester	= 'FONC_ADM_APP';
+			$opAutorises	= array('delmedia');
 			if (in_array($operation, $opAutorises)) break;
 
 			$droitATester	= 'erreur';
@@ -49,7 +67,7 @@ function grantAcces()
 		//-------------------------------------------------
 		case _URL_MAINTENANCE_ : {
 			$droitATester	= 'FONC_ADM_APP';
-			$opAutorises	= array('purgelog', 'epurelog', 'savedb', 'loaddb', 'gorestoredb', 'deldb', 'hash', 'hashfrontend', 'reseterrors');
+			$opAutorises	= array('purgelog', 'epurelog', 'savedb', 'loaddb', 'gorestoredb', 'deldb', 'hash', 'hashfrontend', 'reseterrors', 'reseterrorsfrontend', 'dbsign');
 			if (in_array($operation, $opAutorises)) break;
 
 			$droitATester	= 'erreur';
@@ -61,7 +79,11 @@ function grantAcces()
 		case _URL_LISTING_USERS_ :
 		case _URL_LISTING_DROITS_ : 
 		case _URL_VERSIONNING_ : 
-		case _URL_LISTING_LOGS_	: {
+		case _URL_LISTING_LOGS_	: 
+		case _URL_LISTING_PARAMS_ : 
+		case _URL_PARAM_: 
+		case _URL_MEDIA_ : 
+		case _URL_REGLAGES_ : {
 			$droitATester	= 'FONC_ADM_APP';
 			break;
 		}
@@ -83,6 +105,16 @@ function grantAcces()
 		}
 
 		//-------------------------------------------------
+		case _URL_PARAM_ : {
+			$droitATester	= 'FONC_ADM_APP';
+			$opAutorises	= array('consulter', 'ajouter', 'modifier', 'supprimer');
+			if (in_array($operation, $opAutorises)) break;
+
+			$droitATester	= 'erreur';
+			break;
+		}
+
+		//-------------------------------------------------
 		default: {	
 			$droitATester	= 'erreur';
 			break;
@@ -92,6 +124,13 @@ function grantAcces()
 	//erreur de commande
 	if ($droitATester == 'erreur') {
 		$leMessage = getLib('ERREUR_DROITS');
+		include_once(_BRIQUE_ERREUR_);
+		return false;
+	}
+
+	//droits à développer actuellement inexistant
+	if ($droitATester == 'dev') {
+		$leMessage = 'Accès interdit';
 		include_once(_BRIQUE_ERREUR_);
 		return false;
 	}

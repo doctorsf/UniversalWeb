@@ -62,14 +62,21 @@ $_LIBELLES = array(
 	'UFC_MATCH_INVALIDE'			=> 'Match property unknown!',
 	'UFC_MAX_LENGTH'				=> 'length > %d chars (%d)',
 	'UFC_MIN_LENGTH'				=> 'length < %d chars (%d)',
+	'UFC_SAISIE_NON_CONFORME'		=> 'Incorrect entry',
 
-	'PAS_EXPEDITEUR'				=> 'Sender unknown',
-	'EMAIL_EXPEDITEUR_KO'			=> 'Bad sender eMail',
-	'PAS_DESTINATAIRE'				=> 'No recipient',
-	'TROP_DESTINATAIRES'			=> 'Too much recipient! Maximum 3',
-	'PAS_OBJET'						=> 'No subject',
-	'EMAIL_DESTINATAIRE_INVALIDE'	=> 'Bad email for a recipient',
-	'EMAIL_ENVOI_ERREUR'			=> 'Error sending email',
+	//------------------------------------------
+	// Libellés des classes UniversalWeb SilentMail (UWSM)
+	//------------------------------------------
+	'UWSM_TEST'						=> 'Test',
+	'UWSM_SUCCESS'					=> 'eMail sent with success&hellip;',
+	'UWSM_NO_SENDER'				=> 'Sender unknown',
+	'UWSM_BAD_SENDER'				=> 'Bad sender eMail',
+	'UWSM_NO_OBJECT'				=> 'No subject',
+	'UWSM_NO_RECIPIENT'				=> 'No recipient',
+	'UWSM_TOO_MANY_RECIPIENTS'		=> 'Too many recipient! Maximum 3',
+	'UWSM_BAD_RECIPIENT'			=> 'Bad email for a recipient',
+	'UWSM_SEND_ERROR'				=> 'Error sending email',
+	'UWSM_ERROR_UNKNOWN'			=> 'unknown error',
 
 	//------------------------------------------
 	// ERREURS
@@ -110,6 +117,7 @@ $_LIBELLES = array(
 	'AUTOLOG'						=> 'Autolog',
 	'FRANCAIS'						=> 'french',
 	'ANGLAIS'						=> 'english',
+	'MANQUANT'						=> 'Missing',
 
 	//------------------------------------------
 	// LOGS
@@ -214,6 +222,17 @@ $_LIBELLES = array(
 $_MOIS_EN_CLAIR	= array('', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'); 
 $_CIVILITE = array('', 'Mr.', 'Ms.', 'Miss', 'Unknown');
 
+//--------------------------------------
+// Affiche un texte "nombre de références " + verbe ou participe passé
+// Entrée : $nb : nombre à transcrire
+// Retour : la chaine de catactère résultante
+//--------------------------------------
+function getLibNbRefsTrouvees($nb) {
+	if ($nb == 0)		return 'Aucune référence trouvée';
+	elseif ($nb == 1)	return '1 référence trouvée';
+	else				return $nb.' références trouvées';
+}
+
 //------------------------------------------------------------------
 // Construction d'une chaine avec des paramètres passés en option
 // Entrée :
@@ -271,4 +290,16 @@ function getULib($indice, $param1='', $param2='', $param3='', $param4='', $param
 function existeLib($indice) {
 	global $_LIBELLES;
 	return isset($_LIBELLES[$indice]);
+}
+
+//------------------------------------------------------------------
+// Renvoie le libellé ci-celui-ci existe, l'indice sinon
+//------------------------------------------------------------------
+// Entrée 
+//		$indice : indice du template de la chaine dans $_LIBELLES
+// Retour
+//		la traduction si existe / $indice sinon
+//------------------------------------------------------------------
+function getLibIfExists($indice) {
+	if (existeLib($indice)) return getLib($indice); else return $indice;
 }

@@ -5,6 +5,14 @@ Classe de gestion de la table des logs
 Elle étend la classe générique de table SqlSimple.
 éè : UTF-8
 -------------------------------------------------------------------------
+Methodes disponibles :
+-------------------------------------------------------------------------
+getListeNombre()	: nombre de lignes du listing de la table
+getListe()			: obtenir listing de la table
+get()				: renvoie un tuple recherché
+add()				: //ajoute un tuple
+update()			: modifie un tuple
+delete()			: supprime un tuple
 19.01.2017
 	Premiere version
 28.03.2018
@@ -20,8 +28,13 @@ Elle étend la classe générique de table SqlSimple.
 30.01.2019
 	- Correction creation table : remplacé 'datetime' par 'timestamp' dans la création du champ 'quand'
 	sinon sela ne marchait pas
+11.04.2019
+	- Correction méthode purge() : contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
+	l'ancienne méthode renvoyait toujours 0
 12.11.2019
 	- Modification de l'écriture des champs publiques _table (en table), _index (en index) et _champs (en champ) sans le _ (réservée aux propriétées privées)
+06.03.2020
+	- Correction bug dans backend/libs/sql_logs et frontend/libs/sql_logs
 ------------------------------------------------------------------------*/
 
 //- CREATION tables logs --------------------------------------
@@ -76,7 +89,7 @@ class sqlLogs extends SqlSimple {
 
 	//purge les logs de plus de 3 mois
 	public function epure() {
-		$requete.= "DELETE FROM ".$this->table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+		$requete = "DELETE FROM ".$this->table." WHERE quand < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
 			return $nombre;
@@ -85,11 +98,13 @@ class sqlLogs extends SqlSimple {
 	}
 
 	//purge entièrement les logs
+	//Contrairement à DELETE FROM, TRUNCATE TABLE ne retourne pas le nombre de lignes supprimées
+	//la méthode retourne donc true ou false
 	public function purge() {
-		$requete.= "TRUNCATE TABLE ".$this->table;
+		$requete = "TRUNCATE TABLE ".$this->table;
 		$res = executeQuery($requete, $nombre, _SQL_MODE_);
 		if ($res !== false) {
-			return $nombre;
+			return true;
 		}
 		return false;
 	}
@@ -100,7 +115,7 @@ class sqlLogs extends SqlSimple {
 //--------------------------------------
 function sqlLogs_log($id_log_type, $operation) {
 	$log = new sqlLogs();
-	$donnees['id_log_type'] = _LOG_CONNEXION_;
+	$donnees['id_log_type'] = $id_log_type;
 	$donnees['id_user'] = $_SESSION[_APP_LOGIN_]->getId();
 	$donnees['operation'] = addslashes($operation);
 	$log->add($donnees);
@@ -121,8 +136,8 @@ function sqlLogs_fillSelectTypesTous($defaut)
 	$requete.= "ORDER BY libelle";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
-		($defaut == 'TOUS') ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="TOUS"'.$selected.'>TOUS</option>';
+		($defaut == UniversalListColonne::CMP_ALL) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.UniversalListColonne::CMP_ALL.'"'.$selected.'>'.getLib('LOGS_ALL_TYPES').'</option>';
 		foreach($res as $ligne) {
 			($defaut == $ligne['id_log_type']) ? $selected = ' selected' : $selected = '';
 			$texte.= '<option value="'.$ligne['id_log_type'].'"'.$selected.'>'.$ligne['libelle'].'</option>';
@@ -146,10 +161,10 @@ function sqlLogs_fillSelectUtilisateursTous($defaut)
 	$requete.= "WHERE "._PREFIXE_TABLES_."logs.id_user = "._PREFIXE_TABLES_."users.id_user";
 	$res = executeQuery($requete, $nombre, _SQL_MODE_);
 	if ($res !== false) {
-		($defaut == 'TOUTES') ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="TOUS"'.$selected.'>TOUS</option>';
-		($defaut == 'IGNORE') ? $selected = ' selected' : $selected = '';
-		$texte.= '<option value="IGNORE"'.$selected.'>IGNORE</option>';
+		($defaut == UniversalListColonne::CMP_ALL) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.UniversalListColonne::CMP_ALL.'"'.$selected.'>'.getLib('LOGS_ALL_USERS').'</option>';
+		($defaut == UniversalListColonne::CMP_IGNORE) ? $selected = ' selected' : $selected = '';
+		$texte.= '<option value="'.UniversalListColonne::CMP_IGNORE.'"'.$selected.'>'.getLib('IGNORER_LE_CHAMP').'</option>';
 		foreach($res as $ligne) {
 			($defaut == $ligne['id_user']) ? $selected = ' selected' : $selected = '';
 			$texte.= '<option value="'.$ligne['id_user'].'"'.$selected.'>'.$ligne['nom'].' '.$ligne['prenom'].'</option>';

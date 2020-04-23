@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element parent
-// Version 3.18.0 du 07.01.2020
+// Version 3.20.0 du 26.03.2020
 //==============================================================
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -50,6 +50,7 @@ class UniversalField {
 	private $_titre = '';			//titre de groupe (permet par exemple de mettre sur une seule ligne plusieurs radio buttons)
 	private $_titreHelp = '';		//chaine de caractere sur titre de groupe (agit comme title="" sur un label titre de groupe)
 	private $_titreHelpPos = 'auto';//position du libellé d'aide sur le titre (auto (defaut), left, top, right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
+	private $_titreHelpHtml = false;//contenu HTML (true/false*) dans l'aide de libellé du titre (tooltips Bootstrap activés)
 	private $_tlong = '';			//longueur (1..12) du titre (légende)(pour radio et checkbox seulement)
 	private $_tclass = '';			//classe css du titre
 	private $_talign = 'left';		//alignement du titre -> left / right / center / justify
@@ -59,11 +60,13 @@ class UniversalField {
 	private $_lclass = '';			//classe css du label correspondant
 	private $_labelHelp = '';		//chaine de caractere (agit comme title="" sur le label)
 	private $_labelHelpPos = 'auto';//position du libellé d'aide sur le label (auto (defaut), left, top, right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
+	private $_labelHelpHtml = false;//contenu HTML (true/false*) dans l'aide de libellé (tooltips Bootstrap activés)
 	private $_lalign = 'left';		//alignement du label -> left / right / center / justify
 	
 	private $_labelPlus = '';		//Permet de scinder le label en 2 parties : à gauche contenu de label, à droite le texte (ou code) contenu ici. En pratique (souvent) une icone cadrée à droite.
 	private $_labelPlusHelp = '';	//chaine de caractere (agit comme title="" sur le label)
 	private $_labelPlusHelpPos = 'auto';//position du libellé d'aide sur le label (auto (defaut), left, top, right, bottom). Valable uniquement lorsque les tooltips Bootstrap sont activés
+	private $_labelPlusHelpHtml = false;//contenu HTML (true/false*) dans l'aide de libellé plus (tooltips Bootstrap activés)
 
 	private $_spellcheck = true;	//si true la correction automatique est activée sur le champ, false sinon
 	private $_placeholder = '';		//placeholder sur les champs text
@@ -163,10 +166,12 @@ class UniversalField {
 	public function label()				{return $this->_label;}
 	public function labelHelp()			{return $this->_labelHelp;}
 	public function labelHelpPos()		{return $this->_labelHelpPos;}
+	public function labelHelpHtml()		{return $this->_labelHelpHtml;}
 	public function lalign()			{return $this->_lalign;}
 	public function labelPlus()			{return $this->_labelPlus;}
 	public function labelPlusHelp()		{return $this->_labelPlusHelp;}
 	public function labelPlusHelpPos()	{return $this->_labelPlusHelpPos;}
+	public function labelPlusHelpHtml()	{return $this->_labelPlusHelpHtml;}
 	public function lclass()			{return $this->_lclass;}
 	public function liberreur()			{return $this->_liberreur;}
 	public function liberreurHelp()		{return $this->_liberreurHelp;}
@@ -185,6 +190,7 @@ class UniversalField {
 	public function titre()				{return $this->_titre;}
 	public function titreHelp()			{return $this->_titreHelp;}
 	public function titreHelpPos()		{return $this->_titreHelpPos;}
+	public function titreHelpHtml()		{return $this->_titreHelpHtml;}
 	public function tlong()				{return $this->_tlong;}
 	public function value()				{return $this->_value;}
 
@@ -211,10 +217,12 @@ class UniversalField {
 	public function setLabel($label)			{$this->_label = $label;}
 	public function setLabelHelp($texte)		{$this->_labelHelp = $texte;}
 	public function setLabelHelpPos($pos)		{$this->_labelHelpPos = $pos;}
+	public function setLabelHelpHtml($pos)		{$this->_labelHelpHtml = $pos;}
 	public function setLalign($align)			{$this->_lalign = $align;}	
 	public function setLabelPlus($info)			{$this->_labelPlus = $info;}
 	public function setLabelPlusHelp($texte)	{$this->_labelPlusHelp = $texte;}
 	public function setLabelPlusHelpPos($texte)	{$this->_labelPlusHelpPos = $texte;}
+	public function setLabelPlusHelpHtml($texte){$this->_labelPlusHelpHtml = $texte;}
 	public function setValue($value)			{$this->_value = $value;}
 	public function setMaxlength($length)		{$this->_maxlength = $length;}
 	public function setJavascript($javascript)	{$this->_javascript = $javascript;}
@@ -222,6 +230,7 @@ class UniversalField {
 	public function setTitre($titre)			{$this->_titre = $titre;}
 	public function setTitreHelp($titre)		{$this->_titreHelp = $titre;}
 	public function setTitreHelpPos($pos)		{$this->_titreHelpPos = $pos;}
+	public function setTitreHelpHtml($pos)		{$this->_titreHelpHtml = $pos;}
 	public function setTclass($tclass)			{$this->_tclass = $tclass;}
 	public function setTlong($tlong)			{$this->_tlong = $tlong;}
 	public function setLpos($position)			{$this->_lpos = $position;}

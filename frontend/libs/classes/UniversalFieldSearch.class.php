@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'search' (combiné txt + bouton)
-// Version 3.18.0 du 07.01.2020
+// Version 3.20.0 du 26.03.2020
 //==============================================================
 
 class UniversalFieldSearch extends UniversalField {
@@ -219,18 +219,14 @@ class UniversalFieldSearch extends UniversalField {
 			($this->tclass() != '') ? $tclass = ' '.$this->tclass() : $tclass = '';
 			$titreHelp = '';
 			if ($this->titreHelp() != '') {
-				$titreHelp = ' title="'.htmlspecialchars($this->titreHelp()).'" data-toggle="tooltip"';
+				$titreHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->titreHelp()).'"';
 				($this->titreHelpPos() != '') ? $titreHelp.= ' data-placement="'.$this->titreHelpPos().'"' : $titreHelp.= ' data-placement="auto"';
+				($this->titreHelpHtml() == true) ? $titreHelp.= ' data-html="true"' : $titreHelp.= '';
 			}
 			($this->invisible() == true) ? $invisible = ' invisible' : $invisible = '';
 			$classeTitre = 'text-'.$this->talign().' col-form-label'.$tlong.$tclass.$invisible;
 			$html.= '<legend class="'.$classeTitre.'">';
-			if ($titreHelp != '') {
-				$html.= '<span '.$titreHelp.'>'.$this->titre().'</span>';
-			}
-			else {
-				$html.= '<span>'.$this->titre().'</span>';
-			}
+				$html.= '<span'.$titreHelp.'>'.$this->titre().'</span>';
 			$html.= '</legend>';
 		}
 
@@ -238,8 +234,9 @@ class UniversalFieldSearch extends UniversalField {
 		//prise en compte de certaines données
 		$labelHelp = '';
 		if ($this->labelHelp() != '') {
-			$labelHelp = ' title="'.htmlspecialchars($this->labelHelp()).'" data-toggle="tooltip"';
+			$labelHelp = ' data-toggle="tooltip" title="'.htmlspecialchars($this->labelHelp()).'"';
 			($this->labelHelpPos() != '') ? $labelHelp.= ' data-placement="'.$this->labelHelpPos().'"' : $labelHelp.= ' data-placement="auto"';
+			($this->labelHelpHtml() == true) ? $labelHelp.= ' data-html="true"' : $labelHelp.= '';
 		}
 		($this->liberreurHelp() != '') ? $libErreurHelp = ' title="'.$this->liberreurHelp().'"' : $libErreurHelp = '';
 		($this->clong() != '') ? $clong = ' '.$this->clong() : $clong = '';
