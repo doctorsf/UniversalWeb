@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'filtretexte (combiné txt + menu)
-// Version 3.20.0 du 26.03.2020
+// Version 3.22.0 du 05.05.2020
 //==============================================================
 
 class UniversalFieldFiltretext extends UniversalField {

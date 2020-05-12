@@ -18,29 +18,29 @@ defined('_URL_FRONT_END_') || define('_URL_FRONT_END_',	$_SERVER['REQUEST_SCHEME
 defined('_IMAGES_FRONT_END_')	|| define('_IMAGES_FRONT_END_',	_URL_FRONT_END_.'images/');
 
 //chemins du backend
-defined('_IMAGES_')				|| define('_IMAGES_',			'images/');
-defined('_IMAGES_COMMUN_')		|| define('_IMAGES_COMMUN_',	_IMAGES_.'commun/');
-defined('_CSS_')				|| define('_CSS_',				'css/');
-defined('_JAVASCRIPT_')			|| define('_JAVASCRIPT_',		'js/');
-defined('_BOOTSTRAP_JS_')		|| define('_BOOTSTRAP_JS_',		'bootstrap-4.3.1-dist/js/');
-defined('_BOOTSTRAP_CSS_')		|| define('_BOOTSTRAP_CSS_',	'bootstrap-4.3.1-dist/css/');
-defined('_FONT_AWSOME_CSS_')	|| define('_FONT_AWSOME_CSS_',	'fontawesome-free-5.7.2/css/');
-defined('_LIBS_')				|| define('_LIBS_',				'libs/');
-defined('_CLASSES_')			|| define('_CLASSES_',			_LIBS_.'classes/');
+defined('_IMAGES_')					|| define('_IMAGES_',					'images/');
+defined('_IMAGES_COMMUN_')			|| define('_IMAGES_COMMUN_',			_IMAGES_.'commun/');
+defined('_CSS_')					|| define('_CSS_',						'css/');
+defined('_JAVASCRIPT_')				|| define('_JAVASCRIPT_',				'js/');
+defined('_BOOTSTRAP_JS_')			|| define('_BOOTSTRAP_JS_',				'bootstrap-4.4.1-dist/js/');
+defined('_BOOTSTRAP_CSS_')			|| define('_BOOTSTRAP_CSS_',			'bootstrap-4.4.1-dist/css/');
+defined('_FONT_AWSOME_CSS_')		|| define('_FONT_AWSOME_CSS_',			'fontawesome-free-5.11.2/css/');
+defined('_LIBS_')					|| define('_LIBS_',						'libs/');
+defined('_CLASSES_')				|| define('_CLASSES_',					_LIBS_.'classes/');
 
 //Infos propriétaire du site
-defined('_APP_BLOWFISH_')		|| define('_APP_BLOWFISH_',		'videotheque');
-defined('_APP_ID_')				|| define('_APP_ID_',			md5(_APP_BLOWFISH_));			//id de l'application
-defined('_APP_TITLE_')			|| define('_APP_TITLE_',		'Saisie vidéothèque');
+defined('_APP_BLOWFISH_')			|| define('_APP_BLOWFISH_',				'videotheque');
+defined('_APP_ID_')					|| define('_APP_ID_',					md5(_APP_BLOWFISH_));			//id de l'application
+defined('_APP_TITLE_')				|| define('_APP_TITLE_',				'Saisie vidéothèque');
 defined('_PARAM_EMAIL_WEBMASTER_')	|| define('_PARAM_EMAIL_WEBMASTER_',	'webmaster@yoursite.fr');
-defined('_AUTEUR_')				|| define('_AUTEUR_',			'Auteur');
-defined('_COPYRIGHT_')			|| define('_COPYRIGHT_',		'Auteur - 2016');
-defined('_APP_VERSION_')		|| define('_APP_VERSION_',		'v0.0.0');
-defined('_LG_')					|| define('_LG_',				'fr');
-defined('_IP_DEVELOPPEMENT_')	|| define('_IP_DEVELOPPEMENT_',	array('120.146.72.10'));
+defined('_AUTEUR_')					|| define('_AUTEUR_',					'Auteur');
+defined('_COPYRIGHT_')				|| define('_COPYRIGHT_',				'Auteur - 2016');
+defined('_APP_VERSION_')			|| define('_APP_VERSION_',				'v0.0.0');
+defined('_LG_')						|| define('_LG_',						'fr');
+defined('_IP_DEVELOPPEMENT_')		|| define('_IP_DEVELOPPEMENT_',			array('120.146.72.10'));
 
-defined('_JQUERY_')				|| define('_JQUERY_',			'jquery-3.3.1.min.js');
-defined('_BOOTSTRAP_')			|| define('_BOOTSTRAP_',		'bootstrap.min.js');
+defined('_JQUERY_')					|| define('_JQUERY_',					'jquery-3.4.1.min.js');
+defined('_BOOTSTRAP_')				|| define('_BOOTSTRAP_',				'bootstrap.min.js');
 
 //Auto-chargement des classes (obligatoire avant le session_start() pour pouvoir passer des objets dans des variables de session)
 function chargerClasses($classe) {

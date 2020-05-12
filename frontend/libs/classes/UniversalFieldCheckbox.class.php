@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element 'checkbox'
-// Version 3.20.0 du 26.03.2020
+// Version 3.22.0 du 05.05.2020
 //==============================================================
 
 class UniversalFieldCheckbox extends UniversalField {
@@ -184,10 +184,9 @@ class UniversalFieldCheckbox extends UniversalField {
 			if ($this->readonly()) $enable.= ' readonly';
 		}
 
-		//une checkbox seule est forcement inline
 		//libellés et checkbox sont toujours en ligne, c'est l'ensemble checkbox + libellé qui peut être online
 		if ($this->dpos() == 'alone') {
-			$this->setDesign('inline');					//inline obligatoire
+			//$this->setDesign('inline');				//inline obligatoire (annulé le 05.05.2020)
 			$this->setGroupName($this->idField());		//on force pour être certain que "groupName" n'ait pas été oublié
 		}
 
@@ -248,7 +247,12 @@ class UniversalFieldCheckbox extends UniversalField {
 			}
 			//aucune bordure
 			else {
-				$style = 'margin-top:.25rem;line-height:1.25rem';
+				if ($this->design() == 'inline') {
+					$style = 'margin-top:.25rem;line-height:1.25rem'; 
+				}
+				else {
+					$style='line-height:.8rem';
+				}
 				$html.= '<div class="mb-3 '.$this->clong().'" style="'.$style.'">';
 			}
 

@@ -270,25 +270,25 @@ echo '<body>';
 									echo '<div class="d-flex flex-row align-items-center">';
 										echo '<h1>'.getLib('SIGNATURE_BASE').' (sha1)</h1>';
 									echo '</div>';
-									echo '<table class="table table-hover table-striped table-responsive">';
+									echo '<table class="table table-hover table-striped table-lg-responsive">';
 										echo '<thead>';
 										echo '<tr>';
-											echo '<th class="text-left" width="60%">'.getLib('TABLE').'</th>';
-											echo '<th class="text-left" width="40%">SHA1</th>';
+											echo '<th class="uw-w60 text-left">'.getLib('TABLE').'</th>';
+											echo '<th class="uw-w40 text-left">SHA1</th>';
 										echo '</tr>';
 										echo '</thead>';
 										echo '<tbody>';
 											foreach($lesTables as $table) {
 												echo '<tr>';
-													echo '<td width="60%">'.$table['name'].'</td>';
-													echo '<td width="40%">'.$table['sha1'].'</td>';
+													echo '<td class="uw-w60 text-left">'.$table['name'].'</td>';
+													echo '<td class="uw-w40 text-left text-monospace">'.$table['sha1'].'</td>';
 												echo '</tr>';
 											}
 										echo '</tbody>';
 									echo '<tfoot>';
 										echo '<tr class="table-success">';
 										  echo '<td class="lead">'.getLib('SIGNATURE_FINALE').'</td>';
-										  echo '<td class="lead ">'.$signature.'</td>';
+										  echo '<td class="text-monospace lead">'.$signature.'</td>';
 										echo '</tr>';
 									echo '</tfoot>';
 								echo '</table>';
@@ -404,12 +404,12 @@ echo '<body>';
 								$hash = sha1_file($fichier);
 								$hashs.= $hash;
 								$chaine.= '<tr>';
-									$chaine.= '<td width="60%" align="left">'.$fichier.'</td>';
+									$chaine.= '<td class="uw-w60 text-left">'.$fichier.'</td>';
 									if (file_exists($fichier)) {
-										$chaine.= '<td width="40%" align="left">'.$hash.'</td>';
+										$chaine.= '<td class="uw-w40 text-left text-monospace">'.$hash.'</td>';
 									}
 									else {
-										$chaine.= '<td width="40%" align="left"><span class="text-danger">'.getLib('ERREUR_FICHIER_INEXISTANT').'</span></td>';
+										$chaine.= '<td class="uw-w40 text-left"><span class="text-danger">'.getLib('ERREUR_FICHIER_INEXISTANT').'</span></td>';
 									}
 								$chaine.= '</tr>';
 							}
@@ -426,8 +426,8 @@ echo '<body>';
 									echo '<table class="table table-hover table-striped table-responsive">';
 										echo '<thead>';
 										echo '<tr>';
-											echo '<th class="text-left" width="60%">'.getLib('FICHIER').'</th>';
-											echo '<th class="text-left" width="40%">SHA1</th>';
+											echo '<th class="uw-w60 text-left">'.getLib('FICHIER').'</th>';
+											echo '<th class="uw-w40 text-left">SHA1</th>';
 										echo '</tr>';
 										echo '</thead>';
 										echo '<tbody>';
@@ -436,7 +436,7 @@ echo '<body>';
 									echo '<tfoot>';
 										echo '<tr class="table-success">';
 										  echo '<td class="lead">'.getLib('SIGNATURE_FINALE').'</td>';
-										  echo '<td class="lead ">'.$hashFinal.'</td>';
+										  echo '<td class="text-monospace lead">'.$hashFinal.'</td>';
 										echo '</tr>';
 									echo '</tfoot>';
 								echo '</table>';
@@ -539,11 +539,11 @@ echo '<body>';
 								if (file_exists($fichier)) {
 									$hash = sha1_file($fichier);
 									$hashs.= $hash;
-									$chaine.= '<td width="60%" align="left">'.$fichier.'</td>';
-									$chaine.= '<td width="40%" align="left">'.$hash.'</td>';
+									$chaine.= '<td class="uw-w60 text-left">'.$fichier.'</td>';
+									$chaine.= '<td class="uw-w40 text-left text-monospace">'.$hash.'</td>';
 								}
 								else {
-									$chaine.= '<td width="40%" align="left"><span class="text-danger">'.getLib('ERREUR_FICHIER_INEXISTANT').'</span></td>';
+									$chaine.= '<td class="uw-w40 text-left"><span class="text-danger">'.getLib('ERREUR_FICHIER_INEXISTANT').'</span></td>';
 									$chaine.= '<td></td>';
 								}
 								$chaine.= '</tr>';
@@ -561,8 +561,8 @@ echo '<body>';
 									echo '<table class="table table-hover table-striped table-responsive">';
 										echo '<thead>';
 										echo '<tr>';
-											echo '<th class="text-left" width="60%">'.getLib('FICHIER').'</th>';
-											echo '<th class="text-left" width="40%">SHA1</th>';
+											echo '<th class="uw-w60 text-left">'.getLib('FICHIER').'</th>';
+											echo '<th class="uw-w40 text-left">SHA1</th>';
 										echo '</tr>';
 										echo '</thead>';
 										echo '<tbody>';
@@ -571,7 +571,7 @@ echo '<body>';
 									echo '<tfoot>';
 										echo '<tr class="table-success">';
 										  echo '<td class="lead">'.getLib('SIGNATURE_FINALE').'</td>';
-										  echo '<td class="lead ">'.$hashFinal.'</td>';
+										  echo '<td class="text-monospace lead">'.$hashFinal.'</td>';
 										echo '</tr>';
 									echo '</tfoot>';
 								echo '</table>';

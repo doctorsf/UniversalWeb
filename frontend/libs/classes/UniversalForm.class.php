@@ -217,8 +217,12 @@
 //		- Ajout des propriétés booléènes "labelHelpHtml", "labelPlusHelpHtml" et "titreHelpHtml" qui permettent de passer du HTML dans les tooltip
 //		- Simplification du code pour les aides tooltip
 // Version 3.20.0 du 26.03.2020
-//		- objet UniversalFieldImage : ajouté l'utilisation du paramètre 'complement'. On peut maintenant lui passer une fonction de callback qui sera chargée d'afficher l'image (par 
+//		- Objet UniversalFieldImage : ajouté l'utilisation du paramètre 'complement'. On peut maintenant lui passer une fonction de callback qui sera chargée d'afficher l'image (par 
 //			exemple en la créant à la volée). Le nom de l'image (chemin réel) est toujours contenu dans 'value'
+// Version 3.21.0 du 05.05.2020
+//		- Amélioration UniversalFieldCheckbox (forçage inline pour checkbox alone est supprimé => a permis d'affiner affichage filtre checkbox pour usage dans UniversalList)
+// Version 3.22.0 du 05.05.2020
+//		- Ajout du composant UniversalFieldFiltrecheckbox spécialement créé pour les filtres checkbox de UniveralList (en remplacement de UniversalFieldCheckbox)
 //==============================================================
 
 //-------------------------------------------------------------------------
@@ -266,7 +270,7 @@ class UniversalForm {
 	private $_ligneEncours = false;		//dessin d'une ligne de champs en cours ?
 	private $_memAutofocus = null;		//mémorise le premier objet du formulaire qui a le focus
 
-	const VERSION = 'v3.20.0 (2020-03-26)';
+	const VERSION = 'v3.22.0 (2020-05-05)';
 	const COPYRIGHT = '&copy;2014-2020 Fabrice Labrousse';
 	const CONSULTER = 'consulter';
 	const AJOUTER = 'ajouter';
@@ -337,7 +341,7 @@ class UniversalForm {
 			$chaine.= 'display: none!important;';
 		$chaine.= '}';
 
-		$chaine.= 'form.uf .form_error {';
+		$chaine.= 'form.uf .form_error, p[class="form_error"] {';
 			$chaine.= 'height: 1.3rem;';
 			$chaine.= 'max-width: 100%;';
 			$chaine.= 'overflow: hidden;';
@@ -450,6 +454,7 @@ class UniversalForm {
 		elseif	($fieldType == 'search')		$this->_lesChamps[$idField] = new UniversalFieldSearch($tabInfos, $this->_idForm);
 		elseif	($fieldType == 'filtretext')	$this->_lesChamps[$idField] = new UniversalFieldFiltretext($tabInfos, $this->_idForm);
 		elseif	($fieldType == 'filtreselect')	$this->_lesChamps[$idField] = new UniversalFieldFiltreselect($tabInfos, $this->_idForm);
+		elseif	($fieldType == 'filtrecheckbox')$this->_lesChamps[$idField] = new UniversalFieldFiltrecheckbox($tabInfos, $this->_idForm);
 		else									$this->_lesChamps[$idField] = new UniversalFieldText($tabInfos, $this->_idForm);
 	}
 

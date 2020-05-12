@@ -44,6 +44,9 @@
 //		- Ajout de l'option -R à la commande Mysqldump qui permet de sauver AUSSI les procédures et fonctions stockées
 // 23.03.2020
 //		- Ajout de la fonction signatureDatabase() qui renvoie un hash SHA1 de la structure de la base de données
+// 27.04.2020
+//		- Re-ajout des fonctions createCSV() et addCSVLine()
+//		- Ajout de la fonction appendTextFile()
 //--------------------------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -179,6 +182,131 @@ function saveCSV($inLeFichier, $lesDonnees, $codage=CODAGE_ANSI, $delimiter = LO
 
 		//fermeture du fichier csv
 		fclose($fp);					
+	}
+}
+
+//----------------------------------------------------------------------
+// Création d'un fichier CSV sans saisie de données mais juste avec l'entête
+// Auteur : Fabrice Labrousse
+// Entrée :
+//		$inLeFichier : chemin complet du fichier CSV à générer
+//		$entete : tableau contenant les libellés de colonnes (ex: array('Nom', 'Prenom'))
+//		$codage : type de codage du fichier résultat 
+//			- CODAGE_ANSI (défaut)
+//			- CODAGE_UTF8
+//		$delimiter : spécifie le délimiteur pour le fichier CSV. 
+//			- LOADCSV_DELIMITER_SEMICOLON (défaut) : pour le ;
+//			- LOADCSV_DELIMITER_TAB : pour une tabulation
+//			- On peut passer un délimiteur pseronnalisé mais 1 seule caratère autorisé et le passer entre "" (ex "|")
+// Retour : 
+//		Rien (fichier CSV créé)
+//----------------------------------------------------------------------
+// Comme l'encodage de l'application est UTF8 (car les sources sont enregistrés en UTF8) on 
+// "décode" de l'utf8 pour avoir de l'ANSI.
+// NB : Pour tout ce qui est fichier CSV, préférer un encodage ANSI
+//----------------------------------------------------------------------
+function createCSV($inLeFichier, $entete, $codage=CODAGE_ANSI, $delimiter = LOADCSV_DELIMITER_SEMICOLON)
+{
+	if ($inLeFichier != null) {
+		//creation du fichier csv
+		$fp = fopen($inLeFichier, 'w');
+		
+		//écriture de l'entête
+		foreach($entete as $colonne) {
+			if ($codage == CODAGE_ANSI) {
+				fwrite($fp, utf8_decode($colonne).$delimiter);
+			}
+			else {
+				fwrite($fp, $colonne.$delimiter);
+			}
+		}
+		fwrite($fp, "\r\n");
+		
+		//fermeture du fichier csv
+		fclose($fp);					
+	}
+}
+
+//----------------------------------------------------------------------
+// Ajout d'une ligne de donnée dans un fichier CSV existant
+// Auteur : Fabrice Labrousse
+// Entrée :
+//		$inLeFichier : chemin complet du fichier CSV à générer
+//		$lesDonnees : tableau avec clés contenant les données à insérer (ex: array('Nom' => 'toto', 'Prenom' => 'titi'))
+//		$codage : type de codage du fichier résultat 
+//			- CODAGE_ANSI (défaut)
+//			- CODAGE_UTF8
+//		$delimiter : spécifie le délimiteur pour le fichier CSV. 
+//			- LOADCSV_DELIMITER_SEMICOLON (défaut) : pour le ;
+//			- LOADCSV_DELIMITER_TAB : pour une tabulation
+//			- On peut passer un délimiteur pseronnalisé mais 1 seule caratère autorisé et le passer entre "" (ex "|")
+// Retour : 
+//		Rien (fichier CSV créé)
+//----------------------------------------------------------------------
+// Comme l'encodage de l'application est UTF8 (car les sources sont enregistrés en UTF8) on 
+// "décode" de l'utf8 pour avoir de l'ANSI.
+// NB : Pour tout ce qui est fichier CSV, préférer un encodage ANSI
+//----------------------------------------------------------------------
+function addCSVLine($inLeFichier, $lesDonnees, $codage=CODAGE_ANSI, $delimiter = LOADCSV_DELIMITER_SEMICOLON)
+{
+	if ($inLeFichier != null) {
+		//ouverture en ajout du fichier csv
+		$fp = fopen($inLeFichier, 'a');
+		
+		//ecriture des données
+		foreach ($lesDonnees as $donnee) {
+			if ($codage == CODAGE_ANSI) {
+				fwrite($fp, utf8_decode($donnee).$delimiter);
+			}
+			else {
+				fwrite($fp, $donnee.$delimiter);
+			}
+		}
+		//saut de ligne
+		fwrite($fp, "\r\n");
+
+		//fermeture du fichier csv
+		fclose($fp);					
+	}
+}
+
+//----------------------------------------------------------------------
+// Ajout d'un enregistrement de données dans un fichier texte
+// Auteur : Fabrice Labrousse
+// Entrée :
+//		$inLeFichier : chemin complet du fichier texte à générer
+//		$lesDonnees : tableau avec clés contenant les données à insérer (ex: array('Nom' => 'toto', 'Prenom' => 'titi'))
+//		$codage : type de codage du fichier résultat 
+//			- CODAGE_ANSI
+//			- CODAGE_UTF8 (défaut)
+// Retour : 
+//		Rien (fichier créé et enregistrement ajouté)
+//----------------------------------------------------------------------
+// Comme l'encodage de l'application est UTF8 (car les sources sont enregistrés en UTF8) on 
+// "décode" de l'utf8 pour avoir de l'ANSI.
+//----------------------------------------------------------------------
+function appendTextFile($inLeFichier, $lesDonnees, $codage=CODAGE_UTF8)
+{
+	if ($inLeFichier != null) {
+		//creation du fichier csv
+		$fp = fopen($inLeFichier, 'a');
+		
+		//ecriture des données
+		foreach ($lesDonnees as $key => $donnee) {
+			if ($codage == CODAGE_ANSI) {
+				fwrite($fp, utf8_decode(stripslashes($key.' : '.$donnee)."\r\n"));
+			}
+			else {
+				fwrite($fp, stripslashes($key.' : '.$donnee."\r\n"));
+			}
+		}
+		//saut de ligne
+		fwrite($fp, "\r\n");
+		fwrite($fp, "--------------------------------------------------------\r\n");
+		fwrite($fp, "\r\n");
+
+		//fermeture du fichier csv
+		fclose($fp);			
 	}
 }
 

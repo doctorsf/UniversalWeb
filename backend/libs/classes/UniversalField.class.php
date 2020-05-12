@@ -3,7 +3,7 @@
 // Classe d'élément de formulaire
 //--------------------------------------------------------------
 // Element parent
-// Version 3.20.0 du 26.03.2020
+// Version 3.22.0 du 05.05.2020
 //==============================================================
 
 defined('CHECK_INTEGER')			|| define('CHECK_INTEGER',			'#^[-+]?[0-9]{1,}$#');			//1..n chiffres signé (pas de signe -+ obligatoire)
@@ -337,7 +337,7 @@ class UniversalField {
 			'UFC_MAX_LENGTH'				=> 'longueur > %d caractères (%d)',
 			'UFC_MIN_LENGTH'				=> 'longueur < %d caractères (%d)'
 		);
-		return vsprintf($libelles[$mnemo], $params);
+		return vsprintf($libelles[$mnemo], $param1);
 	}
 
 	//hydratation des données : c'est à dire le remplissage des propriétés de l'objet

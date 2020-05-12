@@ -746,7 +746,7 @@ V3.20.0.0 (en cours)
 8. Amélioration graphique script backend/infos_systeme.php (05.03.2020)
 
 -----------------
-V3.21.0.0 (en cours)
+V3.21.0.0 (commit)
 -----------------
 1. UniversalForm en Version 3.19.0 (19.03.2020)
 2. UniversalList en Version 4.2.0 (19.03.2020)
@@ -789,3 +789,19 @@ V3.21.0.0 (en cours)
 17. Ajout droit "Gérer les utilisateurs" (FONC_ADM_GERER_USERS) et modification code en conséqsuence (permet de facilement donner les droits de gestion à un autre profil qu'ADM)
 18. Correction bug affichage date de création du compte dans formulaire user
 19. Ajout de la fonction getLibIfExists() dans les fichiers de langue
+
+-----------------
+V3.22.0.0 (commit)
+-----------------
+
+1. uw_flux 
+	- Re-ajout des fonctions createCSV() et addCSVLine() (27.04.2020)
+	- Ajout de la fonction appendTextFile() (27.04.2020)
+2. ajout du script fdownload qui force le téléchargement d'un fichier (genre text ou pdf) plutôt que de l'ouvrir
+3. affichage des hash sources de la signature du code en text-monospace pour une meilleure lecture (maintenance)
+4. UniversalForm en v3.22
+	- Ajout du composant UniversalFieldFiltrecheckbox spécialement créé pour les filtres checkbox de UniveralList (en remplacement de UniversalFieldCheckbox)
+5. UniversalList en V4.2.1
+6. UniversalList en V5.0.0
+	- filtre de colonne checkbox : remplacement de l'objet 'UniversalFieldCheckbox' par le nouvel objet 'UniversalFieldFiltrecheckbox' spécialement conçu. Ceci permet de simplifier l'usage et la génération de code pour ce type de filtre.
+	- Version minimale de UniversalForm : 3.22

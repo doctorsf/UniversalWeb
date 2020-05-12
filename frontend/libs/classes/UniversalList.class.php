@@ -120,6 +120,14 @@
 //	- Ajout des méthodes setFiltreTag et getFiltreTag sur les filtres externes. Permet de passer n'importe quelle information supplémentaire
 // 19.03.2020 : Version 4.2.0
 //	- passage de la fonction createTable() en fonction statique
+// 05.05.2020 : Version 4.2.1
+//	- Correction méthode afficher : remplacé tags html 'align=' et 'size=' par class='text-' et class='uw-w'
+//	- Amélioré présentation des filtres de colonnes (affiche maintenant un filtre checkbox avec label au-dessus de la checkbox)
+//	- Rajouté cursor:pointer sur label filtres checkbox (lclass) (attention : classe 'uw-pointer' déclarée dans universalweb.css)
+// 05.05.2020 : Version 5.0.0 
+//	- filtre de colonne checkbox : remplacement de l'objet 'UniversalFieldCheckbox' par le nouvel objet 'UniversalFieldFiltrecheckbox' spécialement conçu. Ceci permet de simplifier 
+//		l'usage et la génération de code pour ce type de filtre.
+//	- Version minimale de UniversalForm : 3.22
 //------------------------------------------------------------------
 
 //*****************************************************************************************
@@ -701,7 +709,7 @@ class UniversalListFormFiltres extends UniversalForm {
 				'apos' => 'before',														//position du bouton addon
 				'complement' => $objCol->getFiltreScope(),								//items du menu
 				'value' => array($objCol->getFiltreRange(), $objCol->getFiltreValue()),	//valeur de la saisie (tableau : item => valeur)
-				'clong' => 'col-12 px-0',												//longueur du bloc champ (ici maximum)
+				'clong' => 'px-0',														//longueur du bloc champ
 				'cheight' => 'sm',														//petite hauteur de saisie
 				'labelHelp' => $objCol->getFiltreHelp(),								//aide sur le label
 				'maxlength' => 255,														//taille maximum de la saisie en nombre de caractères
@@ -721,7 +729,7 @@ class UniversalListFormFiltres extends UniversalForm {
 				'lalign' => 'center',													//left (defaut) / right / center / jutify
 				'labelHelp' => $objCol->getFiltreHelp(),								//aide sur le label
 				'lpos' => 'before',														//position du label par rapport au champ : before (defaut) / after
-				'clong' => 'col-12 px-0',												//longueur du bloc champ (ici maximum)
+				'clong' => 'px-0',														//longueur du bloc champ
 				'cheight' => 'sm',														//petite hauteur de saisie
 				'complement' => $objCol->getFiltreScope(),								//fonction de callback qui doit remplir le <select>
 				'javascript' => 'onchange="submit()"',									//code javascript (permet de valider dès clic sur une autre option)
@@ -733,13 +741,10 @@ class UniversalListFormFiltres extends UniversalForm {
 			$filtre = array(
 				'newLine' => false,														//nouvelle ligne ? false par défaut
 				'dbfield' => $id_filtre,												//retour de la saisie
-				'design' => 'online',													//inline (defaut) / online
-				'dpos' => 'alone',														//position de la case à cocher dans le groupe
 				'label' => $objCol->getFiltreCaption(),									//libellé du filtre
-				'lclass' => 'mr-2',														//classe du label
+				'lclass' => 'uw-pointer',												//classe du label
 				'lalign' => 'center',													//left (defaut) / right / center / jutify
 				'labelHelp' => $objCol->getFiltreHelp(),								//aide sur le label
-				'clong' => 'col-12 text-center ml-1',									//longueur du bloc champ (ici maximum)
 				'javascript' => 'onchange="submit()"',									//code javascript (permet de valider dès clic sur une autre option)
 				'value' => $objCol->getFiltreScope()[1],								//valeur si la case à cocher est cochée (2ème valeur du scope)
 				'valueInverse' => $objCol->getFiltreScope()[0],							//valeur renvoyée si la case n'est pas cochée (1ère valeur du scope)
@@ -760,12 +765,7 @@ class UniversalListFormFiltres extends UniversalForm {
 
 		//construction des champs
 		foreach($this->_buffer as $key => $filtre) {
-			if ($filtre['filtreType'] == 'checkbox') {
-				$this->createField('checkbox', $key, $filtre);
-			}
-			else {
-				$this->createField('filtre'.$filtre['filtreType'], $key, $filtre);
-			}
+			$this->createField('filtre'.$filtre['filtreType'], $key, $filtre);
 		}
 
 		//construction bouton Submit
@@ -875,7 +875,7 @@ class UniversalListFormFiltres extends UniversalForm {
 		//affichage de chacune des colonnes de la liste
 		foreach($cols as $indice => $colonne) {
 			if ($colonne->getDisplay()) {
-				$chaine.= '<th align="center" width="'.$colonne->getSize().'%" class="py-0">';
+				$chaine.= '<th class="text-center uw-w'.$colonne->getSize().' py-0">';
 				if ($colonne->getFiltre()) {
 					$this->_highlightFiltre($colonne, $colonne->getId());
 					$chaine.= $this->field($colonne->getId())->draw(true);
@@ -915,7 +915,7 @@ class UniversalList {
 	private $_headClass = '';				//classe CSS de l'entête de la table
 	private $_filtresClass = 'thead-light';	//classe CSS du bandeau de filtres (première ligne du tableau)
 
-	const VERSION = 'V4.2.0 (2020-03-19)';
+	const VERSION = 'V5.0.0 (2020-05-05)';
 	const NB_LIGNES_PAR_PAGE = 25;
 	const SHOW_BUTTONS = true;
 
